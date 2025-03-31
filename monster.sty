@@ -1,0 +1,469 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesExplPackage{monster}
+    {2026/02/06}{1.0}{D&D Index Cards: Monster Stat Blocks}
+
+\RequirePackage{dndcards}
+
+% Property lists for monster stats
+\prop_new:N \g_dnd_monster_prop
+
+% Monster stats storage keys
+\keys_define:nn { dnd/monster } {
+    name .tl_gset:N = \g__dnd_monster_name_tl,
+    type .tl_gset:N = \g__dnd_monster_type_tl,
+    ac .tl_gset:N = \g__dnd_monster_ac_tl,
+    hp .tl_gset:N = \g__dnd_monster_hp_tl,
+    speed .tl_gset:N = \g__dnd_monster_speed_tl,
+    str .code:n = { \prop_gput:Nnn \g_dnd_monster_prop {str} {#1} },
+    dex .code:n = { \prop_gput:Nnn \g_dnd_monster_prop {dex} {#1} },
+    con .code:n = { \prop_gput:Nnn \g_dnd_monster_prop {con} {#1} },
+    int .code:n = { \prop_gput:Nnn \g_dnd_monster_prop {int} {#1} },
+    wis .code:n = { \prop_gput:Nnn \g_dnd_monster_prop {wis} {#1} },
+    cha .code:n = { \prop_gput:Nnn \g_dnd_monster_prop {cha} {#1} },
+}
+
+% Note: Modifier calculations now use shared utilities from dndcards.sty
+% (\__dndcards_modifier:n and \__dndcards_format_stat:n)
+
+% Helper: output monster modifier for an ability
+\cs_new_protected:Npn \__dnd_monster_output_modifier:n #1 {
+    \__dndcards_format_stat:e { \__dndcards_modifier:n { \prop_item:Nn \g_dnd_monster_prop {#1} } }
+}
+
+% Monster ability score table (horizontal layout like character stats)
+\cs_new_protected:Npn \__dnd_monster_ability_table: {
+    \clist_set:Nn \l_tmpa_clist { str, dex, con, int, wis, cha }
+
+    \begin{tabular}{rcccccc}
+        \clist_map_inline:Nn \l_tmpa_clist {
+            & \head{\prop_item:Nn \g_dnd_names_prop {##1}}
+        } \\
+
+        \textbf{Score}
+        \clist_map_inline:Nn \l_tmpa_clist {
+            & {\boldmath $\prop_item:Nn \g_dnd_monster_prop {##1}$}
+        } \\
+
+        \textbf{Modifier}
+        \clist_map_inline:Nn \l_tmpa_clist {
+            & {$\__dnd_monster_output_modifier:n {##1}$}
+        } \\
+
+        \textbf{Save}
+        \clist_map_inline:Nn \l_tmpa_clist {
+            & {$\__dnd_monster_output_modifier:n {##1}$}
+        }
+    \end{tabular}
+}
+
+% Monster stat block (AC, HP, Speed, abilities) - inserted after card header
+\cs_new_protected:Npn \__dnd_monster_stat_block: {
+    \group_begin:
+    \\
+    \__dnd_monster_ability_table: \\
+    \centering
+    \ThinRule \\
+    \textbf{AC:}~\g__dnd_monster_ac_tl \quad
+    \textbf{HP:}~\g__dnd_monster_hp_tl \quad
+    \textbf{Speed:}~\g__dnd_monster_speed_tl \\
+    \nointerlineskip
+    \vspace{0.3em}
+    \ThinRule \\
+    \vspace{0.3em}
+    \group_end:
+}
+
+% Set up local commands for use within MonsterCard
+\cs_new_protected:Npn \__dnd_monster_setup_local_commands: {
+    % Property line commands
+    \cs_set:Npn \immunities ##1 {
+        \mode_leave_vertical:\\ \textbf{Immunities.}~##1
+    }
+    \cs_set:Npn \resistances ##1 {
+        \mode_leave_vertical:\\ \textbf{Resistances.}~##1
+    }
+    \cs_set:Npn \vulnerabilities ##1 {
+        \mode_leave_vertical:\\ \textbf{Vulnerabilities.}~##1
+    }
+    \cs_set:Npn \conditionimmunities ##1 {
+        \mode_leave_vertical:\\ \textbf{Condition~Immunities.}~##1
+    }
+    \cs_set:Npn \senses ##1 {
+        \mode_leave_vertical:\\ \textbf{Senses.}~##1
+    }
+    \cs_set:Npn \skills ##1 {
+        \mode_leave_vertical:\\ \textbf{Skills.}~##1
+    }
+    \cs_set:Npn \languages ##1 {
+        \mode_leave_vertical:\\ \textbf{Languages.}~##1
+    }
+    \cs_set:Npn \challengerating ##1 {
+        \mode_leave_vertical:\\ \textbf{CR.}~##1
+    }
+
+    % Section headers
+    \cs_set:Npn \actions {
+        \textbf{\textcolor{headercolor}{\scshape Actions}}
+        \par
+    }
+    \cs_set:Npn \bonusactions {
+        {\textbf{\textcolor{headercolor}{\scshape Bonus~Actions}}}
+        \par
+    }
+    \cs_set:Npn \reactions {
+        {\textbf{\textcolor{headercolor}{\scshape Reactions}}}
+        \par
+    }
+    \cs_set:Npn \traits {
+        {\textbf{\textcolor{headercolor}{\scshape Traits}}}
+        \par
+    }
+    \cs_set:Npn \legendaryactions ##1 {
+        {\textbf{\textcolor{headercolor}{\scshape Legendary~Actions}}}
+        \par
+        The~creature~can~take~##1~legendary~actions,~choosing~from~the~
+        options~below.~Only~one~legendary~action~can~be~used~at~a~time~
+        and~only~at~the~end~of~another~creature's~turn.~Spent~legendary~
+        actions~are~regained~at~the~start~of~each~turn.
+        \par
+    }
+}
+
+% MonsterCard environment - wraps Card with monster-specific content
+\NewDocumentEnvironment{MonsterCard}{m}{
+    % Parse monster data
+    \prop_gclear:N \g_dnd_monster_prop
+    \keys_set:nn { dnd/monster } {#1}
+
+    % Start Card with name as title and type as tag
+    \begin{Card}[\g__dnd_monster_type_tl]{\g__dnd_monster_name_tl}
+
+    % Set up local commands
+    \__dnd_monster_setup_local_commands:
+
+    % Insert monster stat block
+    \__dnd_monster_stat_block:
+}{
+    \end{Card}
+}
+
+\ExplSyntaxOff
+%%
+%% Monsters
+%%
+\NewDocumentCommand{\MonsterAbberantSpirit}{}{
+    \begin{MonsterCard}{
+        name=Aberrant Spirit,
+        type={Medium Aberration, Neutral},
+        ac={$11 +$ the spell's level},
+        hp={$40 + 10$ for each spell level above 4},
+        speed={30 ft, Fly 30 ft\fmark},
+        str=16, dex=10, con=15, int=16, wis=10, cha=6,
+    }
+    \ftext{Hover; Beholderkin only.}
+    \immunities{Psychic.}
+    \senses{Darkvision 60 ft; Passive Perception 10.}
+    \languages{Deep Speech, understands the languages you know.}
+    \challengerating{None (XP 0; PB equals your Proficiency Bonus).}
+
+    \traits
+
+    \textbf{Regeneration (Slaad Only).} The spirit regains 5 Hit
+    Points at the start of its turn if it has at least 1 Hit Point.
+
+    \textbf{Whispering Aura (Mind Flayer Only).} At the start of each of
+    the spirit's turns, the spirit emits psionic energy if it doesn't
+    have the Incapacitated condition. \textit{Wisdom Saving Throw:}
+    DC equals your spell save DC, each creature (other than
+    you) within 5 feet of the spirit. \textit{Failure:} $2d6$ Psychic damage.
+
+    \actions
+
+    \textbf{Multiattack.} The spirit makes a number of attacks
+    equal to half this spell's level (round down).
+
+    \textbf{Claw (Slaad Only).} \textit{Melee Attack Roll:} Bonus equals your
+    spell attack modifier, reach 5 ft. \textit{Hit:} $1d10 + 3 +$ the
+    spell's level Slashing damage, and the target can't
+    regain Hit Points until the start of the spirit's next turn.
+
+    \textbf{Eye Ray (Beholderkin Only).} \textit{Ranged Attack Roll:} Bonus
+    equals your spell attack modifier, range 150 ft. \textit{Hit:} $1d8
+    + 3 +$ the spell's level Psychic damage.
+
+    \textbf{Psychic Slam (Mind Flayer Only).} \textit{Melee Attack Roll:}
+    Bonus equals your spell attack modifier, reach 5 ft.
+    \textit{Hit:} $1d8 + 3 +$ the spell's level Psychic damage.
+
+    \end{MonsterCard}
+}
+
+\NewDocumentCommand{\MonsterBat}{}{
+    \begin{MonsterCard}{
+        name=Bat,
+        type={Tiny Beast, Unaligned},
+        ac={12},
+        hp={1 ($1d4 - 1$)},
+        speed={5 ft, Fly 30 ft},
+        str=2, dex=15, con=8, int=2, wis=12, cha=4,
+    }
+    \senses{Blindsight 60 ft; Passive Perception 11.}
+    \challengerating{0 (XP 10; PB $+2$).}
+
+    \actions
+
+    \textbf{Bite.} \textit{Melee Attack Roll:} $+4$, reach 5 ft.
+    \textit{Hit:} 1 Piercing damage.
+
+    \end{MonsterCard}
+}
+
+\NewDocumentCommand{\MonsterDeer}{}{
+    \begin{MonsterCard}{
+        name=Deer,
+        type={Medium Beast, Unaligned},
+        ac={13},
+        hp={4 ($1d8$)},
+        speed={50 ft},
+        str=11, dex=16, con=11, int=2, wis=14, cha=5,
+    }
+    \senses{Darkvision 60 ft; Passive Perception 14.}
+    \challengerating{0 (XP 10; PB $+2$).}
+
+    \traits
+
+    \textbf{Agile.} The deer doesn't provoke an Opportunity Attack when
+    it moves out of an enemy's reach.
+
+    \actions
+
+    \textbf{Ram.} \textit{Melee Attack Roll:} $+2$, reach 5 ft.
+    \textit{Hit:} 2 ($1d4$) Bludgeoning damage.
+
+    \end{MonsterCard}
+}
+
+\NewDocumentCommand{\MonsterFeySpirit}{}{
+    \begin{MonsterCard}{
+        name=Fey Spirit,
+        type={Small Fey, Neutral},
+        ac={$12 +$ the spell's level},
+        hp={$30 + 10$ for each spell level above 3},
+        speed={30 ft, Fly 30 ft},
+        str=13, dex=16, con=14, int=14, wis=11, cha=16,
+    }
+    \immunities{Charmed.}
+    \senses{Darkvision 60 ft; Passive Perception 10.}
+    \languages{Sylvan, understands the languages you know.}
+    \challengerating{None (XP 0; PB equals your Proficiency Bonus).}
+
+    \actions
+
+    \textbf{Multiattack.} The spirit makes a number of Fey Blade attacks
+    equal to half this spell's level (round down).
+
+    \textbf{Fey Blade.} \textit{Melee Attack Roll:} Bonus equals your
+    spell attack modifier, reach 5 ft. \textit{Hit:} $2d6 + 3 +$ the
+    spell's level Force damage.
+
+    \bonusactions
+
+    \textbf{Fey Step.} The spirit magically teleports up to 30 feet to
+    an unoccupied space it can see. Then one of the following
+    effects occurs, based on the spirit's chosen mood:
+
+    \textbf{Fuming.} The spirit has Advantage on the next attack roll it
+    makes before the end of this turn.
+
+    \textbf{Mirthful.} \textit{Wisdom Saving Throw:} DC equals your
+    spell save DC, one creature the spirit can see within 10 feet of
+    itself. \textit{Failure:} The target is Charmed by you and the
+    spirit for 1 minute or until the target takes any damage.
+
+    \textbf{Tricksy.} The spirit fills a 10-foot Cube within 5 feet of
+    it with magical Darkness, which lasts until the end of its next
+    turn.
+
+    \end{MonsterCard}
+}
+
+\NewDocumentCommand{\MonsterImp}{}{
+    \begin{MonsterCard}{
+        name=Imp,
+        type={Tiny Fiend (Devil), Lawful Evil},
+        ac={13},
+        hp={21 ($6d4 + 6$)},
+        speed={20 ft, Fly 40 ft},
+        str=6, dex=17, con=13, int=11, wis=12, cha=14,
+    }
+    \skills{Deception $+4$, Insight $+3$, Stealth $+5$.}
+    \resistances{Cold.}
+    \immunities{Fire, Poison; Poisoned.}
+    \senses{Darkvision 120 ft (unimpeded by magical Darkness); Passive Perception 11.}
+    \languages{Common, Infernal.}
+    \challengerating{1 (XP 200; PB $+2$).}
+
+    \traits
+
+    \textbf{Magic Resistance.} The imp has Advantage on saving throws against
+    spells and other magical effects.
+
+    \actions
+
+    \textbf{Sting.} \textit{Melee Attack Roll:} $+5$, reach 5 ft.
+    \textit{Hit:} 6 ($1d6 + 3$) Piercing damage
+    plus 7 ($2d6$) Poison damage.
+
+    \textbf{Invisibility.} The imp casts \textit{Invisibility} on itself,
+    requiring no spell components and using Charisma as the spellcasting
+    ability.
+
+    \textbf{Shape-Shift.} The imp shape-shifts to resemble a rat (Speed 20 ft),
+    a raven (20 ft, Fly 60 ft), or a spider (20 ft, Climb 20 ft), or it
+    returns to its true form. Its game statistics are the same in each
+    form, except for its Speed. Any equipment it is wearing or carrying
+    isn't transformed.
+
+    \end{MonsterCard}
+}
+
+\NewDocumentCommand{\MonsterQuasit}{}{
+    \begin{MonsterCard}{
+        name=Quasit,
+        type={Tiny Fiend (Demon), Chaotic Evil},
+        ac={13},
+        hp={25 ($10d4$)},
+        speed=40 ft,
+        str=5, dex=17, con=10, int=7, wis=10, cha=10,
+    }
+    \skills{Stealth $+5$.}
+    \resistances{Cold, Fire, Lightning.}
+    \immunities{Poison; Poisoned.}
+    \senses{Darkvision 120 ft; Passive Perception 10.}
+    \languages{Abyssal, Common.}
+    \challengerating{1 (XP 200; PB $+2$).}
+
+    \traits
+
+    \textbf{Magic Resistance.} The quasit has Advantage on saving throws against
+    spells and other magical effects.
+
+    \newpage
+    \actions
+
+    \textbf{Rend.} \textit{Melee Attack Roll:} $+5$, reach 5 ft.
+    \textit{Hit:} 5 ($1d4 + 3$) Slashing damage, and the target has the
+    Poisoned condition until the start of the quasit's next turn.
+
+    \textbf{Invisibility.} The quasit casts Invisibility on itself, requiring
+    no spell components and using Charisma as the spellcasting ability.
+
+    \textbf{Scare (1/Day).} Wisdom Saving Throw: DC 10, one creature within 20
+    feet. Failure: The target has the Frightened condition. At the end of
+    each of its turns, the target repeats the save, ending the effect on
+    itself on a success. After 1 minute, it succeeds automatically.
+
+    \textbf{Shape-Shift.} The quasit shape-shifts to resemble a bat (Speed 10
+    ft, Fly 40 ft), a centipede (40 ft, Climb 40 ft), or a toad (40 ft,
+    Swim 40 ft), or it returns to its true form. Its game statistics are
+    the same in each form, except for its Speed. Any equipment it is
+    wearing or carrying isn't transformed.
+
+    \end{MonsterCard}
+}
+
+\NewDocumentCommand{\MonsterSphinxOfWonder}{}{
+    \begin{MonsterCard}{
+        name=Sphinx of Wonder,
+        type={Tiny Celestial, Lawful Good},
+        ac={13},
+        hp={24 ($7d4 + 7$)},
+        speed={20 ft, Fly 40 ft},
+        str=6, dex=17, con=13, int=15, wis=12, cha=11,
+    }
+    \skills{Arcana $+4$, Religion $+4$, Stealth $+5$.}
+    \resistances{Necrotic, Psychic, Radiant.}
+    \senses{Darkvision 60 ft; Passive Perception 11.}
+    \languages{Celestial, Common.}
+    \challengerating{1 (XP 200; PB $+2$).}
+
+    \traits
+
+    \textbf{Magic Resistance.} The sphinx has Advantage on saving throws against
+    spells and other magical effects.
+
+    \actions
+
+    \textbf{Rend.} \textit{Melee Attack Roll:} $+5$, reach 5 ft.
+    \textit{Hit:} 5 ($1d4 + 3$) Slashing damage plus 7 ($2d6$) Radiant damage.
+
+    \reactions
+
+    \textbf{Burst of Ingenuity (2/Day).} \textit{Trigger:} The sphinx or another
+    creature within 30 feet makes an ability check or a saving throw.
+    \textit{Response:} The sphinx adds 2 to the roll.
+
+    \end{MonsterCard}
+}
+
+\NewDocumentCommand{\MonsterSprite}{}{
+    \begin{MonsterCard}{
+        name=Sprite,
+        type={Tiny Fey, Neutral Good},
+        ac={15},
+        hp={10 ($4d4$)},
+        speed={10 ft, Fly 40 ft},
+        str=3, dex=18, con=10, int=14, wis=13, cha=11,
+    }
+    \skills{Perception $+3$, Stealth $+8$.}
+    \senses{Passive Perception 13.}
+    \languages{Common, Elvish, Sylvan.}
+    \challengerating{1/4 (XP 50; PB $+2$).}
+
+    \actions
+
+    \textbf{Needle Sword.} \textit{Melee Attack Roll:} $+6$, reach 5 ft.
+    \textit{Hit:} 6 ($1d4 + 4$) Piercing damage.
+
+    \textbf{Enchanting Bow.} \textit{Ranged Attack Roll:} $+6$, range 40/160 ft.
+    \textit{Hit:} 1 Piercing damage, and the target has the Charmed condition
+    until the start of the sprite's next turn.
+
+
+    \textbf{Heart Sight.} \textit{Charisma Saving Throw:} DC 10, one creature
+    within 5 feet the sprite can see (Celestials, Fiends, and Undead
+    automatically fail the save). \textit{Failure:} The sprite knows the
+    target's emotions and alignment.
+
+    \textbf{Invisibility.} The sprite casts \textit{Invisibility} on itself,
+    requiring no spell components and using Charisma as the spellcasting
+    ability.
+
+    \end{MonsterCard}
+}
+
+\NewDocumentCommand{\MonsterOwl}{}{
+    \begin{MonsterCard}{
+        name=Owl,
+        type={Tiny Beast, Unaligned},
+        ac={11},
+        hp={1 ($1d4 - 1$)},
+        speed={5 ft, Fly 60 ft},
+        str=3, dex=13, con=8, int=2, wis=12, cha=7,
+    }
+    \senses{Darkvision 120 ft; Passive Perception 15.}
+    \languages{None.}
+    \challengerating{0 (XP 10; PB $+2$).}
+
+    \traits
+
+    \textbf{Flyby.} The owl doesn't provoke an Opportunity Attack when
+    it flies out of an enemy's reach.
+
+    \actions
+
+    \textbf{Talons.} \textit{Melee Attack Roll:} $+3$, reach 5 ft.
+    \textit{Hit:} 1 Slashing damage.
+
+    \end{MonsterCard}
+}
