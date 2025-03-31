@@ -1,0 +1,92 @@
+\documentclass{dnd-deck}
+\usepackage{monster}
+
+\begin{document}
+\Character{
+  pc={Isaac ``Zek'' Crespo},
+  summary={Human Draconic Sorcerer 3},
+  player=Jacques,
+  levels=3,
+  str=9, dex=16, con*=12, int=10, wis=10, cha*=17,
+  hp=20, ac=16,
+  spellcasting=cha}
+\SkillProficiencies{Acrobatics, Arcana, Deception, Investigation, Perception,
+  Persuasion, Sleight of Hand, Stealth}
+\LanguageProficiencies{Common, Draconic, Elvish}
+
+\TitleCard[\Summary]{\PC}
+\StatCard{\PC, \Summary}
+
+\begin{Card}[Actions]{\PC, \Summary}
+  \begin{tabular}{p{0.25\linewidth}p{0.2\linewidth}p{0.1\linewidth}p{0.4\linewidth}}
+    \head{Attack}          & \head{Range}    & \head{Hit}  & \head{Damage/Effect}       \\
+    Light Crossbow\fmarkA  & 80 ft (320 ft)  & $+5$        & $1d8+3$ Piercing\fmark     \\
+    Quarterstaff\fmarka    & 5 ft (melee)    & $+5$        & $1d8+3$ Bludgeoning\fmark
+  \end{tabular}
+  %
+  \ftext{Using \textit{True Strike}.}
+  \ftext{Choice of Piercing or Radiant.}
+  \ftext{Choice of Bludgeoning or Radiant.}
+  %
+  \ThinRule \par
+  \begin{tabular}{p{0.25\linewidth}p{0.37\linewidth}p{0.30\linewidth}}
+    \head{Actions}  & \head{Bonus Actions}  & \head{Other}                \\
+                    & Innate Sorcery\fmarkB  & Quickened Spell\fmarkb     \\
+                    & Create Spell Slot      & Seeking Spell\fmarkb       \\
+                    &                        & Heroic Inspiration\fmarkb
+  \end{tabular}
+  \ftext{Limited use.}
+\end{Card}
+
+\begin{Card}[Resources]{\PC, \Summary}
+  \begin{ResourceTable}
+    \header{Spell Slots}     & \header{Long Rest}                  \\
+    \resource{1st Level}{4}  & \resource{Heroic Inspiration}{1}    \\
+    \resource{2nd Level}{2}  & \resource{Luck}{2}                  \\
+                            && \resource{Innate Sorcery}{2}        \\
+                            && \resource{Sorcery Points\fmark}{3}
+  \end{ResourceTable}
+  \ftext{\textbf{Quickened Spell} 2 points; \textbf{Seeking Spell} 1 point.}
+\end{Card}
+
+\begin{Card}{Zek's Prepared Spells}
+  \begin{PreparedSpells}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
+    \head{Cantrip}        & \head{1st Level}      & \head{2nd Level}      \\
+    \spell{MageHand}      & \spell{ChromaticOrb}  & \spell{AlterSelf}     \\
+    \spell{Mending}       & \spell{Command}       & \spell{CloudOfDaggers}\\
+    \spell{MindSliver}    & \spell{DetectMagic}   & \spell{DragonsBreath} \\
+    \spell{MinorIllusion} & \spell{FindFamiliar}  & \spell{Invisibility}  \\
+    \spell{Prestidigitation}& \spell{MagicMissile}& \spell{Suggestion}    \\
+    \spell{TrueStrike}    & \spell{Shield}        &
+  \end{PreparedSpells}
+\end{Card}
+
+\begin{Card}[Class]{Sorcerer}
+  \InnateSorcery
+  \FontOfMagic
+  \DraconicResilience
+\end{Card}
+
+\begin{Card}[Class]{Sorcerer: Metamagic}
+  \Metamagic
+  \begin{itemize}
+    \item \QuickenedSpell
+    \item \SeekingSpell
+  \end{itemize}
+\end{Card}
+
+\begin{Card}{Feats}
+  \MagicInitiate{Wizard}{Mending, Minor Illusion}{Find Familiar}
+  \Skilled{Acrobatics, Investigation, Perception}
+\end{Card}
+
+\SpeciesCardHuman{Small}{Stealth}{Magic Initiate (Wizard)}
+
+\SpellCards
+
+\MonsterBat
+\MonsterDeer
+
+\Placard
+
+\end{document}

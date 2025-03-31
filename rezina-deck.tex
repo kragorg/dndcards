@@ -1,0 +1,107 @@
+\documentclass{dnd-deck}
+
+\begin{document}
+\Character{
+  pc={Rezina},
+  summary={Sera Luma Bard 1},
+  player=Sheila,
+  levels=1,
+  str=9, dex*=14, con=12, int=12, wis=10, cha*=18,
+  hp=9, ac=14,
+  spellcasting=cha}
+\SkillProficiencies{Arcana, Investigation, Performance, Persuasion, Stealth, Survival}
+\LanguageProficiencies{Auran, Birdfolk}
+
+\TitleCard[\Summary]{\PC}
+\StatCard{\PC, \Summary}
+
+\begin{Card}[Actions]{\PC, \Summary}
+  \begin{tabular}{p{0.3\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}
+    \head{Attack}             & \head{Range}     & \head{Hit}  & \head{Damage/Effect}    \\
+    Shortsword\fmarkA         & 5 ft (melee)     & $+6$        & $1d6+4$ Radiant         \\
+    Bodhr\'{a}n (off-hand)    & 5 ft (melee)     & $+6$        & $1d4$ Bludgeoning       \\
+    Shortbow\fmarka           & 80 ft (320 ft)   & $+6$        & $1d6+4$ Radiant         \\
+    \textit{Sorcerous Burst}  & 120 ft           & $+6$        & $1d8$ elemental\fmark   \\
+  \end{tabular}
+  %
+  \ftext{Using \textit{True Strike}.}
+  \ftext{Choose Acid, Cold, Fire, Lightning, Thunder, Poison, or Psychic.}
+  %
+  \ThinRule \par
+  \begin{tabular}{p{0.25\linewidth}p{0.40\linewidth}p{0.30\linewidth}}
+    \head{Actions}                & \head{Bonus Actions}              & \head{Other}        \\
+    Wing Flap                     & Two-Weapon Fighting (Shortsword)  & Fated\fmarkB        \\
+    \textit{Charm Person}\fmarkb  & Bardic Inspiration $d6$\fmarkb    & Glide               \\
+    \textit{Detect Magic}\fmarkb  &                                   & Touched             \\
+                                  &                                   & Songbird            \\
+                                  &                                   & Center of Attention
+  \end{tabular}
+  \ftext{Limited use.}
+\end{Card}
+
+\begin{Card}[Resources]{\PC, \Summary}
+  \begin{ResourceTable}
+    \header{Spell Slots}     & \header{Long Rest}                       \\
+    \resource{1st Level}{2}  & \resource{Bardic Inspiration}{4}         \\
+                            && \resource{\textit{Charm Person}}{1}      \\
+    \header{Short Rest}      & \resource{\textit{Detect Magic}}{1}      \\
+    \resource{Fated}{1}
+  \end{ResourceTable}
+\end{Card}
+
+\begin{Card}{Rezina's Prepared Spells}
+  \begin{PreparedSpells}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
+    \head{Cantrip}        & \head{1st Level}      & \\
+    \spell{Guidance}      & \spell{CharmPerson}   & \\
+    \spell{GustBarrier}   & \spell{Command}       & \\
+    \spell{MageHand}      & \spell{DetectMagic}   & \\
+    \spell{SorcerousBurst}& \spell{HealingWord}   & \\
+    \spell{TrueStrike}    & \spell{SilveryBarbs}  & \\
+                          & \spell{Sleep}         &
+  \end{PreparedSpells}
+\end{Card}
+
+\begin{Card}[Class]{Bard}
+  \MusicalInstruments{Birdpipes, Flue, Hand Drum}
+  \BardSpellcasting
+  \BardicInspiration{d6}
+\end{Card}
+
+\begin{Card}{Feats}
+\MagicInitiate{Druid}{Guidance, Gust Barrier}{Detect Magic}
+\end{Card}
+
+\SpeciesCardSeraLuma{Sorcerous Burst}
+
+\begin{Card}[Gear]{Bodhr\'{a}n}
+  \begin{tabular}{lllll}
+    \head{Name} & \head{Cost} & \head{Damage}      & \head{Weight} & \head{Properties}        \\
+    Bodhr\'{a}n & 25gp        & $1d4$ Bludgeoning  & 3 lbs         & Finesse, Light, Special
+  \end{tabular}
+  \par \ThinRule
+
+  \textit{Musical Instrument}, \textit{Simple Melee Weapon}
+
+  This shallow drum is reinforced with an iron rim and a sturdy oak cross-brace
+  on the back, allowing it to be gripped like a shield. Bards often use the
+  pommel of a sword or a rhythmic ``tipper'' stick to play it while keeping their
+  other hand ready for combat.
+
+  \textbf{Special Property (Reverberating Block):} While you are holding this
+  weapon, you can use your Reaction when you are hit by a ranged weapon attack
+  to angle the drum against the flight path. Make a Charisma (Performance)
+  check against the attack roll that hit you.
+
+  \begin{itemize}
+    \item \textbf{Success:} If your check is higher than the attack roll, the
+    projectile deflects off the drum's rim or taut skin. You reduce the
+    damage taken by your Charisma modifier.
+    \item \textbf{Failure:} You take the damage as normal.
+  \end{itemize}
+\end{Card}
+
+\SpellCards
+
+\Placard
+
+\end{document}

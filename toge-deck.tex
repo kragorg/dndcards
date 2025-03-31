@@ -1,0 +1,65 @@
+\documentclass{dnd-deck}
+
+\begin{document}
+\Character{
+  pc={Toge Greygrin},
+  summary={Hedge Fighter 1},
+  player=Jacques,
+  levels=1,
+  str*=16, dex=20, con*=16, int=12, wis=15, cha=11,
+  hp=13, ac=19,
+  spellcasting=int}
+\SkillProficiencies{Acrobatics, Perception, Sleight of Hand, Stealth}
+\LanguageProficiencies{Birdfolk, Hedge}
+
+\TitleCard[\Summary]{\PC}
+\StatCard{\PC, \Summary}
+
+\begin{Card}[Actions]{\PC, \Summary}
+  \begin{tabular}{p{0.2\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}
+    \head{Attack}                 & \head{Range}     & \head{Hit}     & \head{Damage/Effect}             \\
+    Shortsword                    & 5 feet (melee)   & $+7$           & $1d6+5$ Piercing, \textit{Vex}   \\
+    Scimitar                      & 5 feet (melee)   & $+7$           & $1d6+5$ Slashing, \textit{Nick}  \\
+    Longbow                       & 150 feet (600)   & $+7$           & $1d8+5$ Piercing, \textit{Slow}
+  \end{tabular}
+  %
+  \ThinRule \par
+  \begin{tabular}{p{0.20\linewidth}p{0.42\linewidth}p{0.30\linewidth}}
+    \head{Actions}                    & \head{Bonus Actions}              & \head{Other}      \\
+    \textit{Animal Messenger}\fmarkA  & Second Wind\fmarka                & Initiative Swap   \\
+    Curl Up                           & Two-Weapon Fighting (Shortsword)  & Natural Burrower  \\
+    \textit{Druidcraft}               &                                   & Speak With Bugs   \\
+                                      &                                   & Spiny Quills
+  \end{tabular}
+  \ftext{Limited use.}
+\end{Card}
+
+\begin{Card}[Resources]{\PC, \Summary}
+
+  \begin{ResourceTable}
+    \header{Short Rest}                      \\
+    \resource{\textit{Animal Messenger}}{1}  \\
+    \resource{Second Wind}{2}
+  \end{ResourceTable}
+\end{Card}
+
+\begin{Card}[Class]{Fighter}
+  \SecondWind
+  \Vex{Shortsword}
+  \Nick{Scimitar}
+  \Slow{Longbow}
+\end{Card}
+
+\begin{Card}{Feats}
+\Alert
+\TwoWeaponFighting
+\end{Card}
+
+\SpeciesCardHedge
+
+\SpellDruidcraft
+\SpellAnimalMessenger
+
+\Placard
+
+\end{document}

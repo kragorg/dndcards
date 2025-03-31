@@ -1,0 +1,127 @@
+\documentclass{dnd-deck}
+\usepackage{monster}
+
+\begin{document}
+\Character{
+  pc={Kragor Grimstride},
+  summary={Orc Fighter 1/Great Old One Warlock 7},
+  player=Jacques,
+  levels=8,
+  str*=10, dex=14, con*=14, int=8, wis=12, cha=18,
+  hp=77, ac=20,
+  spellcasting=cha}
+\SkillProficiencies{Acrobatics, Arcana, Insight, Persuasion}
+\LanguageProficiencies{Common, Draconic, Dwarvish, Goblin, Orc}
+
+\TitleCard[\Summary]{\PC}
+\StatCard[
+  Spell={mod=2, note=While holding \textit{Rod of the Pact Keeper $+2$}.},
+  SaveCON={note=Advantage on saving throws to maintain Concentration.}
+]{\PC, \small\Summary}
+
+\begin{Card}[Actions]{\PC, \small\Summary}
+  \begin{tabular}{p{0.25\linewidth}p{0.2\linewidth}p{0.1\linewidth}p{0.4\linewidth}}
+    \head{Attack}                       & \head{Range}    & \head{Hit}  & \head{Damage/Effect}                 \\
+    Battleaxe $\times 2$                & 5 ft (melee)    & $+7$        & $1d8+4$ Slashing, \textit{Topple}    \\
+    Rapier $\times 2$                   & 5 ft (melee)    & $+7$        & $1d8+4$ Piercing, \textit{Vex}       \\
+    Warhammer $\times 2$                & 5 ft (melee)    & $+7$        & $1d8+4$ Bludgeoning, \textit{Push}   \\
+    \textit{Eldritch Blast} $\times 2$  & 120 feet        & $+9$\fmark  & $1d10$ Force and push 10 ft
+  \end{tabular}
+  %
+  \ftext{While holding \textit{Rod of the Pact Keeper $+2$}.}
+  %
+  \ThinRule \par
+  \begin{tabular}{p{0.35\linewidth}p{0.30\linewidth}p{0.35\linewidth}}
+    \head{Actions}                                 & \head{Bonus Actions}          & \head{Other}                  \\
+    Fiendish Vigor: \textit{False Life\fmark}      & Adrenaline Rush\fmarkA        & Lucky\fmarka                  \\
+    One with Shadows: \textit{Invisibility\fmark}  & Second Wind\fmarka            & Relentless Endurance\fmarka   \\
+                                                   & Pact of the Blade: Bind       & Magical Cunning\fmarka        \\
+                                                   & Pact of the Blade: Conjure    & Psychic Spells                \\
+    \head{Reactions}                               & Awakened Mind                 & Repelling Blast               \\
+    Opportunity Attack: Spell                      & Clairvoyant Combatant\fmarka  &
+  \end{tabular}
+  \ftext{At will, self only.}
+  \ftext{Limited use.}
+  \ftext{At will, self only, while in Dim Light or Darkness.}
+\end{Card}
+
+\begin{Card}[Resources]{\PC, \small\Summary}
+  \begin{ResourceTable}
+    \header{Short Rest}                        & \header{Long Rest}                  \\
+    \resource{Adrenaline Rush}{3}              & \resource{Relentless Endurance}{1}  \\
+    \resource{Second Wind\fmark}{2}            & \resource{Luck}{3}                  \\
+    \resource{Pact Slots\fmark}{2}             & \resource{Magical Cunning}{1}       \\
+    \resource{Clairvoyant Combatant\fmark}{1}  &
+  \end{ResourceTable}
+  \ftext{You regain one expended use when you finish a Short Rest, and
+  you regain all expended uses when you finish a Long Rest.}
+  \ftext{All Pact Slots are 4th level.}
+  \ftext{You can restore your use of Clairvoyant Combatant by expending a Pact
+  Magic spell slot (no action required).}
+\end{Card}
+
+\begin{Card}{Kragor's Prepared Spells}
+  \begin{PreparedSpells}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
+    \head{Cantrip}                 & \head{2nd Level}          & \head{4th Level}          \\
+    \spell{EldritchBlast}          & \spell{DetectThoughts}    & \spell{Confusion}         \\
+    \spell{MageHand}               & \spell{PhantasmalForce}   & \spell{SickeningRadiance} \\
+    \spell{MindSliver}             & \spell{Suggestion}        & \spell{SummonAberration}  \\
+                                   &                           &                           \\
+    \head{1st Level}               & \head{3rd Level}          &                           \\
+    \spell{ArmorOfAgathys}         & \spell{Clairvoyance}      &                           \\
+    \spell{DissonantWhispers}      & \spell{Fly}               &                           \\
+    \spell{Hex}                    & \spell{HungerOfHadar}     &                           \\
+    \spell{TashasHideousLaughter}  & \spell{HypnoticPattern}   &                           \\
+                                   & \spell{MajorImage}        &                           \\
+                                   & \spell{SummonFey}         &                           \\
+                                   &                           &
+  \end{PreparedSpells}
+\end{Card}
+
+\begin{Card}[Class]{Warlock}
+  \PactMagic
+  \MagicalCunning
+  \PsychicSpells
+  \AwakenedMind
+  \ClairvoyantCombatant
+\end{Card}
+\begin{Card}[Class]{Warlock: Eldritch Invocations}
+  \LessonsOfTheFirstOnes{Tough}
+  \FiendishVigor
+  \RepellingBlast{Eldritch Blast}
+  \PactOfTheBlade
+  \ThirstingBlade
+  \OneWithShadows
+\end{Card}
+\begin{Card}[Class]{Fighter}
+  \Defense
+  \SecondWind
+  \Push{Warhammer}
+  \Topple{Battleaxe}
+  \Vex{Rapier}
+\end{Card}
+
+\begin{Card}{Feats}
+  \Lucky
+  \Tough
+  \newpage
+  \WarCaster{Charisma}
+\end{Card}
+
+\begin{Card}[Item (Rare)]{Rod of the Pact Keeper $+2$}
+  While holding this rod, you gain a bonus to spell attack rolls and to the
+  saving throw DCs of your Warlock spells. The bonus is determined by the rod's
+  rarity.
+
+  In addition, you can regain one spell slot as a Magic action while holding the
+  rod. You can't use this property again until you finish a Long Rest.
+\end{Card}
+
+\SpellCards
+
+\MonsterAbberantSpirit
+\MonsterFeySpirit
+
+\Placard
+
+\end{document}

@@ -1,0 +1,2154 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesExplPackage{spells}
+    {2026/01/28}{1.0}{D&D Index Cards: Spells}
+
+% Error messages for spell validation
+\msg_new:nnn {dnd} {undefined-spell}
+  { Spell~'\token_to_str:N\Spell#1'~not~defined.~Check~spelling~or~add~to~spells.sty }
+
+\keys_define:nn { spell }
+{
+    tags       .tl_set:N  = \l_spell_tags_tl,
+    level      .tl_set:N  = \l_spell_level_tl,
+    time       .tl_set:N  = \l_spell_time_tl,
+    range      .tl_set:N  = \l_spell_range_tl,
+    components .tl_set:N  = \l_spell_components_tl,
+    duration   .tl_set:N  = \l_spell_duration_tl,
+    school     .tl_set:N  = \l_spell_school_tl,
+    attack     .tl_set:N  = \l_spell_attack_tl,
+    effect     .tl_set:N  = \l_spell_effect_tl,
+
+    tags       .initial:n = {},
+}
+
+% ============================================================================
+% Prepared Spells System
+% ============================================================================
+% Storage for prepared spell keys (e.g., "MageHand", "ChromaticOrb")
+\seq_new:N \g_prepared_spells_seq
+
+% Property list mapping keys to display names (e.g., "MageHand" -> "Mage Hand")
+\prop_new:N \g_spell_names_prop
+
+% Token list holding the current key when invoked via \SpellCards
+\tl_new:N \g_spell_current_key_tl
+
+% PreparedSpells environment - wraps a tabular with a local \spell macro
+% Usage: \begin{PreparedSpells}{lll} ... \spell{MageHand} ... \end{PreparedSpells}
+\cs_new:Npn \__spell_prepare:n #1 {
+    % Validate that spell command exists
+    \cs_if_exist:cF {Spell#1}
+    {
+        \msg_error:nnn {dnd} {undefined-spell} {#1}
+    }
+    \seq_if_in:NnF \g_prepared_spells_seq {#1}
+    {
+        \seq_gput_right:Nn \g_prepared_spells_seq {#1}
+    }
+}
+
+\NewDocumentCommand{\AddPreparedSpell}{m}{
+    \__spell_prepare:n {#1}
+}
+
+\NewDocumentEnvironment{PreparedSpells}{m}
+{
+    \cs_set:Npn \spell ##1
+    {
+        \__spell_prepare:n {##1}
+        \prop_if_in:NnTF \g_spell_names_prop {##1}
+        { \prop_item:Nn \g_spell_names_prop {##1} }
+        { ##1 }
+    }
+    \begin{tabular}{#1}
+}
+{
+    \end{tabular}
+}
+
+% \SpellCards - Invokes all recorded spell macros in alphabetical order by name
+\NewDocumentCommand{\SpellCards}{}
+{
+    \seq_set_eq:NN \l_tmpa_seq \g_prepared_spells_seq
+    \seq_sort:Nn \l_tmpa_seq
+    {
+        \prop_get:NnNTF \g_spell_names_prop {##1} \l_tmpa_tl
+            { }
+            { \tl_set:Nn \l_tmpa_tl {##1} }
+        \prop_get:NnNTF \g_spell_names_prop {##2} \l_tmpb_tl
+            { }
+            { \tl_set:Nn \l_tmpb_tl {##2} }
+        \str_compare:eNeTF { \l_tmpa_tl } > { \l_tmpb_tl }
+            { \sort_return_swapped: }
+            { \sort_return_same: }
+    }
+    \seq_map_inline:Nn \l_tmpa_seq
+    {
+        \tl_gset:Nn \g_spell_current_key_tl {##1}
+        \use:c {Spell##1}
+        \tl_gclear:N \g_spell_current_key_tl
+    }
+}
+
+% \PrepSpellName{Key}{Name} - Called from aux file to populate the mapping
+\NewDocumentCommand{\PrepSpellName}{mm}
+{
+    \prop_gput:Nnn \g_spell_names_prop {#1} {#2}
+}
+
+% Helper to write key->name mapping to aux file when invoked via SpellCards
+\cs_new_protected:Npn \__spell_record_name:n #1
+{
+    \tl_if_empty:NF \g_spell_current_key_tl
+    {
+        \iow_shipout:cx { @auxout }
+        {
+            \exp_not:N \PrepSpellName
+            { \g_spell_current_key_tl }
+            { \exp_not:n {#1} }
+        }
+    }
+}
+
+% ============================================================================
+
+\cs_new_protected:Npn \__spell_header_table:
+{
+    \begin{tabular}{
+            p{0.22\linewidth}
+            p{0.22\linewidth}
+            p{0.22\linewidth}
+            p{0.22\linewidth}
+        }
+        \head{Level}                             &
+        \head{Casting~Time}                      &
+        \head{Range/Area}                        &
+        \head{Components}                        \\
+        {\footnotesize \l_spell_level_tl}        &
+        {\footnotesize \l_spell_time_tl}         &
+        {\footnotesize \l_spell_range_tl}        &
+        {\footnotesize \l_spell_components_tl}   \\
+        \head{Duration}                          &
+        \head{School}                            &
+        \head{Attack/Save}                       &
+        \head{Damage/Effect}                     \\
+        {\footnotesize \l_spell_duration_tl}     &
+        {\footnotesize \l_spell_school_tl}       &
+        {\footnotesize \l_spell_attack_tl}       &
+        {\footnotesize \l_spell_effect_tl}
+    \end{tabular}
+}
+
+\cs_new_protected:Npn \__spell_begin:nn #1#2
+{
+    \setlength{\parskip}{0em}
+    \par
+    \__spell_header_table:
+    \par
+    \ThinRule
+    \setlength{\parskip}{0.1in}
+}
+
+\NewDocumentEnvironment{Spell}{om}
+{
+    \keys_set:nn { spell } { #1 }
+    \__spell_record_name:n { #2 }
+    \begin{Card}[ \l_spell_tags_tl ] { #2 }
+    \__spell_begin:nn { #1 } { #2 }
+} {
+    \end{Card}
+}
+
+\NewDocumentEnvironment{components}{}{
+  \vfill
+  \begin{tabular}{rl}
+} {
+  \end{tabular}
+}
+
+\ExplSyntaxOff
+\NewDocumentCommand{\SpellAlarm}{}{
+    \begin{Spell}[
+        tags=Ritual,
+        level=1st,
+        time=1 Minute,
+        range={30 ft/20 ft Cube},
+        components={V, S, M},
+        duration=8 Hours,
+        school=Abjuration,
+        attack=None,
+        effect=Detection
+    ]{Alarm}
+    You set an alarm against intrusion. Choose a door, a window, or an area within range that is no larger than a 20-foot Cube. Until the spell ends, an alarm alerts you whenever a creature touches or enters the warded area. When you cast the spell, you can designate creatures that won't set off the alarm. You also choose whether the alarm is audible or mental:
+
+    \textbf{Audible Alarm.} The alarm produces the sound of a handbell for 10 seconds within 60 feet of the warded area.
+
+    \textbf{Mental Alarm.} You are alerted by a mental ping if you are within 1 mile of the warded area. This ping awakens you if you're asleep.
+
+    \begin{components}
+    V & \textit{Custodio (koo-STOH-dee-oh)} \\
+    M & a bell and silver wire
+    \end{components}
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellAlterSelf}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level=2nd,
+      time=1 Action,
+      range=Self,
+      components={V, S},
+      duration=1 Hour,
+      school=Transmutation,
+      attack=None,
+      effect=Shapechanging
+    ]{Alter Self}
+
+    You alter your physical form. Choose one of the following options.
+    Its effects last for the duration, during which you can take a
+    Magic action to replace the option you chose with a different
+    one.
+
+    \textbf{Aquatic Adaptation.} You sprout gills and grow webs between
+    your fingers. You can breathe underwater and gain a Swim Speed
+    equal to your Speed.
+
+    \textbf{Change Appearance.} You alter your appearance. You decide
+    what you look like, including your height, weight, facial
+    features, sound of your voice, hair length, coloration, and
+    other distinguishing characteristics. You can make yourself
+    appear as a member of another species, though none of your
+    statistics change. You can't appear as a creature of a different
+    size, and your basic shape stays the same; if you're bipedal,
+    you can't use this spell to become quadrupedal, for instance.
+    For the duration, you can take a Magic action to change your
+    appearance in this way again.
+
+    \textbf{Natural Weapons.} You grow claws (Slashing), fangs
+    (Piercing), horns (Piercing), or hooves (Bludgeoning). When you
+    use your Unarmed Strike to deal damage with that new growth, it
+    deals $1d6$ damage of the type in parentheses instead of dealing
+    the normal damage for your Unarmed Strike, and you use your
+    spellcasting ability modifier for the attack and damage rolls
+    rather than using Strength.
+
+    \begin{components}
+    V & \textit{Muto corpus (MOO-toh KOR-poos)}
+    \end{components}
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellAnimalMessenger}{}{
+    \begin{Spell}[
+      tags=Ritual,
+      level=2nd,
+      time=1 Action,
+      range=30 ft,
+      components={V, S, M},
+      duration=24 Hours,
+      school=Enchantment,
+      attack=CHA Save,
+      effect=Communication
+    ]{Animal Messenger}
+    A Tiny Beast of your choice that you can see within range must succeed on a Charisma saving throw, or it attempts to deliver a message for you (if the target's Challenge Rating isn't 0, it automatically succeeds). You specify a location you have visited and a recipient who matches a general description, such as ``a person dressed in the uniform of the town guard'' or ``a red-haired dwarf wearing a pointed hat.'' You also communicate a message of up to twenty-five words. The Beast travels for the duration toward the specified location, covering about 25 miles per 24 hours or 50 miles if the Beast can fly.
+
+    When the Beast arrives, it delivers your message to the creature that you described, mimicking your communication. If the Beast doesn't reach its destination before the spell ends, the message is lost, and the Beast returns to where you cast the spell.
+
+    \begin{components}
+    V & \textit{Porto nuntium (POR-toh NOON-tee-oom)} \\
+    M & a morsel of food
+    \end{components}
+    \end{Spell}
+
+}
+
+
+\NewDocumentCommand{\SpellArmorOfAgathys}{}{
+    \begin{Spell}[
+      level=1st,
+      time=1 Bonus Action,
+      range=Self,
+      components={V, S, M},
+      duration=1 Hour,
+      school=Abjuration,
+      attack=None,
+      effect=Cold
+    ]{Armor of Agathys}
+    Protective magical frost surrounds you. You gain 5 Temporary Hit Points. If a creature hits you with a melee attack roll before the spell ends, the creature takes 5 Cold damage. The spell ends early if you have no Temporary Hit Points.
+
+    \textbf{Using a Higher-Level Spell Slot.} The Temporary Hit Points and the Cold damage both increase by 5 for each spell slot level above 1.
+
+    \begin{components}
+    V & \textit{Macte virtute (MAHK-teh weer-TOO-teh)} \\
+    M & a shard of blue glass
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellCharmPerson}{}{
+    \begin{Spell}[
+      level=1st,
+      time=1 Action,
+      range=30 ft,
+      components={V, S},
+      duration=1 Hour,
+      school=Enchantment,
+      attack=WIS Save,
+      effect=Charmed
+    ]{Charm Person}
+    One Humanoid you can see within range makes a Wisdom saving throw. It does so with Advantage if you or your allies are fighting it. On a failed save, the target has the Charmed condition until the spell ends or until you or your allies damage it. The Charmed creature is Friendly to you. When the spell ends, the target knows it was Charmed by you.
+
+    \textbf{Using a Higher-Level Spell Slot.} You can target one additional creature for each spell slot level above 1.
+
+    \begin{components}
+    V & \textit{Captiva cor (kahp-TEE-wah kor)}
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellChromaticOrb}{}{
+    \begin{Spell}[
+      level=1st,
+      time=1 Action,
+      range=90 ft,
+      components={V, S, M},
+      duration=Instantaneous,
+      school=Evocation,
+      attack=Ranged,
+      effect=Elemental
+    ]{Chromatic Orb}
+    You hurl an orb of energy at a target within range. Choose Acid, Cold, Fire, Lightning, Poison, or Thunder for the type of orb you create, and then make a ranged spell attack against the target. On a hit, the target takes $3d8$ damage of the chosen type.
+
+    If you roll the same number on two or more of the $d8$s, the orb leaps to a different target of your choice within 30 feet of the target. Make an attack roll against the new target, and make a new damage roll. The orb can't leap again unless you cast the spell with a level $2+$ spell slot.
+
+    \textbf{Using a Higher-Level Spell Slot.} The damage increases by $1d8$ for each spell slot level above 1. The orb can leap a maximum number of times equal to the level of the slot expended, and a creature can be targeted only once by each casting of this spell.
+
+    \begin{components}
+    V & \textit{Orbis chromata (OR-biss kroh-MAH-tah)} \\
+    M & a diamond worth $50+$gp
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellClairvoyance}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level={3rd},
+      time=10 Minutes,
+      range=1 Mile,
+      components={V, S, M},
+      duration=10 Minutes,
+      school={Divination},
+      attack={None},
+      effect={Detection}
+    ]{Clairvoyance}
+    You create an Invisible sensor within range in a location familiar to you (a place you have visited or seen before) or in an obvious location that is unfamiliar to you (such as behind a door, around a corner, or in a grove of trees). The intangible, invulnerable sensor remains in place for the duration.
+
+    When you cast the spell, choose seeing or hearing. You can use the chosen sense through the sensor as if you were in its space. As a Bonus Action, you can switch between seeing and hearing.
+
+    A creature that sees the sensor (such as a creature benefiting from \textit{See Invisibility} or Truesight) sees a luminous orb about the size of your fist.
+
+    \begin{components}
+    V & \textit{Sentio ultra (SEN-tee-oh UL-tra)} \\
+    M & a focus worth at least 100gp, which is either a jeweled horn (for hearing) \\
+      & or a glass eye (for seeing)
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellCloudOfDaggers}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level=2nd,
+      time=1 Action,
+      range={60 ft/5 ft Cube},
+      components={V, S, M},
+      duration=1 Minute,
+      school=Conjuration,
+      attack=None,
+      effect=Slashing
+    ]{Cloud of Daggers}
+    You conjure spinning daggers in a 5-foot Cube centered on a point within range. Each creature in that area takes $4d4$ Slashing damage. A creature also takes this damage if it enters the Cube or ends its turn there or if the Cube moves into its space. A creature takes this damage only once per turn.
+
+    On your later turns, you can take a Magic action to teleport the Cube up to 30 feet.
+
+    \textbf{Using a Higher-Level Spell Slot.} The damage increases by $2d4$ for each spell slot level above 2.
+
+    \begin{components}
+    V & \textit{Nubes gladii (NOO-bess GLAH-dee-ee)} \\
+    M & a sliver of glass
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellCommand}{}{
+    \begin{Spell}[
+        level=1st,
+        time=1 Action,
+        range=60 ft,
+        components={V},
+        duration=Instantaneous,
+        school=Enchantment,
+        attack=WIS,
+        effect=Prone
+    ]{Command}
+    You speak a one-word command to a creature you can see within range. The target must succeed on a Wisdom saving throw or follow the command on its next turn. Choose the command from these options:
+
+    \textbf{Approach.} The target moves toward you by the shortest and most direct route, ending its turn if it moves within 5 feet of you.
+
+    \textbf{Drop.} The target drops whatever it is holding and then ends its turn.
+
+    \textbf{Flee.} The target spends its turn moving away from you by the fastest available means.
+
+    \textbf{Grovel.} The target has the Prone condition and then ends its turn.
+
+    \textbf{Halt.} On its turn, the target doesn't move and takes no action or Bonus Action.
+
+    \begin{components}
+    V & \textit{C\=og\=eris (koh-GAY-riss)}
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellComprehendLanguages}{}{
+    \begin{Spell}[
+        level=1st,
+        time=1 Action,
+        range=Self,
+        components={V, S, M},
+        duration=1 Hour,
+        school=Divination,
+        attack=None,
+        effect=Social
+      ]{Comprehend Languages}
+    For the duration, you understand the literal meaning of any language that you hear or see signed. You also understand any written language that you see, but you must be touching the surface on which the words are written. It takes about 1 minute to read one page of text. This spell doesn't decode symbols or secret messages.
+
+    \begin{components}
+    V & \textit{Verba vertere (WER-bah WER-teh-reh)} \\
+    M & a pinch of soot and salt
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellConfusion}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level={4th},
+      time=1 Action,
+      range={90 ft/10 ft r Sphere},
+      components={V, S, M},
+      duration=1 Minute,
+      school={Enchantment},
+      attack={WIS Save},
+      effect={Control}
+    ]{Confusion}
+    Each creature in a 10-foot-radius Sphere centered on a point you choose within range must succeed on a Wisdom saving throw, or that target can't take Bonus Actions or Reactions and must roll $1d10$ at the start of each of its turns to determine its behavior for that turn, consulting the following table.
+
+    \begin{center}
+    \begin{tabular}{cl}
+    \textbf{$1d10$} & \textbf{Behavior for the Turn} \\ \hline
+    1 & The target doesn't take an action, and it uses all its movement to move. \\
+      & Roll $1d4$ for the direction: 1, north; 2, east; 3, south; or 4, west. \\
+    2--6 & The target doesn't move or take actions. \\
+    7--8 & The target doesn't move, and it takes the Attack action to make one melee \\
+      & attack against a random creature within reach. If none are within reach, \\
+      & the target takes no action. \\
+    9--10 & The target chooses its behavior. \\
+    \hline
+    \end{tabular}
+    \end{center}
+
+    At the end of each of its turns, an affected target repeats the save, ending the spell on itself on a success.
+
+    \textbf{Using a Higher-Level Spell Slot.} The Sphere's radius increases by 5 feet for each spell slot level above 4.
+
+    \begin{components}
+    V & \textit{Chaos mentis (KAH-oss MEN-tiss)} \\
+    M & three nut shells
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellCureWounds}{}{
+    \begin{Spell}[
+        level=1st,
+        time=1 Action,
+        range=Touch,
+        components={V, S},
+        duration=Instantaneous,
+        school=Abjuration,
+        attack=None,
+        effect=Healing
+      ]{Cure Wounds}
+    A creature you touch regains a number of Hit Points equal to $2d8$ plus your spellcasting ability modifier.
+
+    \textbf{Using a Higher-Level Spell Slot.} The healing increases by $2d8$ for each spell slot level above 1.
+
+    \begin{components}
+    V & \textit{Salvus (SAHL-voos)}
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellDetectMagic}{}{
+    \begin{Spell}[
+      tags={Concentration, Ritual},
+      level=1st,
+      time=1 Action,
+      range={Self/30 ft r Sphere},
+      components={V, S},
+      duration=10 Minutes,
+      school=Divination,
+      attack=None,
+      effect=Detection
+    ]{Detect Magic}
+    For the duration, you sense the presence of magical effects within 30 feet of yourself. If you sense such effects, you can take the Magic action to see a faint aura around any visible creature or object in the area that bears the magic, and if an effect was created by a spell, you learn the spell's school of magic.
+
+    The spell is blocked by 1 foot of stone, dirt, or wood; 1 inch of metal; or a thin sheet of lead.
+
+    \begin{components}
+    V & \textit{Revela arcana (reh-VAY-lah ar-KAH-nah)}
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellDetectPoisonAndDisease}{}{
+    \begin{Spell}[
+            tags={Concentration, Ritual},
+            level=1st,
+            time=1 Action,
+            range={Self, 30 ft},
+            components={V, S, M},
+            duration=10 Minutes,
+            school=Divination,
+            attack=None,
+            effect=Detection
+          ]{Detect Poison and Disease}
+        For the duration, you sense the location of poisons, poisonous
+        or venomous creatures, and magical contagions within 30 feet of
+        yourself. You sense the kind of poison, creature, or contagion
+        in each case.
+
+        The spell is blocked by 1 foot of stone, dirt, or wood; 1 inch
+        of metal; or a thin sheet of lead.
+
+        \begin{components}
+            V & \textit{Noxia sentio (NOX-see-ah SEN-tee-oh)} \\
+            M & a yew leaf
+        \end{components}
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellDetectThoughts}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level={2nd},
+      time=1 Action,
+      range=Self,
+      components={V, S, M},
+      duration=1 Minute,
+      school={Divination},
+      attack={WIS Save},
+      effect={Detection}
+    ]{Detect Thoughts}
+    You activate one of the effects below. Until the spell ends, you can activate either effect as a Magic action on your later turns.
+
+    \textbf{Sense Thoughts.} You sense the presence of thoughts within 30 feet of yourself that belong to creatures that know languages or are telepathic. You don't read the thoughts, but you know that a thinking creature is present.
+
+    The spell is blocked by 1 foot of stone, dirt, or wood; 1 inch of metal; or a thin sheet of lead.
+
+    \textbf{Read Thoughts.} Target one creature you can see within 30 feet of yourself or one creature within 30 feet of yourself that you detected with the Sense Thoughts option. You learn what is most on the target's mind right now. If the target doesn't know any languages and isn't telepathic, you learn nothing.
+
+    As a Magic action on your next turn, you can try to probe deeper into the target's mind. If you probe deeper, the target makes a Wisdom saving throw. On a failed save, you discern the target's reasoning, emotions, and something that looms large in its mind (such as a worry, love, or hate). On a successful save, the spell ends. Either way, the target knows that you are probing into its mind, and until you shift your attention away from the target's mind, the target can take an action on its turn to make an Intelligence (Arcana) check against your spell save DC, ending the spell on a success.
+
+    \begin{components}
+    V & \textit{Intro mentis (IN-troh MEN-tis)} \\
+    M & a copper piece
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellDisguiseSelf}{}{
+    \begin{Spell}[
+        level=1st,
+        time=1 Action,
+        range=Self,
+        components={V, S},
+        duration=1 Hour,
+        school=Illusion,
+        attack=None,
+        effect=Shapechanging
+    ]{Disguise Self}
+    You make yourself---including your clothing, armor, weapons, and other belongings on your person---look different until the spell ends. You can seem 1 foot shorter or taller and can appear heavier or lighter. You must adopt a form that has the same basic arrangement of limbs as you have. Otherwise, the extent of the illusion is up to you.
+
+    The changes wrought by this spell fail to hold up to physical inspection. For example, if you use this spell to add a hat to your outfit, objects pass through the hat, and anyone who touches it would feel nothing.
+
+    To discern that you are disguised, a creature must take the Study action to inspect your appearance and succeed on an Intelligence (Investigation) check against your spell save DC.
+
+    \begin{components}
+    V & \textit{Vultumuto (vool-too-MOO-toh)}
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellDispelMagic}{}{
+    \begin{Spell}[
+        level=3rd,
+        time=1 Action,
+        range=120 ft,
+        components={V, S},
+        duration=Instantaneous,
+        school=Abjuration,
+        attack=None,
+        effect=Control
+    ]{Dispel Magic}
+        Choose one creature, object, or magical effect within range. Any
+        ongoing spell of level 3 or lower on the target ends. For each ongoing
+        spell of level 4 or higher on the target, make an ability check using
+        your spellcasting ability (DC 10 plus that spell's level). On a
+        successful check, the spell ends.
+
+        \textbf{Using a Higher-Level Spell Slot.} You automatically end a spell
+        on the target if the spell's level is equal to or less than the level
+        of the spell slot you use.
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellDissonantWhispers}{}{
+    \begin{Spell}[
+        level=1st,
+        time=1 Action,
+        range=60 ft,
+        components={V},
+        duration=Instantaneous,
+        school=Enchantment,
+        attack=WIS Save,
+        effect=Psychic
+    ]{Dissonant Whispers}
+    One creature of your choice that you can see within range hears a discordant melody in its mind. The target makes a Wisdom saving throw. On a failed save, it takes $3d6$ Psychic damage and must immediately use its Reaction, if available, to move as far away from you as it can, using the safest route. On a successful save, the target takes half as much damage only.
+
+    \textbf{Using a Higher-Level Spell Slot.} The damage increases by $1d6$ for each spell slot level above 1.
+
+    \begin{components}
+    V & \textit{Arcanum dissonum (ar-KAH-num dis-SOH-num)}
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellDragonsBreath}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level=2nd,
+      time=1 Bonus Action,
+      range={Touch/15 ft Cone},
+      components={V, S, M},
+      duration=1 Minute,
+      school=Transmutation,
+      attack=DEX Save,
+      effect=Acid
+    ]{Dragon's Breath}
+    You touch one willing creature, and choose Acid, Cold, Fire, Lightning, or Poison. Until the spell ends, the target can take a Magic action to exhale a 15-foot Cone. Each creature in that area makes a Dexterity saving throw, taking $3d6$ damage of the chosen type on a failed save or half as much damage on a successful one.
+
+    \textbf{Using a Higher-Level Spell Slot.} The damage increases by $1d6$ for each spell slot level above 2.
+
+    \begin{components}
+    V & \textit{Spiritus draconis (SPEER-ee-toos drah-KOH-niss)} \\
+    M & a hot pepper
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellDruidcraft}{}{
+    \begin{Spell}[
+      level=Cantrip,
+      time=1 Action,
+      range=30 ft,
+      components={V, S},
+      duration=Instantaneous,
+      school=Transmutation,
+      attack=None,
+      effect=Utility
+    ]{Druidcraft}
+    Whispering to the spirits of nature, you create one of the following effects within range.
+
+    \textbf{Weather Sensor.} You create a Tiny, harmless sensory effect that predicts what the weather will be at your location for the next 24 hours. The effect might manifest as a golden orb for clear skies, a cloud for rain, falling snowflakes for snow, and so on. This effect persists for 1 round.
+
+    \textbf{Bloom.} You instantly make a flower blossom, a seed pod open, or a leaf bud bloom.
+
+    \textbf{Sensory Effect.} You create a harmless sensory effect, such as falling leaves, spectral dancing fairies, a gentle breeze, the sound of an animal, or the faint odor of skunk. The effect must fit in a 5-foot Cube.
+
+    \textbf{Fire Play.} You light or snuff out a candle, a torch, or a campfire.
+
+    \begin{components}
+    V & \textit{Natura susurro (nah-TOO-rah soo-SOOR-roh)}
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellEldritchBlast}{}{
+    \begin{Spell}[
+      level=Cantrip,
+      time=1 Action,
+      range=120 ft,
+      components={V, S},
+      duration=Instantaneous,
+      school=Evocation,
+      attack=Ranged,
+      effect=Force
+    ]{Eldritch Blast}
+    You hurl a beam of crackling energy. Make a ranged spell attack against one creature or object in range. On a hit, the target takes $1d10$ Force damage.
+
+    \textbf{Cantrip Upgrade.} The spell creates two beams at level 5, three beams at level 11, and four beams at level 17. You can direct the beams at the same target or at different ones. Make a separate attack roll for each beam.
+
+    \begin{components}
+    V & \textit{Dolor (DOH-lor)}
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellEntangle}{}{
+    \begin{Spell}[
+        tags=Concentration,
+        level=1st,
+        time=1 Action,
+        range=90 ft. (20 ft.),
+        components={V, S},
+        duration=1 Minute,
+        school=Conjuration,
+        attack=STR Save,
+        effect=Restrained
+      ]{Entangle}
+        Grasping plants sprout from the ground in a 20-foot square
+        within range. For the duration, these plants turn the ground in
+        the area into Difficult Terrain. They disappear when the spell
+        ends.
+
+        Each creature (other than you) in the area when you cast the
+        spell must succeed on a Strength saving throw or have the
+        Restrained condition until the spell ends. A Restrained creature
+        can take an action to make a Strength (Athletics) check against
+        your spell save DC. On a success, it frees itself from the
+        grasping plants and is no longer Restrained by them.
+
+        \begin{components}
+            V & \textit{Impedi (im-PEH-dee)}
+        \end{components}
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellFaerieFire}{}{
+    \begin{Spell}[
+        tags=Concentration,
+        level=1st,
+        time=1 Action,
+        range={60 ft/20 ft Cube},
+        components={V},
+        duration=1 Minute,
+        school=Evocation,
+        attack=DEX Save,
+        effect=Debuff
+    ]{Faerie Fire}
+    Objects in a 20-foot Cube within range are outlined in blue, green,
+    or violet light (your choice). Each creature in the Cube is also
+    outlined if it fails a Dexterity saving throw. For the duration,
+    objects and affected creatures shed Dim Light in a 10-foot radius
+    and can't benefit from the Invisible condition.
+
+    Attack rolls against an affected creature or object have Advantage
+    if the attacker can see it.
+
+    \begin{components}
+    V & \textit{Lumen fata (LOO-men FAH-tah)}
+    \end{components}
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellFalseLife}{}{
+    \begin{Spell}[
+      level={1st},
+      time=1 Action,
+      range=Self,
+      components={V, S, M},
+      duration=Instantaneous,
+      school={Necromancy},
+      attack={None},
+      effect={Buff}
+    ]{False Life}
+    You gain $2d4+4$ Temporary Hit Points.
+
+    \textbf{Using a Higher-Level Spell Slot.} You gain 5 additional Temporary Hit Points for each spell slot level above 1.
+
+    \begin{components}
+    V & \textit{Vim vitae (WIM WEE-tie)} \\
+    M & a drop of alcohol
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellFeatherFall}{}{
+    \begin{Spell}[
+        level=1st,
+        time=1 Reaction\fmark,
+        range=60 ft,
+        components={V, M},
+        duration=1 Minute,
+        school=Transmutation,
+        attack=None,
+        effect=Exploration
+    ]{Feather Fall}
+    Choose up to five falling creatures within range. A falling creature's rate of descent slows to 60 feet per round until the spell ends. If a creature lands before the spell ends, the creature takes no damage from the fall, and the spell ends for that creature.
+
+    \ftext{Which you take when you or a creature you can see within 60 feet of you falls.}
+
+    \begin{components}
+    V & \textit{Plumitas (PLOO-mee-tass)} \\
+    M & a small feather or piece of down
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellFindFamiliar}{}{
+    \begin{Spell}[
+      tags=Ritual,
+      level=1st,
+      time=1 Hour,
+      range=10 ft,
+      components={V, S, M},
+      duration=Instantaneous,
+      school=Conjuration,
+      attack=None,
+      effect=Summoning
+    ]{Find Familiar}
+    You gain the service of a familiar, a spirit that takes an animal form you choose: Bat, Cat, Frog, Hawk, Lizard, Octopus, Owl, Rat, Raven, Spider, Weasel, or another Beast that has a Challenge Rating of 0. Appearing in an unoccupied space within range, the familiar has the statistics of the chosen form, though it is a Celestial, Fey, or Fiend (your choice) instead of a Beast. Your familiar acts independently of you, but it obeys your commands.
+
+    \textbf{Telepathic Connection.} While your familiar is within 100 feet of you, you can communicate with it telepathically. Additionally, as a Bonus Action, you can see through the familiar's eyes and hear what it hears until the start of your next turn, gaining the benefits of any special senses it has.
+
+    Finally, when you cast a spell with a range of touch, your familiar can deliver the touch. Your familiar must be within 100 feet of you, and it must take a Reaction to deliver the touch when you cast the spell.
+
+    \textbf{Combat.} The familiar is an ally to you and your allies. It rolls its own Initiative and acts on its own turn. A familiar can't attack, but it can take other actions as normal.
+
+    \textbf{Disappearance of the Familiar.} When the familiar drops to 0 Hit Points, it disappears. It reappears after you cast this spell again. As a Magic action, you can temporarily dismiss the familiar to a pocket dimension. Alternatively, you can dismiss it forever. As a Magic action while it is temporarily dismissed, you can cause it to reappear in an unoccupied space within 30 feet of you. Whenever the familiar drops to 0 Hit Points or disappears into the pocket dimension, it leaves behind in its space anything it was wearing or carrying.
+
+    \textbf{One Familiar Only.} You can't have more than one familiar at a time. If you cast this spell while you have a familiar, you instead cause it to adopt a new eligible form.
+
+    \begin{components}
+    V & \textit{Voco socius (WOH-koh SOH-kee-oos)} \\
+    M & burning incense worth $10+$gp, which the spell consumes
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellFireBolt}{}{
+    \begin{Spell}[
+      level=Cantrip,
+      time=1 Action,
+      range=120 ft,
+      components={V, S},
+      duration=Instantaneous,
+      school=Evocation,
+      attack=Ranged,
+      effect=Fire
+    ]{Fire Bolt}
+
+    You hurl a mote of fire at a creature or an object within range. Make a
+    ranged spell attack against the target. On a hit, the target takes
+    $1d10$ Fire damage. A flammable object hit by this spell starts burning
+    if it isn't being worn or carried.
+
+    \textit{Cantrip Upgrade.} The damage increases by 1d10 when you reach
+    levels 5 ($2d10$), 11 ($3d10$), and 17 ($4d10$).
+
+    \begin{components}
+    V & \textit{Fyr'keth! (FEER-keth)}
+    \end{components}
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellFly}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level={3rd},
+      time=1 Action,
+      range=Touch,
+      components={V, S, M},
+      duration=10 minutes,
+      school={Transmutation},
+      attack={None},
+      effect={Movement}
+    ]{Fly}
+    You touch a willing creature. For the duration, the target gains a Fly Speed of 60 feet and can hover. When the spell ends, the target falls if it is still aloft unless it can stop the fall.
+
+    \textbf{Using a Higher-Level Spell Slot.} You can target one additional creature for each spell slot level above 3.
+
+    \begin{components}
+    V & \textit{Sursum (SOOR-soom)} \\
+    M & a feather
+    \end{components}
+    \end{Spell}
+
+}
+
+
+\NewDocumentCommand{\SpellGoodberry}{}{
+    \begin{Spell}[
+        level=1st,
+        time=1 Action,
+        range=Self,
+        components={V, S, M},
+        duration=24 Hours,
+        school=Conjuration,
+        attack=None,
+        effect=Healing
+    ]{Goodberry}
+    Ten berries appear in your hand and are infused with magic for the duration. A creature can take a Bonus Action to eat one berry. Eating a berry restores 1 Hit Point, and the berry provides enough nourishment to sustain a creature for one day.
+
+    Uneaten berries disappear when the spell ends.
+
+    \begin{components}
+    V & \textit{Bacca vitis (BAH-kah WEE-tis)} \\
+    M & a sprig of mistletoe
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellGuidance}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level=Cantrip,
+      time=1 Action,
+      range=Touch,
+      components={V, S},
+      duration=1 Minute,
+      school=Divination,
+      attack=None,
+      effect=Buff
+    ]{Guidance}
+    You touch a willing creature and choose a skill. Until the spell ends, the creature adds $1d4$ to any ability check using the chosen skill.
+
+    \begin{components}
+    V & \textit{Dirige viam (dee-REE-geh WEE-ahm)}
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellGustBarrier}{}{
+    \begin{Spell}[
+      level=Cantrip,
+      time=1 Action,
+      range=Self,
+      components={S},
+      duration=1 Round,
+      school=Evocation,
+      attack=CON Save,
+      effect=Control
+    ]{Gust Barrier}
+      You spread your arms wide, allowing yourself to become enveloped
+      by the air around you. Until the end of your next turn, any ranged
+      attack against you is made with Disadvantage.
+
+      Melee attackers who successfully hit you must make a Constitution
+      saving throw against your spell save DC. On a failure, the
+      attacker is flung away from you up to 10 feet and is knocked
+      Prone.
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellHealingWord}{}{
+    \begin{Spell}[
+      level=1st,
+      time=1 Bonus Action,
+      range=60 ft,
+      components={V},
+      duration=Instantaneous,
+      school=Abjuration,
+      attack=None,
+      effect=Healing
+    ]{Healing Word}
+    A creature of your choice that you can see within range regains Hit Points equal to $2d4$ plus your spellcasting ability modifier.
+
+    \textbf{Using a Higher-Level Spell Slot.} The healing increases by $2d4$ for each spell slot level above 1.
+
+    \begin{components}
+    V & \textit{Sano vulnus (SAH-noh WOOL-noos)}
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellHeroism}{}{
+    \begin{Spell}[
+        tags=Concentration,
+        level=1st,
+        time=1 Action,
+        range=Touch,
+        components={V, S},
+        duration=1 Minute,
+        school=Enchantment,
+        attack=None,
+        effect=Frightened
+    ]{Heroism}
+    A willing creature you touch is imbued with bravery. Until the spell ends, the creature is immune to the Frightened condition and gains Temporary Hit Points equal to your spellcasting ability modifier at the start of each of its turns.
+
+    \textbf{Using a Higher-Level Spell Slot.} You can target one additional creature for each spell slot level above 1.
+
+    \begin{components}
+    V & \textit{Cor ignis (KOR EEG-nees)}
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellHex}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level=1st,
+      time=1 Bonus Action,
+      range=90 ft,
+      components={V, S, M},
+      duration=1 Hour,
+      school=Enchantment,
+      attack=None,
+      effect=Necrotic
+    ]{Hex}
+        You place a curse on a creature that you can see within range.
+        Until the spell ends, you deal an extra $1d6$ Necrotic damage to
+        the target whenever you hit it with an attack roll. Also, choose
+        one ability when you cast the spell. The target has Disadvantage
+        on ability checks made with the chosen ability.
+
+        If the target drops to 0 Hit Points before this spell ends, you
+        can take a Bonus Action on a later turn to curse a new creature.
+
+        \textbf{Using a Higher-Level Spell Slot.} Your Concentration can
+        last longer with a spell slot of level 2 (up to 4 hours), 3-4
+        (up to 8 hours), or $5+$ (24 hours).
+
+        \begin{components}
+        V & \textit{Te exsecro (TAY eks-SEH-kroh)} \\
+        M & the petrified eye of a newt
+        \end{components}
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellHungerOfHadar}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level={3rd},
+      time=1 Action,
+      range={150 ft/20 ft r Sphere},
+      components={V, S, M},
+      duration=1 Minute,
+      school={Conjuration},
+      attack={DEX Save},
+      effect={Damage, Control}
+    ]{Hunger of Hadar}
+    You open a gateway to the Far Realm. A 20-foot-radius Sphere of Darkness appears, centered on a point you can see within range, and it lasts for the duration. The Sphere is Difficult Terrain.
+
+    No light, magical or otherwise, can illuminate the area, and creatures fully within it are Blinded. Whispers and slurping noises can be heard up to 30 feet away.
+
+    A creature that starts its turn in the area takes $2d6$ Cold damage. A creature that ends its turn there must make a Dexterity saving throw or take $2d6$ Acid damage.
+
+    \textbf{Using a Higher-Level Spell Slot.} The Cold or Acid damage (your choice) increases by $1d6$ for each spell slot level above 3.
+
+    \begin{components}
+    V & \textit{Vorax nihilo (WOR-ax NEE-hee-lo)} \\
+    M & a pickled tentacle
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellHypnoticPattern}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level={3rd},
+      time=1 Action,
+      range={120 ft/30 ft Cube},
+      components={S, M},
+      duration=1 Minute,
+      school={Illusion},
+      attack={WIS Save},
+      effect={Control}
+    ]{Hypnotic Pattern}
+    You create a twisting pattern of colors in a 30-foot Cube within range. Each creature in the area who sees the pattern must make a Wisdom saving throw. On a failed save, the creature has the Charmed condition for the duration. While Charmed this way, the creature is Incapacitated and has a speed of 0.
+
+    The spell ends for a creature if it takes damage or if another creature uses its action to shake it out of its stupor.
+
+    \begin{components}
+    M & a pinch of confetti
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellInvisibility}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level=2nd,
+      time=1 Action,
+      range=Touch,
+      components={V, S, M},
+      duration=1 Hour,
+      school=Illusion,
+      attack=None,
+      effect=Invisible
+    ]{Invisibility}
+    A creature you touch has the Invisible condition until the spell ends. The spell ends early immediately after the target makes an attack roll, deals damage, or casts a spell.
+
+    \textbf{Using a Higher-Level Spell Slot.} You can target one additional creature for each spell slot level above 2.
+
+    \begin{components}
+    V & \textit{Evanesco (eh-vah-NESS-koh)} \\
+    M & an eyelash in gum arabic
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellLight}{}{
+    \begin{Spell}[
+      level=Cantrip,
+      time=1 Action,
+      range=Touch,
+      components={V, M},
+      duration=1 Hour,
+      school=Evocation,
+      attack=None,
+      effect=Creation
+    ]{Light}
+    You touch one Large or smaller object that isn't being worn or carried by someone else. Until the spell ends, the object sheds Bright Light in a 20-foot radius and Dim Light for an additional 20 feet. The light can be colored as you like.
+
+    Covering the object with something opaque blocks the light. The spell ends if you cast it again.
+
+    \begin{components}
+    V & \textit{Lux fiat (LOOKS FEE-aht)} \\
+    M & a firefly or phosphorescent moss
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellMageHand}{}{
+    \begin{Spell}[
+      level=Cantrip,
+      time=1 Action,
+      range=30 ft,
+      components={V, S},
+      duration=1 Minute,
+      school=Conjuration,
+      attack=None,
+      effect=Utility
+    ]{Mage Hand}
+    A spectral, floating hand appears at a point you choose within range. The hand lasts for the duration. The hand vanishes if it is ever more than 30 feet away from you or if you cast this spell again.
+
+    When you cast the spell, you can use the hand to manipulate an object, open an unlocked door or container, stow or retrieve an item from an open container, or pour the contents out of a vial.
+
+    As a Magic action on your later turns, you can control the hand thus again. As part of that action, you can move the hand up to 30 feet.
+
+    The hand can't attack, activate magic items, or carry more than 10 pounds.
+
+    \begin{components}
+    V & \textit{Veni et iuva me (WEH-nee eht YOO-wah meh)}
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellMagicMissile}{}{
+    \begin{Spell}[
+      level=1st,
+      time=1 Action,
+      range=120 ft,
+      components={V, S},
+      duration=Instantaneous,
+      school=Evocation,
+      attack=None,
+      effect=Force
+    ]{Magic Missile}
+    You create three glowing darts of magical force. Each dart strikes a creature of your choice that you can see within range. A dart deals $1d4+1$ Force damage to its target. The darts all strike simultaneously, and you can direct them to hit one creature or several.
+
+    \textbf{Using a Higher-Level Spell Slot.} The spell creates one more dart for each spell slot level above 1.
+
+    \begin{components}
+    V & \textit{Sagitta vis (sah-GIT-tah WEES)}
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellMajorImage}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level={3rd},
+      time=1 Action,
+      range={120 ft/20 ft Cube},
+      components={V, S, M},
+      duration=10 Minutes,
+      school={Illusion},
+      attack={INT Check},
+      effect={Control}
+    ]{Major Image}
+    You create the image of an object, a creature, or some other visible phenomenon that is no larger than a 20-foot Cube. The image appears at a spot that you can see within range and lasts for the duration. It seems real, including sounds, smells, and temperature appropriate to the thing depicted, but it can't deal damage or cause conditions.
+
+    If you are within range of the illusion, you can take a Magic action to cause the image to move to any other spot within range. As the image changes location, you can alter its appearance so that its movements appear natural for the image. You can also cause the illusion to make different sounds at different times, even making it carry on a conversation.
+
+    Physical interaction with the image reveals it to be an illusion, as things can pass through it. A creature that takes a Study action to examine the image can determine that it is an illusion with a successful Intelligence (Investigation) check against your spell save DC. If a creature discerns the illusion for what it is, the creature can see through the image, and its other sensory qualities become faint to the creature.
+
+    \textbf{Using a Higher-Level Spell Slot.} The spell lasts until dispelled, without requiring Concentration, if cast with a 4th-level or higher spell slot.
+
+    \begin{components}
+    V & \textit{Sensus decipio (SEN-soos day-KEE-pee-oh)} \\
+    M & a bit of fleece
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellMending}{}{
+    \begin{Spell}[
+      level=Cantrip,
+      time=1 Minute,
+      range=Touch,
+      components={V, S, M},
+      duration=Instantaneous,
+      school=Transmutation,
+      attack=None,
+      effect=Utility
+    ]{Mending}
+    This spell repairs a single break or tear in an object you touch, such as a broken chain link, two halves of a broken key, a torn cloak, or a leaking wineskin. As long as the break or tear is no larger than 1 foot in any dimension, you mend it, leaving no trace of the former damage.
+
+    This spell can physically repair a magic item, but it can't restore magic to such an object.
+
+    \begin{components}
+    V & \textit{Reparo fractum (reh-PAH-roh FRAHK-toom)} \\
+    M & two lodestones
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellMindSliver}{}{
+    \begin{Spell}[
+      level=Cantrip,
+      time=1 Action,
+      range=60 ft,
+      components={V},
+      duration=1 Round,
+      school=Enchantment,
+      attack=INT Save,
+      effect=Psychic
+    ]{Mind Sliver}
+    You try to temporarily sliver the mind of one creature you can see within range. The target must succeed on an Intelligence saving throw or take $1d6$ Psychic damage and subtract $1d4$ from the next saving throw it makes before the end of your next turn.
+
+    \textbf{Cantrip Upgrade.} The damage increases by $1d6$ when you reach levels 5 ($2d6$), 11 ($3d6$), and 17 ($4d6$).
+
+    \begin{components}
+    V & \textit{Mens fragilis (MENS frah-GEE-liss)}
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellMinorIllusion}{}{
+    \begin{Spell}[
+        level=Cantrip,
+        time=1 Action,
+        range={30 ft/5 ft Cube},
+        components={S, M},
+        duration=1 Minute,
+        school=Illusion,
+        attack=None,
+        effect=Control
+    ]{Minor Illusion}
+    You create a sound or an image of an object within range that lasts for the duration. See the descriptions below for the effects of each. The illusion ends if you cast this spell again.
+
+    If a creature takes a Study action to examine the sound or image, the creature can determine that it is an illusion with a successful Intelligence (Investigation) check against your spell save DC. If a creature discerns the illusion for what it is, the illusion becomes faint to the creature.
+
+    \newpage
+
+    \textbf{Sound.} If you create a sound, its volume can range from a whisper to a scream. It can be your voice, someone else's voice, a lion's roar, a beating of drums, or any other sound you choose. The sound continues unabated throughout the duration, or you can make discrete sounds at different times before the spell ends.
+
+    \textbf{Image.} If you create an image of an object---such as a chair, muddy footprints, or a small chest---it must be no larger than a 5-foot Cube. The image can't create sound, light, smell, or any other sensory effect. Physical interaction with the image reveals it to be an illusion, since things can pass through it.
+
+    \begin{components}
+    V & \textit{Mirus umbra (MEE-roos OOM-bra)} \\
+    M & a bit of fleece
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellMirrorImage}{}{
+    \begin{Spell}[
+      level=2nd,
+      time=1 Action,
+      range=Self,
+      components={V, S},
+      duration=1 Minute,
+      school=Illusion,
+      attack=None,
+      effect=Deception
+    ]{Mirror Image}
+    Three illusory duplicates of yourself appear in your space. Until the spell ends, the duplicates move with you and mimic your actions, shifting position so it's impossible to track which image is real.
+
+    Each time a creature hits you with an attack roll during the spell's duration, roll a $d6$ for each of your remaining duplicates. If any of the $d6$s rolls a 3 or higher, one of the duplicates is hit instead of you, and the duplicate is destroyed. The duplicates otherwise ignore all other damage and effects. The spell ends when all three duplicates are destroyed.
+
+    A creature is unaffected by this spell if it has the Blinded condition, Blindsight, or Truesight.
+
+    \begin{components}
+    V & \textit{Speculi mei (SPEH-koo-lee MAY-ee)}
+    \end{components}
+    \end{Spell}
+
+}
+
+
+\NewDocumentCommand{\SpellMistyStep}{}{
+    \begin{Spell}[
+      level={2nd},
+      time=1 Bonus Action,
+      range=Self,
+      components={V},
+      duration=Instantaneous,
+      school={Conjuration},
+      attack={None},
+      effect={Teleportation}
+    ]{Misty Step}
+    Briefly surrounded by silvery mist, you teleport up to 30 feet to an unoccupied space you can see.
+
+    \begin{components}
+    V & \textit{Alter ubi (AHL-tair OO-bee)}
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellPhantasmalForce}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level={2nd},
+      time=1 Action,
+      range={60 ft/10 ft Cube},
+      components={V, S, M},
+      duration=1 Minute,
+      school={Illusion},
+      attack={INT Save},
+      effect={Psychic}
+    ]{Phantasmal Force}
+    You craft an illusion in the mind of a creature you can see within range. The target must make an Intelligence saving throw. On a failed save, you create a phantasmal object, creature, or other phenomenon of your choice (no larger than a 10-foot Cube) that is perceivable only to the target for the duration. The phantasm includes sound, temperature, and other stimuli.
+
+    The target treats the phantasm as if it were real, rationalizing any illogical outcomes. If the phantasm is a dangerous creature or hazard, it deals $2d8$ Psychic damage to the target on each of your turns if the target is in the phantasm's area or within 5 feet of it. The target perceives the damage as a type appropriate to the illusion.
+
+    The target can take a Study action to make an Intelligence (Investigation) check against your spell save DC. On a success, the target realizes the phantasm is an illusion, and the spell ends.
+
+    \begin{components}
+    V & \textit{Phantasma mortiferum (fan-TAZ-mah mor-TIF-er-um)} \\
+    M & a bit of fleece
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellPrestidigitation}{}{
+    \begin{Spell}[
+      level=Cantrip,
+      time=1 Action,
+      range=10 ft,
+      components={V, S},
+      duration=1 Hour,
+      school=Transmutation,
+      attack=None,
+      effect=Utility
+    ]{Prestidigitation}
+        You create a magical effect within range. Choose the effect from the
+        options below. If you cast this spell multiple times, you can have up
+        to three of its non-instantaneous effects active at a time.
+
+        \vspace{\parskip}\setlength{\parskip}{0.25em}
+        \textbf{Sensory Effect.} You create an instantaneous, harmless
+        sensory effect, such as a shower of sparks, a puff of wind, faint
+        musical notes, or an odd odor.
+
+        \textbf{Fire Play.} You instantaneously light or snuff out a
+        candle, a torch, or a small campfire.
+
+        \textbf{Clean or Soil.} You instantaneously clean or soil an
+        object no larger than 1 cubic foot.
+
+        \textbf{Minor Sensation.} You chill, warm, or flavor up to 1
+        cubic foot of nonliving material for 1 hour.
+
+        \textbf{Magic Mark.} You make a color, a small mark, or a symbol
+        appear on an object or a surface for 1 hour.
+
+        \textbf{Minor Creation.} You create a nonmagical trinket or an
+        illusory image that can fit in your hand. It lasts until the end of
+        your next turn. A trinket can deal no damage and has no
+        monetary worth.
+
+        \begin{components}
+        V & \textit{Ludo magica (LOO-doh MAH-gee-kah)}
+        \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellPrimalSavagery}{}{
+    \begin{Spell}[
+        level=Cantrip,
+        time=1 Action,
+        range=5 ft,
+        components={S},
+        duration=Instantaneous,
+        school=Transmutation,
+        attack=Melee,
+        effect=Acid
+      ]{Primal Savagery}
+        You channel primal magic to cause your teeth or fingernails to
+        sharpen, ready to deliver a corrosive attack. Make a melee spell
+        attack against one creature within 5 feet of you. On a hit, the
+        target takes $1d10$ acid damage. After you make the attack, your
+        teeth or fingernails return to normal.
+
+        \textbf{Cantrip Upgrade.} The spell's damage increases by $1d10$
+        when you reach 5th level ($2d10$), 11th level ($3d10$), and 17th
+        level ($4d10$).
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellProduceFlame}{}{
+    \begin{Spell}[
+        level=Cantrip,
+        time=1 Bonus Action,
+        range={Self, 60 ft},
+        components={V, S},
+        duration=10 Minutes,
+        school=Conjuration,
+        attack=Ranged,
+        effect=Fire
+      ]{Produce Flame}
+        A flickering flame appears in your hand and remains there for
+        the duration. While there, the flame emits no heat and ignites
+        nothing, and it sheds Bright Light in a 20-foot radius and Dim
+        Light for an additional 20 feet. The spell ends if you cast it
+        again.
+
+        Until the spell ends, you can take a Magic action to hurl fire
+        at a creature or an object within 60 feet of you. Make a ranged
+        spell attack. On a hit, the target takes $1d8$ Fire damage.
+
+        \textbf{Cantrip Upgrade.} The damage increases by $1d8$ when you
+        reach levels 5 ($2d8$), 11 ($3d8$), and 17 ($4d8$).
+
+        \begin{components}
+            V & \textit{Ignis (IG-nis)}
+        \end{components}
+    \end{Spell}
+}
+
+\NewDocumentCommand{\SpellShapeWater}{}{
+    \begin{Spell}[
+      level=Cantrip,
+      time=1 Action,
+      range={30 ft/5 ft Cube},
+      components={S},
+      duration=Instantaneous,
+      school=Transmutation,
+      attack=None,
+      effect=Control
+    ]{Shape Water}
+    You choose an area of water that you can see within range and that fits within a 5-foot Cube. You manipulate it in one of the following ways:
+    \begin{itemize}
+    \setlength{\itemsep}{0em}
+    \item You instantaneously move or otherwise change the flow of the water as you direct, up to 5 feet in any direction. This movement doesn't have enough force to cause damage.
+    \item You cause the water to form into simple shapes and animate at your direction. This change lasts for 1 hour.
+    \item You change the water's color or opacity. The water must be changed in the same way throughout. This change lasts for 1 hour.
+    \item You freeze the water, provided that there are no creatures in it. The water unfreezes in 1 hour.
+    \end{itemize}
+    If you cast this spell multiple times, you can have no more than two of its non-instantaneous effects active at a time, and you can dismiss such an effect as an action.
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellShield}{}{
+    \begin{Spell}[
+      level=1st,
+      time=1 Reaction\fmark,
+      range=Self,
+      components={V, S},
+      duration=1 Round,
+      school=Abjuration,
+      attack=None,
+      effect=Warding
+    ]{Shield}
+    An imperceptible barrier of magical force protects you. Until the start of your next turn, you have a $+5$ bonus to AC, including against the triggering attack, and you take no damage from Magic Missile.
+
+    \begin{components}
+    V & \textit{Protego (proh-TEH-goh)}
+    \end{components}
+
+    \ftext{Which you take when you are hit by an attack roll or targeted by the Magic Missile spell.}
+    \end{Spell}
+
+
+}
+
+\NewDocumentCommand{\SpellShillelagh}{}{
+    \begin{Spell}[
+        level=Cantrip,
+        time=1 Bonus Action,
+        range=Self,
+        components={V, S, M},
+        duration=1 Minute,
+        school=Transmutation,
+        attack=Melee,
+        effect=Bludgeoning
+      ]{Shillelagh}
+
+        A Club or Quarterstaff you are holding is imbued with nature's
+        power. For the duration, you can use your spellcasting ability
+        instead of Strength for the attack and damage rolls of melee
+        attacks using that weapon, and the weapon's damage die becomes a
+        $d8$. If the attack deals damage, it can be Force damage or the
+        weapon's normal damage type (your choice).
+
+        The spell ends early if you cast it again or if you let go of
+        the weapon.
+
+        \textbf{Cantrip Upgrade.} The damage die changes when you reach
+        levels 5 ($d10$), 11 ($d12$), and 17 ($2d6$).
+
+        \begin{components}
+            V & \textit{Anima quercus (AH-nee-mah KWER-koos)} \\
+            M & mistletoe
+        \end{components}
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellShadowOfMoil}{}{
+    \begin{Spell}[
+        tags=Concentration,
+        level=4th,
+        time=1 Action,
+        range=Self,
+        components={V, S, M},
+        duration=1 Minute,
+        school=Necromancy,
+        attack=None,
+        effect=Necrotic
+      ]{Shadow of Moil}
+
+        Flame-like shadows wreathe your body until the spell ends, causing you
+        to become Heavily Obscured to others. The shadows turn dim light within
+        10 feet of you into darkness, and bright light in the same area to dim
+        light.
+
+        Until the spell ends, you have resistance to radiant damage. In
+        addition, whenever a creature within 10 feet of you hits you with an
+        attack, the shadows lash out at that creature, dealing it $2d8$
+        necrotic damage.
+
+        \begin{components}
+        V & \textit{Thrax'kael umbrask (THRAKS-kale UM-brask)} \\
+        M & an undead eyeball encased in a gem worth at least 150 gp
+        \end{components}
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellSickeningRadiance}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level={4th},
+      time=1 Action,
+      range={120 ft/30 ft r Sphere},
+      components={V, S},
+      duration=10 Minutes,
+      school={Evocation},
+      attack={CON Save},
+      effect={Radiant, Exhaustion}
+    ]{Sickening Radiance}
+    Dim, greenish light fills a 30-foot-radius Sphere centered on a point you choose within range. The light spreads around corners and lasts for the duration.
+
+    When a creature moves into the spell's area for the first time on a turn or starts its turn there, it must succeed on a Constitution saving throw or take $4d10$ Radiant damage, suffer one level of Exhaustion, and emit dim, greenish light in a 5-foot radius. This light prevents the creature from benefiting from being Invisible.
+
+    The light and any levels of Exhaustion caused by this spell go away when the spell ends.
+
+    \begin{components}
+    V & \textit{Lux aegra (LOOKS EYE-grah)}
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellSilentImage}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level={1st},
+      time=1 Action,
+      range={60 ft/15 ft Cube},
+      components={V, S, M},
+      duration=10 Minutes,
+      school={Illusion},
+      attack={None},
+      effect={Control}
+    ]{Silent Image}
+        You create the image of an object, a creature, or some other
+        visible phenomenon that is no larger than a 15-foot Cube. The
+        image appears at a spot within range and lasts for the duration.
+        The image is purely visual; it isn't accompanied by sound,
+        smell, or other sensory effects.
+
+        As a Magic action, you can cause the image to move to any spot
+        within range. As the image changes location, you can alter its
+        appearance so that its movements appear natural for the image.
+        For example, if you create an image of a creature and move it,
+        you can alter the image so that it appears to be walking.
+
+        Physical interaction with the image reveals it to be an
+        illusion, since things can pass through it. A creature that
+        takes a Study action to examine the image can determine that it
+        is an illusion with a successful Intelligence (Investigation)
+        check against your spell save DC. If a creature discerns the
+        illusion for what it is, the creature can see through the image.
+
+        \vfill%
+        \begin{components}
+        V & \textit{Texe forma (TAYK-seh FOR-mah)} \\
+        M & a bit of fleece
+        \end{components}
+    \end{Spell}
+}
+
+\NewDocumentCommand{\SpellSilence}{}{
+    \begin{Spell}[
+        tags=Concentration,
+        level=2nd,
+        time=1 Action,
+        range={120 ft, 20 ft r Sphere},
+        components={V, S},
+        duration=10 Minutes,
+        school=Illusion,
+        attack=None,
+        effect=Control
+    ]{Silence}
+        For the duration, no sound can be created within or pass through a
+        20-foot-radius Sphere centered on a point you choose within range. Any
+        creature or object entirely inside the Sphere has Immunity to Thunder
+        damage, and creatures have the Deafened condition while entirely inside
+        it. Casting a spell that includes a Verbal component is impossible
+        there.
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellSilveryBarbs}{}{
+    \begin{Spell}[
+        level=1st,
+        time=1 Reaction\fmark,
+        range=60 ft,
+        components={V},
+        duration=Instantaneous,
+        school=Enchantment,
+        attack=None,
+        effect=Buff
+    ]{Silvery Barbs}
+        You magically distract the triggering creature and turn its momentary
+        uncertainty into encouragement for another creature. The triggering
+        creature must reroll the $d20$ and use the lower roll.
+
+        You can then choose a different creature you can see within range (you
+        can choose yourself). The chosen creature has Advantage on the next
+        attack roll, ability check, or saving throw it makes within 1 minute. A
+        creature can be empowered by only one use of this spell at a time.
+
+        \ftext{Which you take when a creature you can see within 60 feet of
+        yourself succeeds on an attack roll, an ability check, or a saving
+        throw.}
+
+        \begin{components}
+            V & \textit{Fors aversa (FORS ah-WEHR-sah)}
+        \end{components}
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellSleep}{}{
+    \begin{Spell}[
+        tags=Concentration,
+        level=1st,
+        time=1 Action,
+        range={60 ft/5 ft r Sphere},
+        components={V, S, M},
+        duration=1 Minute,
+        school=Enchantment,
+        attack=WIS Save,
+        effect=Incapacitated
+    ]{Sleep}
+    Each creature of your choice in a 5-foot-radius Sphere centered on a point within range must succeed on a Wisdom saving throw or have the Incapacitated condition until the end of its next turn, at which point it must repeat the save. If the target fails the second save, the target has the Unconscious condition for the duration. The spell ends on a target if it takes damage or someone within 5 feet of it takes an action to shake it out of the spell's effect.
+
+    Creatures that don't sleep, such as elves, or that have Immunity to the Exhaustion condition automatically succeed on saves against this spell.
+
+    \begin{components}
+    V & \textit{Nox silens (noks SEE-lens)}  \\
+    M & a pinch of sand or rose petals
+    \end{components}
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellSlow}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level=3rd,
+      time=1 Action,
+      range={120 ft, 40 ft Cube},
+      components={V, S, M},
+      duration=1 Minute,
+      school=Transmutation,
+      attack=WIS Save,
+      effect=Control
+    ]{Slow}
+        You alter time around up to six creatures of your choice in a 40-foot
+        Cube within range. Each target must succeed on a Wisdom saving throw or
+        be affected by this spell for the duration.
+
+        An affected target's Speed is halved, it takes a -2 penalty to AC and
+        Dexterity saving throws, and it can't take Reactions. On its turns, it
+        can take either an action or a Bonus Action, not both, and it can make
+        only one attack if it takes the Attack action. If it casts a spell with
+        a Somatic component, there is a 25 percent chance the spell fails as a
+        result of the target making the spell's gestures too slowly.
+
+        An affected target repeats the save at the end of each of its turns,
+        ending the spell on itself on a success.
+
+        \begin{components}
+        V & \textit{Onus-tal (Oh-noos-TAHL)} \\
+        M & a drop of molasses
+        \end{components}
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellSorcerousBurst}{}{
+    \begin{Spell}[
+      level=Cantrip,
+      time=1 Action,
+      range=120 ft,
+      components={V, S},
+      duration=Instantaneous,
+      school=Evocation,
+      attack=Ranged,
+      effect=Acid...
+    ]{Sorcerous Burst}
+        You cast sorcerous energy at one creature or object within
+        range. Make a ranged spell attack against the target. On a hit,
+        the target takes $1d8$ damage of a type you choose: Acid, Cold,
+        Fire, Lightning, Poison, Psychic, or Thunder.
+
+        If you roll an 8 on a $d8$ for this spell, you can roll another
+        $d8$, and add it to the damage. When you cast this spell, the
+        maximum number of these $d8$s you can add to the spell's damage
+        equals your spellcasting ability modifier.
+
+        \textbf{Cantrip Upgrade.} The damage increases by $1d8$ when you
+        reach levels 5 ($2d8$), 11 ($3d8$), and 17 ($4d8$).
+
+        \begin{components}
+            V & \textit{Vis erumpo (WEES eh-ROOM-poh)}
+        \end{components}
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellSpeakWithAnimals}{}{
+    \begin{Spell}[
+        tags=Ritual,
+        level=1st,
+        time=1 Action,
+        range=Self,
+        components={V,S},
+        duration=10 Minutes,
+        school=Divination,
+        attack=None,
+        effect=Communication
+    ]{Speak with Animals}
+    For the duration, you can comprehend and verbally communicate with Beasts, and you can use any of the Influence action's skill options with them.
+
+    Most Beasts have little to say about topics that don't pertain to survival or companionship, but at minimum, a Beast can give you information about nearby locations and monsters, including whatever it has perceived within the past day.
+    \begin{components}
+    V & \textit{Amicus animales (ah-MEE-koos ah-nee-MAH-les)}
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellStarryWisp}{}{
+    \begin{Spell}[
+      level=Cantrip,
+      time=1 Action,
+      range=60 ft,
+      components={V, S},
+      duration=Instantaneous,
+      school=Evocation,
+      attack=Ranged,
+      effect=Radiant
+    ]{Starry Wisp}
+
+    You launch a mote of light at one creature or object within range. Make a
+        ranged spell attack against the target. On a hit, the target takes
+        $1d8$ Radiant damage, and until the end of your next turn, it emits Dim
+        Light in a 10-foot radius and can't benefit from the Invisible
+        condition.
+
+    \textbf{Cantrip Upgrade.} The damage increases by $1d8$ when you reach
+    levels 5 ($2d8$), 11 ($3d8$), and 17 ($4d8$).
+
+    \begin{components}
+    V & \textit{Stella errans (STEL-lah EHR-rahns)}
+    \end{components}
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellSuggestion}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level={2nd},
+      time=1 Action,
+      range=30 ft,
+      components={V, M},
+      duration=8 Hours,
+      school={Enchantment},
+      attack={WIS Save},
+      effect={Control}
+    ]{Suggestion}
+    You suggest a course of activity---described in no more than 25 words---to one creature you can see within range that can hear and understand you. The suggestion must sound achievable and not involve anything that would obviously deal damage to the target or its allies. For example, you could say, ``Fetch the key to the cult's treasure vault, and give the key to me.'' Or you could say, ``Stop fighting, leave this library peacefully, and don't return.''
+
+    The target must succeed on a Wisdom saving throw or have the Charmed condition for the duration or until you or your allies deal damage to the target. The Charmed target pursues the suggestion to the best of its ability. The suggested activity can continue for the entire duration, but if the suggested activity can be completed in a shorter time, the spell ends for the target upon completing it.
+
+    \begin{components}
+    V & \textit{Imperio flecte (im-PER-ee-oh FLEK-tay)} \\
+    M & a drop of honey
+    \end{components}
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellSummonAberration}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level={4th},
+      time=1 Action,
+      range=90 ft,
+      components={V, S, M},
+      duration=1 Hour,
+      school={Conjuration},
+      attack={None},
+      effect={Summoning}
+    ]{Summon Aberration}
+    You call forth an aberrant spirit. It manifests in an unoccupied space that you can see within range and uses the Aberrant Spirit stat block. When you cast the spell, choose Beholderkin, Mind Flayer, or Slaad. The creature resembles an Aberration of that kind, which determines certain details in its stat block. The creature disappears when it drops to 0 Hit Points or when the spell ends.
+
+    The creature is an ally to you and your allies. In combat, it shares your Initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you). If you don't issue any, it takes the Dodge action and uses its movement to avoid danger.
+
+    \textbf{Using a Higher-Level Spell Slot.} Use the spell slot's level for the spell's level in the stat block.
+
+    \begin{components}
+    V & \textit{Voco vacuo (WOH-koh WAH-koo-oh)} \\
+    M & a pickled tentacle and an eyeball in a platinum-inlaid vial worth $400+$gp
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellSummonFey}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level={3rd},
+      time=1 Action,
+      range=90 ft,
+      components={V, S, M},
+      duration=1 Hour,
+      school={Conjuration},
+      attack={None},
+      effect={Summoning}
+    ]{Summon Fey}
+    You call forth a Fey spirit. It manifests in an unoccupied space you can see within range and uses the Fey Spirit stat block. When you cast the spell, choose a mood: Fuming, Mirthful, or Tricksy. The creature resembles a Fey creature of your choice marked by the chosen mood, which determines certain details in its stat block. The creature disappears when it drops to 0 Hit Points or when the spell ends.
+
+    The creature is an ally to you and your companions. In combat, the creature shares your initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you). If you don't issue any commands, it takes the Dodge action and uses its movement to avoid danger.
+
+    \textbf{Using a Higher-Level Spell Slot.} Use the spell slot's level for the spell's level in the stat block.
+
+    \begin{components}
+    V & \textit{Voco fae (WOH-koh FEYE)} \\
+    M & a gilded flower worth at least 300gp
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellSwordBurst}{}{
+    \begin{Spell}[
+      level=Cantrip,
+      time=1 Action,
+      range={Self / 5 ft Emanation},
+      components={V},
+      duration=Instantaneous,
+      school=Conjuration,
+      attack=DEX 15,
+      effect=Force
+    ]{Sword Burst}
+    You create a momentary circle of spectral blades that sweep around you.
+    All other creatures within 5 feet of you must succeed on a Dexterity
+    saving throw or take $1d6$ force damage.
+
+    \textbf{Cantrip Upgrade.} This spell's damage increases by $1d6$ when you
+    reach 5th level ($2d6$), 11th level ($3d6$), and 17th level ($4d6$).
+    \begin{components}
+    V & \textit{Vex'ir'kesh (VEX-eer-kesh)}
+    \end{components}
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellTashasHideousLaughter}{}{
+    \begin{Spell}[
+      tags=Concentration,
+      level={1st},
+      time=1 Action,
+      range=30 ft,
+      components={V, S, M},
+      duration=1 Minute,
+      school={Enchantment},
+      attack={WIS Save},
+      effect={Control}
+    ]{Tasha's Hideous Laughter}
+    A creature you can see within range must make a Wisdom saving throw. On a failed save, it falls Prone, becomes Incapacitated, and laughs uncontrollably for the duration. The creature can't end the Prone condition on itself.
+
+    At the end of each of its turns, and each time it takes damage, the target makes another Wisdom saving throw, ending the spell on a success. The save has Advantage if triggered by damage.
+
+    \textbf{Using a Higher-Level Spell Slot.} You can target one additional creature for each spell slot level above 1.
+
+    \begin{components}
+    V & \textit{Risus demens (REE-soos DAY-mens)} \\
+    M & a tart and a feather
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellThunderwave}{}{
+    \begin{Spell}[
+        level=1st,
+        time=1 Action,
+        range={Self/15 ft Cube},
+        components={V, S},
+        duration=Instantaneous,
+        school=Evocation,
+        attack=CON Save,
+        effect=Thunder
+    ]{Thunderwave}
+    You unleash a wave of thunderous energy. Each creature in a 15-foot Cube originating from you makes a Constitution saving throw. On a failed save, a creature takes $2d8$ Thunder damage and is pushed 10 feet away from you. On a successful save, a creature takes half as much damage only.
+
+    In addition, unsecured objects that are entirely within the Cube are pushed 10 feet away from you, and a thunderous boom is audible within 300 feet.
+
+    \textbf{Using a Higher-Level Spell Slot.} The damage increases by $1d8$ for each spell slot level above 1.
+
+    \begin{components}
+    V & \textit{Tonare (toh-NAH-reh)}
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellTrueStrike}{}{
+    \begin{Spell}[
+      level=Cantrip,
+      time=1 Action,
+      range=Self,
+      components={S, M},
+      duration=Instantaneous,
+      school=Divination,
+      attack=Melee,
+      effect=Radiant
+    ]{True Strike}
+    Guided by a flash of magical insight, you make one attack with the weapon used in the spell's casting. The attack uses your spellcasting ability for the attack and damage rolls instead of using Strength or Dexterity. If the attack deals damage, it can be Radiant damage or the weapon's normal damage type (your choice).
+
+    \textbf{Cantrip Upgrade.} Whether you deal Radiant damage or the weapon's normal damage type, the attack deals extra Radiant damage when you reach levels 5 ($1d6$), 11 ($2d6$), and 17 ($3d6$).
+
+    \begin{components}
+    M & a weapon with which you have proficiency and that is worth $1+$cp
+    \end{components}
+    \end{Spell}
+
+
+}
+
+
+\NewDocumentCommand{\SpellViciousMockery}{}{
+    \begin{Spell}[
+        level=Cantrip,
+        time=1 Action,
+        range=60 ft,
+        components=V,
+        duration=Instantaneous,
+        school=Enchantment,
+        attack=WIS Save,
+        effect=Psychic
+    ]{Vicious Mockery}
+        You unleash a string of insults laced with subtle enchantments at one
+        creature you can see or hear within range. The target must succeed on a
+        Wisdom saving throw or take $1d6$ Psychic damage and have Disadvantage
+        on the next attack roll it makes before the end of its next turn.
+
+        \textbf{Cantrip Upgrade.} The damage increases by $1d6$ when you reach
+        levels 5 ($2d6$), 11 ($3d6$), and 17 ($4d6$).
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellWitchBolt}{}{
+    \begin{Spell}[
+        tags=Concentration,
+        level=1st,
+        time=1 Action,
+        range=60 ft,
+        components={V, S, M},
+        duration=1 Minute,
+        school=Evocation,
+        attack=Ranged,
+        effect=Lightning
+    ]{Witch Bolt}
+    A beam of crackling energy lances toward a creature within range, forming a sustained arc of lightning between you and the target. Make a ranged spell attack against it. On a hit, the target takes $2d12$ Lightning damage.
+
+    On each of your subsequent turns, you can take a Bonus Action to deal $1d12$ Lightning damage to the target automatically, even if the first attack missed.
+
+    The spell ends if the target is ever outside the spell's range or if it has Total Cover from you.
+
+    \textbf{Using a Higher-Level Spell Slot.} The initial damage increases by $1d12$ for each spell slot level above 1.
+
+    \begin{components}
+    V & \textit{Fulgur (FULL-goor)} \\
+    M & a twig struck by lightning
+    \end{components}
+    \end{Spell}
+}
+

@@ -1,0 +1,85 @@
+\documentclass{dnd-deck}
+
+\begin{document}
+\Character{
+  pc={Kragor Grimstride},
+  summary={Orc Great Old One Warlock 3},
+  player=Jacques,
+  levels=3,
+  str=10, dex=16, con=12, int=8, wis*=11, cha*=17,
+  hp=21, thp=12, ac=15,
+  prof=2, spellcasting=cha}
+\SkillProficiencies{Arcana, Deception, Insight, Sleight of Hand}
+\LanguageProficiencies{Common, Dwarvish, Orc}
+
+\TitleCard[\Summary]{\PC}
+\StatCard{\PC, \Summary}
+
+\begin{Card}[Actions]{\PC, \Summary}
+  \centering
+  \begin{tabular}{p{0.25\linewidth}p{0.25\linewidth}p{0.1\linewidth}p{0.4\linewidth}}
+    \head{Attack}            & \head{Range}     & \head{Hit}     & \head{Damage/Effect}     \\
+    Longsword $+1$           & 5 ft (melee)     & $+6$           & $1d10+4$ Slashing\fmark  \\
+    Light Crossbow           & 80 ft (320 ft)   & $+5$           & $1d8+3$ Piercing         \\
+    \textit{Eldritch Blast}  & 120 ft           & $+5$           & $1d10$ Force\fmark
+  \end{tabular}
+  %
+  \ftext{Choice of Slashing, Necrotic, Radiant, or Psychic.}
+  \ftext{Choice of Force or Psychic.}
+  \ThinRule \par
+  \begin{tabular}{p{0.35\linewidth}p{0.30\linewidth}p{0.35\linewidth}}
+    \head{Actions}                              & \head{Bonus Actions}        & \head{Other}                 \\
+    Fiendish Vigor: \textit{False Life}\fmark   & Pact of the Blade: Bond     & Luck\fmarkA                  \\
+    Misty Visions: \textit{Silent Image}\fmark  & Pact of the Blade: Conjure  & Relentless Endurance\fmarka  \\
+                                                & Adrenaline Rush\fmarka      & Magical Cunning\fmarka       \\
+                                                & Awakened Mind               & Replling Blast               \\
+                                                &                             & Psychic Spells
+  \end{tabular}
+  %
+  \ftext{At will, self only.}
+  \ftext{Limited use.}
+  \ftext{At will.}
+\end{Card}
+
+\begin{Card}[Resources]{\PC, \Summary}
+  \begin{ResourceTable}
+    \header{Short Rest}            & \header{Long Rest}                  \\
+    \resource{Adrenaline Rush}{2}  & \resource{Relentless Endurance}{1}  \\
+    \resource{Pact Slots}{2}       & \resource{Magical Cunning}{1}       \\
+                                  && \resource{Luck}{2}
+  \end{ResourceTable}
+\end{Card}
+
+\begin{Card}{Kragor's Prepared Spells}
+  \begin{PreparedSpells}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
+    \head{Cantrip}          & \head{1st Level}              & \head{2nd Level}        \\
+    \spell{EldritchBlast}   & \spell{ArmorOfAgathys}        & \spell{DetectThoughts}  \\
+    \spell{MageHand}        & \spell{DetectMagic}           & \spell{PhantasmalForce} \\
+                            & \spell{DissonantWhispers}     & \spell{Suggestion}      \\
+                            & \spell{Hex}                   &                         \\
+                            & \spell{TashasHideousLaughter} &
+  \end{PreparedSpells}
+\end{Card}
+
+\begin{Card}[Class]{Great Old One Warlock}
+  \PactMagic
+  \MagicalCunning
+  \PsychicSpells
+  \AwakenedMind
+\end{Card}
+\begin{Card}[Class]{Warlock: Eldritch Invocations}
+  \PactOfTheBlade
+  \FiendishVigor
+  \MistyVisions
+\end{Card}
+\begin{Card}{Feats}
+  \Lucky
+\end{Card}
+
+\SpeciesCardOrc
+
+\SpellCards
+
+\Placard
+
+\end{document}
