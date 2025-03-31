@@ -1,0 +1,76 @@
+\documentclass[landscape]{article}
+\usepackage[paperwidth=6in, paperheight=4in, margin=0.25in]{geometry}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage[skip=0em]{parskip}
+\usepackage{xcolor}
+\usepackage{ETbb}
+
+\renewcommand{\rmdefault}{etbb}
+\renewcommand{\sfdefault}{etbb}
+\definecolor{headercolor}{HTML}{8B2020}
+
+\newcommand{\CardTitle}[2][]{%
+  {%
+    \Large\textbf{\textcolor{headercolor}{\textsc{#2}}}%
+    \hfill%
+    \ifx&#1&%
+    \else%
+      {\small\textit{#1}}%
+    \fi%
+  }
+
+  {\rule{\linewidth}{0.4pt}}%
+}
+\newcommand{\head}[1]{\textbf{\small \textsc{\textcolor{headercolor}{#1}}}}
+\newcommand{\m}[2][]{%
+  \textit{#2%
+  \ifx\relax#1\relax%
+  \else{ (\uppercase\expandafter{\romannumeral #1})}%
+  \fi}}
+\newcommand{\smol}[1]{\footnotesize #1}
+\newcommand{\freq}[1]{\smol{(#1)}}
+
+\newcommand{\HPACInitiative}[3]{
+  \begin{center}
+  \begin{tikzpicture}
+  \node[draw=headercolor, line width=0.5pt, minimum width=1.2cm, minimum height=1.2cm, align=center] (hp) {
+    {\large \textbf{#1}}\\[0.1cm]
+    {\footnotesize \textbf{HP}}
+  };
+  \node[draw=headercolor, line width=0.5pt, minimum width=1.2cm, minimum height=1.2cm, align=center] (ac) at ($(hp.east)+(1cm,0)$) {
+    {\large \textbf{#2}}\\[0.1cm]
+    {\footnotesize \textbf{AC}}
+  };
+  \node[draw=headercolor, line width=0.5pt, minimum width=1.2cm, minimum height=1.2cm, align=center] (init) at ($(ac.east)+(1cm,0)$) {
+    {\large \textbf{#3}}\\[0.1cm]
+    {\footnotesize \textbf{Initiative}}
+  };
+  \end{tikzpicture}
+  \end{center}
+}
+
+\makeatletter
+\newcommand{\skill}{\@ifstar{\@skillp}{\@skill}}
+\newcommand{\@skill}[2]{%
+  \footnotesize {\bfseries #1} \hfill #2}
+\newcommand{\@skillp}[2]{%
+  \footnotesize {\bfseries \itshape \scshape #1} \hfill #2}
+\makeatother
+
+\newenvironment{Spell}[8]{%
+  % #1: Level, #2: Casting Time, #3: Range/Area, #4: Components
+  % #5: Duration, #6: School, #7: Attack/Save, #8: Damage/Effect
+  %
+  \begin{tabular}{p{0.22\linewidth}p{0.22\linewidth}p{0.22\linewidth}p{0.22\linewidth}}
+  \head{Level}     & \head{Casting Time}  & \head{Range/Area}   & \head{Components} \\
+  \smol{#1}        & \smol{#2}            & \smol{#3}           & \smol{#4} \\[0.1in]
+  \head{Duration}  & \head{School}        & \head{Attack/Save}  & \head{Damage/Effect} \\
+  \smol{#5}        & \smol{#6}            & \smol{#7}           & \smol{#8} \\
+  \end{tabular}
+
+  {\rule{\linewidth}{0.4pt}}
+  \setlength{\parskip}{0.1in}
+}{\newpage}

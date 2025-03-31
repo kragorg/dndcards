@@ -1,0 +1,63 @@
+\input{include.tex}
+
+\begin{document}
+\pagestyle{empty}
+
+\CardTitle{Kragor}
+
+\begin{tabular}{p{0.3\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}%
+  \head{Attack}            & \head{Range}     & \head{Hit}     & \head{Damage} \\
+  Conjured Warhammer       & 5 feet (melee)   & +5             & 1d10+3 Psychic \\
+  \m{Eldritch Blast}       & 120 feet         & +5             & 1d10+3 Force \\
+\end{tabular}
+
+{\rule{\linewidth}{0.4pt}}
+\vspace{1em}
+
+\begin{tabular}{p{0.24\linewidth}p{0.24\linewidth}p{0.48\linewidth}}
+  \multicolumn{2}{l}{\head{Actions}}                               & \head{Bonus Actions} \\
+  Dash                     & \m{Mage Hand}                         & \m[1]{Armor of Agathys} \\
+  \m[1]{Detect Magic}      & Magic                                 & Adrenaline Rush \freq{2/short rest} \\
+  Disengage                & Ready                                 & \m[1]{Hex} \\
+  Dodge                    & Search                                & Pact of the Blade: Bond \\
+  \m{Fiendish Vigor}       & Shove                                 & Pact of the Blade: Conjure \\
+  Grapple                  & Study                                 & \\
+  Help                     & Utilize                               & \head{Reactions} \\
+  Hide                     &                                       & Opportunity Attack \\
+  Improvise                &                                       & \\
+  Influence                &                                       & \head{Other} \\
+                           &                                       & Luck \freq{2/long rest} \\
+                           &                                       & Magical Cunning \freq{1/long rest} \\
+                           &                                       & Relentless Endurance \freq{1/long rest}
+\end{tabular}
+
+\newpage
+\CardTitle{Kragor}
+
+\begin{tabular}{r@{\hspace{0.5em}}c@{\hspace{0.5em}}c@{\hspace{0.5em}}c@{\hspace{0.5em}}c@{\hspace{0.5em}}c@{\hspace{0.5em}}c}
+                  & \head{Strength} & \head{Dexterity} & \head{Constitution} & \head{Intelligence} & \head{Wisdom} & \head{Charisma} \\
+\textbf{Score}    & 10              & 14               & 15                  & 8                   & 10            & 17 \\
+\textbf{Modifier} & \smol{+0}       & \smol{+2}        & \smol{+2}           & \smol{-1}           & \smol{+0}     & \smol{+3} \\
+\textbf{Save}     & \smol{+0}       & \smol{+2}        & \smol{+2}           & \smol{-1}           & \smol{+2}     & \smol{+5} \\
+\end{tabular}
+
+{\rule{\linewidth}{0.4pt}}
+
+\HPACInitiative{17}{13}{+2}
+
+\begin{center}
+  \head{Skills}
+\end{center}
+
+\begin{center}
+\begin{tabular}{p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}}
+  \skill{Acrobatics}{+2}       & \skill{History}{-1}        & \skill{Performance}{+3} \\
+  \skill{Animal Handling}{+0}  & \skill*{Insight}{+2}       & \skill{Persuasion}{+3} \\
+  \skill*{Arcana}{+1}          & \skill*{Intimidation}{+5}  & \skill{Religion}{-1} \\
+  \skill{Athletics}{+0}        & \skill{Investigation}{-1}  & \skill{Sleight of Hand}{+2} \\
+  \skill{Deception}{+3}        & \skill{Medicine}{+0}       & \skill*{Stealth}{+4} \\
+  \skill{Nature}{-1}           & \skill{Perception}{+0}     & \skill{Survival}{+0} \\
+\end{tabular}
+\end{center}
+
+\end{document}
