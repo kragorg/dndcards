@@ -1,0 +1,55 @@
+#! /usr/bin/env zsh -df
+setopt errexit pipefail
+: ${src:=${PWD}} ${out:=${PWD}/outputs/out} ${obj:=${PWD}/obj}
+export TEXINPUTS=${src}//:
+
+# We need a writable home directory for luaotfload’s font cache.
+mkdir -p ${obj}
+cd ${obj}
+export HOME=${obj}
+
+# If the source file names are given on the command line, we use that.
+# Otherwise we expect them to be specified in the environment variable
+# `texfiles`, shell-quoted. The file names are relative to the `src`
+# directory.
+if (( ${#argv} > 0 )) {
+  inputs=( ${argv} )
+} else {
+  inputs=( ${(Q)${(z)texfiles}} )  # z: Split into words using shell parsing. Q: Remove quoting.
+}
+
+fonts=(
+  luaotfload-tool
+  --formats=otf
+  --update
+)
+latexmk=(
+  latexmk
+  --pdflua
+  --interaction=nonstopmode
+  --halt-on-error
+)
+install=(
+  install
+  -D -t ${out}
+  -m 0644
+)
+
+
+if [[ ! -d $(kpsewhich -var-value TEXMFVAR)/luatex-cache/generic/fonts ]] {
+  print -Pru2 -- '%F{magenta}••• Font caching •••%f'
+  run ${fonts}
+}
+
+
+print -Pru2 -- '%F{magenta}••• LaTeX to PDF •••%f'
+for file ( ${src}/${^inputs} ) {       # ^: RC_EXPAND_PARAM.
+  run ${latexmk} ${file}
+}
+
+
+print -Pru2 -- '%F{magenta}••• Installation •••%f'
+run ${install} ${^inputs:r}.pdf
+
+
+print -Pru2 -- '%F{green}••• BUILD COMPLETE •••%f'
