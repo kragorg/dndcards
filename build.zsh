@@ -6,7 +6,7 @@ export TEXINPUTS=${src}//:
 # We need a writable home directory for luaotfload’s font cache.
 export HOME="$PWD"
 
-inputs=( ${(Q)${(z)texfiles}} )   # z: Split into words using shell parsing. Q: Remove quoting.
+inputs=( ${argv} )
 
 fonts=(
   luaotfload-tool

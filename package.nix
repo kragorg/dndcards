@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   phases = [ "buildPhase" ];
   buildPhase = ''
     runHook preBuild
-    ${zsh}/bin/zsh -df ${build.zsh}
+    ${zsh}/bin/zsh -df ${build.zsh} ${texfiles}
     runHook postBuild
   '';
   nativeBuildInputs = [
