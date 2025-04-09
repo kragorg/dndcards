@@ -24,6 +24,12 @@
 
   {\rule{\linewidth}{0.4pt}}%
 }
+
+\newenvironment{Card}[2][]{%
+  \CardTitle[#1]{#2}%
+  \setlength{\parskip}{0.1in}%
+  }{\newpage}
+
 \newcommand{\head}[1]{\textbf{\small \textsc{\textcolor{headercolor}{#1}}}}
 \newcommand{\m}[2][]{%
   \textit{#2%
