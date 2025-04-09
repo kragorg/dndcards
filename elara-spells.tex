@@ -3,30 +3,49 @@
 \begin{document}
 \pagestyle{empty}
 
-\CardTitle[Concentration]{Guidance}
-
-\begin{Spell}{Cantrip}{1 Action}{Touch}{V, S}{1 Minute}{Divination}{None}{Buff}
-
+\begin{Spell}[
+    tags=Concentration,
+    level=Cantrip,
+    time=1 Action,
+    range=Touch,
+    components={V, S},
+    duration=1 Minute,
+    school=Divination,
+    attack=None,
+    effect=Buff
+]{Guidance}
 You touch a willing creature and choose a skill. Until the spell ends, the creature adds 1d4 to any ability check using the chosen skill.
-
 \end{Spell}
 
-\CardTitle{Light}
 
-\begin{Spell}{Cantrip}{1 Action}{Touch}{V, M*}{1 Hour}{Evocation}{None}{Creation}
-
+\begin{Spell}[
+    level=Cantrip,
+    time=1 Action,
+    range=Touch,
+    components={V, M*},
+    duration=1 Hour,
+    school=Evocation,
+    attack=None,
+    effect=Creation
+]{Light}
 You touch one Large or smaller object that isn't being worn or carried by someone else. Until the spell ends, the object sheds Bright Light in a 20-foot radius and Dim Light for an additional 20 feet. The light can be colored as you like.
 
 Covering the object with something opaque blocks the light. The spell ends if you cast it again.
 
 * - (a firefly or phosphorescent moss)
-
 \end{Spell}
 
-\CardTitle{Minor Illusion (Sound)}
 
-\begin{Spell}{Cantrip}{1 Action}{30 ft. (5 ft. *)}{S, M*}{1 Minute}{Illusion}{None}{Control}
-
+\begin{Spell}[
+    level=Cantrip,
+    time=1 Action,
+    range=30 ft. (5 ft. *),
+    components={S, M*},
+    duration=1 Minute,
+    school=Illusion,
+    attack=None,
+    effect=Control
+]{Minor Illusion (Sound)}
 You create a sound within range that lasts for the duration.
 
 If a creature takes a Study action to examine the sound, the creature can determine that it is an illusion with a successful Intelligence (Investigation) check against your spell save DC. If a creature discerns the illusion for what it is, the illusion becomes faint to the creature.
@@ -34,13 +53,19 @@ If a creature takes a Study action to examine the sound, the creature can determ
 Its volume can range from a whisper to a scream. It can be your voice, someone else's voice, a lion's roar, a beating of drums, or any other sound you choose. The sound continues unabated throughout the duration, or you can make discrete sounds at different times before the spell ends.
 
 * - (a bit of fleece)
-
 \end{Spell}
 
-\CardTitle{Minor Illusion (Image)}
 
-\begin{Spell}{Cantrip}{1 Action}{30 ft. (5 ft. *)}{S, M*}{1 Minute}{Illusion}{None}{Control}
-
+\begin{Spell}[
+    level=Cantrip,
+    time=1 Action,
+    range=30 ft. (5 ft. *),
+    components={S, M*},
+    duration=1 Minute,
+    school=Illusion,
+    attack=None,
+    effect=Control
+]{Minor Illusion (Image)}
 You create an image of an object within range that lasts for the duration.
 
 If a creature takes a Study action to examine the image, the creature can determine that it is an illusion with a successful Intelligence (Investigation) check against your spell save DC. If a creature discerns the illusion for what it is, the illusion becomes faint to the creature.
@@ -48,65 +73,103 @@ If a creature takes a Study action to examine the image, the creature can determ
 If you create an image of an object—such as a chair, muddy footprints, or a small chest—it must be no larger than a 5-foot Cube. The image can't create sound, light, smell, or any other sensory effect. Physical interaction with the image reveals it to be an illusion, since things can pass through it.
 
 * - (a bit of fleece)
-
 \end{Spell}
 
-\CardTitle{Starry Wisp}
 
-\begin{Spell}{Cantrip}{1 Action}{60 ft.}{V, S}{Instantaneous}{Evocation}{Ranged}{Radiant}
-
+\begin{Spell}[
+    level=Cantrip,
+    time=1 Action,
+    range=60 ft.,
+    components={V, S},
+    duration=Instantaneous,
+    school=Evocation,
+    attack=Ranged,
+    effect=Radiant
+]{Starry Wisp}
 You launch a mote of light at one creature or object within range. Make a ranged spell attack against the target. On a hit, the target takes 1d8 Radiant damage, and until the end of your next turn, it emits Dim Light in a 10-foot radius and can't benefit from the Invisible condition.
 
 \textbf{Cantrip Upgrade.} The damage increases by 1d8 when you reach levels 5 (2d8), 11 (3d8), and 17 (4d8).
-
 \end{Spell}
 
-\CardTitle{Vicious Mockery}
 
-\begin{Spell}{Cantrip}{1 Action}{60 ft.}{V}{Instantaneous}{Enchantment}{WIS Save}{Psychic}
-
+\begin{Spell}[
+    level=Cantrip,
+    time=1 Action,
+    range=60 ft.,
+    components={V},
+    duration=Instantaneous,
+    school=Enchantment,
+    attack=WIS Save,
+    effect=Psychic
+]{Vicious Mockery}
 You unleash a string of insults laced with subtle enchantments at one creature you can see or hear within range. The target must succeed on a Wisdom saving throw or take 1d6 Psychic damage and have Disadvantage on the next attack roll it makes before the end of its next turn.
 
 \textbf{Cantrip Upgrade.} The damage increases by 1d6 when you reach levels 5 (2d6), 11 (3d6), and 17 (4d6).
-
 \end{Spell}
 
-\CardTitle{Dissonant Whispers}
 
-\begin{Spell}{1st}{1 Action}{60 ft.}{V}{Instantaneous}{Enchantment}{WIS Save}{Psychic}
-
+\begin{Spell}[
+    level=1st,
+    time=1 Action,
+    range=60 ft.,
+    components={V},
+    duration=Instantaneous,
+    school=Enchantment,
+    attack=WIS Save,
+    effect=Psychic
+]{Dissonant Whispers}
 One creature of your choice that you can see within range hears a discordant melody in its mind. The target makes a Wisdom saving throw. On a failed save, it takes 3d6 Psychic damage and must immediately use its Reaction, if available, to move as far away from you as it can, using the safest route. On a successful save, the target takes half as much damage only.
 
 \textbf{Using a Higher-Level Spell Slot.} The damage increases by 1d6 for each spell slot level above 1.
-
 \end{Spell}
 
-\CardTitle[Concentration]{Faerie Fire}
 
-\begin{Spell}{1st}{1 Action}{60 ft. (20 ft. )}{V}{1 Minute}{Evocation}{DEX Save}{Debuff}
-
+\begin{Spell}[
+    tags=Concentration,
+    level=1st,
+    time=1 Action,
+    range=60 ft. (20 ft. ),
+    components={V},
+    duration=1 Minute,
+    school=Evocation,
+    attack=DEX Save,
+    effect=Debuff
+]{Faerie Fire}
 Objects in a 20-foot Cube within range are outlined in blue, green, or violet light (your choice). Each creature in the Cube is also outlined if it fails a Dexterity saving throw. For the duration, objects and affected creatures shed Dim Light in a 10-foot radius and can't benefit from the Invisible condition.
 
 Attack rolls against an affected creature or object have Advantage if the attacker can see it.
-
 \end{Spell}
 
-\CardTitle{Speak with Animals}
 
-\begin{Spell}{1st}{1 Action}{Self}{V,S}{10 Minutes}{Divination}{None}{Communication}
-
+\begin{Spell}[
+    tags=Ritual,
+    level=1st,
+    time=1 Action,
+    range=Self,
+    components={V,S},
+    duration=10 Minutes,
+    school=Divination,
+    attack=None,
+    effect=Communication
+]{Speak with Animals}
 For the duration, you can comprehend and verbally communicate with Beasts, and you can use any of the Influence action's skill options with them.
 
 Most Beasts have little to say about topics that don't pertain to survival or companionship, but at minimum, a Beast can give you information about nearby locations and monsters, including whatever it has perceived within the past day.
-
 \end{Spell}
 
-\CardTitle{Healing Word}
-\begin{Spell}{1st}{1 Bonus Action}{60 ft.}{V}{Instantaneous}{Abjuration}{None}{Healing}
 
+\begin{Spell}[
+    level=1st,
+    time=1 Bonus Action,
+    range=60 ft.,
+    components={V},
+    duration=Instantaneous,
+    school=Abjuration,
+    attack=None,
+    effect=Healing
+]{Healing Word}
 A creature of your choice that you can see within range regains Hit Points equal to 2d4 plus your spellcasting ability modifier.
 
 \textbf{Using a Higher-Level Spell Slot.} The healing increases by 2d4 for each spell slot level above 1.
 \end{Spell}
-
 \end{document}

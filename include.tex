@@ -4,6 +4,7 @@
 \usetikzlibrary{calc}
 \usepackage{array}
 \usepackage{booktabs}
+\usepackage{keyval}
 \usepackage[skip=0em]{parskip}
 \usepackage{xcolor}
 \usepackage{ETbb}
@@ -64,19 +65,30 @@
   \footnotesize {\bfseries #1} \hfill #2}
 \newcommand{\@skillp}[2]{%
   \footnotesize {\bfseries \itshape \scshape #1} \hfill #2}
-\makeatother
 
-\newenvironment{Spell}[8]{%
-  % #1: Level, #2: Casting Time, #3: Range/Area, #4: Components
-  % #5: Duration, #6: School, #7: Attack/Save, #8: Damage/Effect
-  %
+\define@key{spell@keys}{tags}{\def\spell@tags{#1}}%
+\define@key{spell@keys}{level}{\def\spell@level{#1}}%
+\define@key{spell@keys}{time}{\def\spell@time{#1}}%
+\define@key{spell@keys}{range}{\def\spell@range{#1}}%
+\define@key{spell@keys}{components}{\def\spell@components{#1}}%
+\define@key{spell@keys}{duration}{\def\spell@duration{#1}}%
+\define@key{spell@keys}{school}{\def\spell@school{#1}}%
+\define@key{spell@keys}{attack}{\def\spell@attack{#1}}%
+\define@key{spell@keys}{effect}{\def\spell@effect{#1}}%
+\setkeys{spell@keys}{tags={}}%
+
+\NewDocumentEnvironment{Spell}{om}{%
+  \setkeys{spell@keys}{#1}%
+  \CardTitle[\spell@tags]{#2}
   \begin{tabular}{p{0.22\linewidth}p{0.22\linewidth}p{0.22\linewidth}p{0.22\linewidth}}
-  \head{Level}     & \head{Casting Time}  & \head{Range/Area}   & \head{Components} \\
-  \smol{#1}        & \smol{#2}            & \smol{#3}           & \smol{#4} \\[0.1in]
-  \head{Duration}  & \head{School}        & \head{Attack/Save}  & \head{Damage/Effect} \\
-  \smol{#5}        & \smol{#6}            & \smol{#7}           & \smol{#8} \\
+  \head{Level}            & \head{Casting Time}   & \head{Range/Area}     & \head{Components}         \\
+  \smol{\spell@level}     & \smol{\spell@time}    & \smol{\spell@range}   & \smol{\spell@components}  \\
+  \head{Duration}         & \head{School}         & \head{Attack/Save}    & \head{Damage/Effect}      \\
+  \smol{\spell@duration}  & \smol{\spell@school}  & \smol{\spell@attack}  & \smol{\spell@effect}
   \end{tabular}
 
   {\rule{\linewidth}{0.4pt}}
   \setlength{\parskip}{0.1in}
 }{\newpage}
+
+\makeatother
