@@ -6,7 +6,16 @@ export TEXINPUTS=${src}//:
 # We need a writable home directory for luaotfload’s font cache.
 export HOME="$PWD"
 
-inputs=( ${argv} )
+# If the source file names are given on the command line, we use that.
+# Otherwise we expect them to be specified in the environment variable
+# `markdown`, shell-quoted. The file names are relative to the `src`
+# directory.
+if (( ${#argv} > 0 )) {
+  inputs=( ${argv} )
+} else {
+  inputs=( ${(Q)${(z)texfiles}} )  # z: Split into words using shell parsing. Q: Remove quoting.
+}
+inputs=( ${src}/${^inputs} )       # ^: RC_EXPAND_PARAM.
 
 fonts=(
   luaotfload-tool
@@ -24,7 +33,7 @@ install=(
   install
   -D -t ${out}
   -m 0644
-  ${^inputs:r}.pdf
+  ${^inputs:t:r}.pdf
 )
 
 function run {
@@ -41,7 +50,7 @@ function dolatex {
 }
 
 run ${fonts}
-for file ( ${src}/${^inputs} ) {  # ^: RC_EXPAND_PARAM.
+for file ( ${^inputs} ) {  # ^: RC_EXPAND_PARAM.
   dolatex ${file}
 }
 run ${install}
