@@ -18,12 +18,13 @@ stdenv.mkDerivation rec {
 
   src = ./.;
   texfiles = lib.escapeShellArgs [
-    "elara-spells.tex"
-    "kragor-spells.tex"
-    "scarlet-spells.tex"
+    "actions.tex"
     "elara-reminders.tex"
+    "elara-spells.tex"
     "kragor-reminders.tex"
+    "kragor-spells.tex"
     "more-spells.tex"
+    "scarlet-spells.tex"
   ];
 
   phases = [ "buildPhase" ];
