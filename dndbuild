@@ -8,49 +8,46 @@ export HOME="$PWD"
 
 # If the source file names are given on the command line, we use that.
 # Otherwise we expect them to be specified in the environment variable
-# `markdown`, shell-quoted. The file names are relative to the `src`
+# `texfiles`, shell-quoted. The file names are relative to the `src`
 # directory.
 if (( ${#argv} > 0 )) {
   inputs=( ${argv} )
 } else {
   inputs=( ${(Q)${(z)texfiles}} )  # z: Split into words using shell parsing. Q: Remove quoting.
 }
-inputs=( ${src}/${^inputs} )       # ^: RC_EXPAND_PARAM.
 
 fonts=(
   luaotfload-tool
   --formats=otf
   --update
 )
-latex=(
-  lualatex
+latexmk=(
+  latexmk
+  --pdflua
   --interaction=batchmode
   --halt-on-error
-  --output-format=pdf
-  --output-directory=${PWD}
 )
 install=(
   install
   -D -t ${out}
   -m 0644
-  ${^inputs:t:r}.pdf
 )
 
-function run {
-  print -Pru2 -- "%F{cyan}${argv}%f"
-  ${argv}
+
+if [[ ! -d $(kpsewhich -var-value TEXMFVAR)/luatex-cache/generic/fonts ]] {
+  print -Pru2 -- '%F{magenta}••• Font caching •••%f'
+  run ${fonts}
 }
 
-function dolatex {
-  run ${latex} $1 || {
-    local rc=$?
-    cat ${1:t:r}.log >&2
-    return ${rc}
-  }
+
+print -Pru2 -- '%F{magenta}••• LaTeX to PDF •••%f'
+for file ( ${src}/${^inputs} ) {       # ^: RC_EXPAND_PARAM.
+  run ${latexmk} ${file}
 }
 
-run ${fonts}
-for file ( ${^inputs} ) {  # ^: RC_EXPAND_PARAM.
-  dolatex ${file}
-}
-run ${install}
+
+print -Pru2 -- '%F{magenta}••• Installation •••%f'
+run ${install} ${^inputs:r}.pdf
+
+
+print -Pru2 -- '%F{green}••• BUILD COMPLETE •••%f'

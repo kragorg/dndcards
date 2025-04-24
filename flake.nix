@@ -21,6 +21,7 @@
             scheme-small
             collection-fontsextra
             etbb
+            latexmk
             xstring
           ]
         ) ;
@@ -33,14 +34,16 @@
         };
         devShells = {
           default = pkgs.mkShell {
+            inherit (dnd-cards) texfiles;
             name = "dnd-cards-shell";
             shellHook = ''
-              export src=${./.}
-              export texfiles="${dnd-cards.texfiles}";
+              export src="$PWD"
+              export PATH=$PWD:$PATH
+              mkdir -p obj
+              cd obj
             '';
-            nativeBuildInputs = with pkgs; [
-              nixfmt-rfc-style
-              dnd-cards.nativeBuildInputs
+            packages = dnd-cards.nativeBuildInputs ++ [
+              pkgs.nixfmt-rfc-style
             ];
           };
         };
