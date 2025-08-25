@@ -1,0 +1,155 @@
+\input{include.tex}
+
+\begin{document}
+\pagestyle{empty}
+\CardTitle{Kragor}
+
+\begin{tabular}{p{0.3\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}%
+  \head{Attack}            & \head{Range}     & \head{Hit}     & \head{Damage} \\
+  Conjured Warhammer       & 5 feet (melee)   & +5             & 1d10+3 Psychic \\
+  \m{Eldritch Blast}       & 120 feet         & +5             & 1d10 Force \\
+\end{tabular}
+
+{\rule{\linewidth}{0.4pt}}
+\vspace{1em}
+
+\begin{tabular}{p{0.24\linewidth}p{0.36\linewidth}p{0.36\linewidth}}
+  \multicolumn{2}{l}{\head{Actions}}                                           & \head{Reactions} \\
+  Dash                                 & Ready                                 & Opportunity Attack \\
+  Disengage                            & Search                                & \\
+  Dodge                                & Shove                                 & \head{Other} \\
+  \m{Fiendish Vigor}                   & Study                                 & Luck \freq{2/long rest} \\
+  Grapple                              & Utilize                               & Magical Cunning \freq{1/long rest} \\
+  Help                                 &                                       & Psychic Spells \\
+  Hide                                 & \head{Bonus Actions}                  & Relentless Endurance \freq{1/long rest} \\
+  Improvise                            & Awakened Mind                         & \\
+  Influence                            & \m[1]{Armor of Agathys}               & \\
+  \m[1]{Mage Armor \freq{1/long rest}} & Adrenaline Rush \freq{2/short rest}   & \\
+  Magic                                & \m[1]{Hex}                            & \\
+                                       & Pact of the Blade: Bond, Conjure      &
+\end{tabular}
+
+\newpage
+\CardTitle{Kragor}
+
+\begin{tabular}{r@{\hspace{0.5em}}c@{\hspace{0.5em}}c@{\hspace{0.5em}}c@{\hspace{0.5em}}c@{\hspace{0.5em}}c@{\hspace{0.5em}}c}
+                  & \head{Strength} & \head{Dexterity} & \head{Constitution} & \head{Intelligence} & \head{Wisdom} & \head{Charisma} \\
+\textbf{Score}    & 10              & 14               & 15                  & 8                   & 10            & 17 \\
+\textbf{Modifier} & \smol{+0}       & \smol{+2}        & \smol{+2}           & \smol{-1}           & \smol{+0}     & \smol{+3} \\
+\textbf{Save}     & \smol{+0}       & \smol{+2}        & \smol{+2}           & \smol{-1}           & \smol{+2}     & \smol{+5} \\
+\end{tabular}
+
+{\rule{\linewidth}{0.4pt}}
+
+\begin{center}
+\begin{tikzpicture}
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center] (hp) {
+  {\large \textbf{24}}\\[0.1cm]
+  {\footnotesize \textbf{HP}}
+};
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (ac1) at ($(hp.east)+(0.2cm,0)$) {
+  {\large \textbf{15}}\\[0.1cm]
+  {\footnotesize \textbf{AC (Mage Armor)}}
+};
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (ac2) at ($(ac1.east)+(0.2cm,0)$) {
+  {\large \textbf{13}}\\[0.1cm]
+  {\footnotesize \textbf{AC (Leather)}}
+};
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (init) at ($(ac2.east)+(0.2cm,0)$) {
+  {\large \textbf{+2}}\\[0.1cm]
+  {\footnotesize \textbf{Initiative}}
+};
+\end{tikzpicture}
+\end{center}
+
+\begin{center}
+  \head{Skills}
+\end{center}
+
+\begin{center}
+\begin{tabular}{p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}}
+  \skill{Acrobatics}{+2}       & \skill{History}{-1}        & \skill{Performance}{+3} \\
+  \skill{Animal Handling}{+0}  & \skill*{Insight}{+2}       & \skill{Persuasion}{+3} \\
+  \skill*{Arcana}{+1}          & \skill*{Intimidation}{+5}  & \skill{Religion}{-1} \\
+  \skill{Athletics}{+0}        & \skill{Investigation}{-1}  & \skill{Sleight of Hand}{+2} \\
+  \skill{Deception}{+3}        & \skill{Medicine}{+0}       & \skill*{Stealth}{+4} \\
+  \skill{Nature}{-1}           & \skill{Perception}{+0}     & \skill{Survival}{+0} \\
+\end{tabular}
+\end{center}
+
+\newpage
+\CardTitle{Kragor's Prepared Spells}
+\begin{tabular}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
+\head{Cantrips}     & \head{Level 1}             & \head{Level 2} \\
+Booming Blade       & Armor of Agathys           & Detect Thoughts \\
+Eldritch Blast      & Dissonant Whispers         & Invisibility \\
+Mage Hand           & Hex                        & Phantasmal Force \\
+Mind Sliver         & Mage Armor                 & Suggestion \\
+                    & Tasha's Hideous Laughter   &
+\end{tabular}
+\newpage
+
+\begin{Card}{Awakened Mind}
+You can form a telepathic connection between your mind and the mind of another. As a Bonus Action, choose one creature you can see within 30 feet of yourself. You and the chosen creature can communicate telepathically with each other while the two of you are within a number of miles of each other equal to your Charisma modifier (minimum of 1 mile). To understand each other, you each must mentally use a language the other knows.
+
+The telepathic connection lasts for a number of minutes equal to your Warlock level. It ends early if you use this feature to connect with a different creature.
+\end{Card}
+
+\begin{Card}{Psychic Spells}
+When you cast a Warlock spell that deals damage, you can change its damage type to Psychic. In addition, when you cast a Warlock spell that is an Enchantment or Illusion, you can do so without Verbal or Somatic components.
+\end{Card}
+
+\begin{Card}[Magic Initiate: Wizard]{Lessons of the First Ones}
+You have received knowledge from an elder entity of the multiverse, allowing you to gain the Magic Initiate Origin feat.
+
+\textbf{Two Cantrips.} You learn two cantrips of your choice from the Wizard spell list. Charisma is your spellcasting ability for this feat's spells.
+
+\textbf{Level 1 Spell.} Choose a level 1 spell from the same list you selected for this feat's cantrips. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest. You can also cast the spell using any spell slots you have.
+
+\textbf{Spell Change.} Whenever you gain a new level, you can replace one of the spells you chose for this feat with a different spell of the same level from the chosen spell list.
+
+\begin{tabular}{cl}
+Cantrip & Booming Blade \\
+Cantrip & Mind Sliver \\
+1st & Mage Armor \\
+\end{tabular}
+\end{Card}
+
+\begin{Card}{Tattooist's Tools}
+Proficiency with tattooist's tools allows you to create intricate designs on the skin of a living creature. Tattoos can be a mark of allegiance, a symbol of faith, a superstitious ward, or a personal statement.
+
+\textbf{Ability:} Dexterity.
+
+\textbf{Components.} Tattooist's tools include a selection of needles, a mortar and pestle for grinding pigments, ink pots, a sterilizing agent, and clean leather rags. These are typically kept in a sturdy leather case.
+
+\textbf{Arcana.} Your knowledge of intricate symbols and magical script, combined with your artistic skill, can help you discern magical properties within a tattoo or identify ancient runic etchings.
+
+\textbf{History.} Your knowledge of tattoos allows you to recognize traditional designs, from the markings of a remote tribe to the intricate scrollwork favored by an ancient magical order. You can identify the approximate origin or cultural significance of a tattoo.
+
+\vfill \hfill \textit{\footnotesize continues}
+\newpage
+\CardTitle[continued 2/3]{Tattooist's Tools}
+\textbf{Insight.} Examining someone's tattoos can reveal much about their background, affiliations, and personal history. You can often determine gang memberships, military service, religious devotions, or important life events from their ink.
+
+\textbf{Deception.} You can create temporary tattoos or modify existing ones to help establish a false identity or allegiance, though such work fades after several days.
+
+\textbf{Medicine.} Your understanding of skin, healing, and infection prevention grants you additional insight when treating wounds or skin conditions. You can use this knowledge to effectively clean and bind a wound, granting advantage on any Wisdom (Medicine) check made to stabilize a dying creature.
+
+\textbf{Apply Tattoo.} You can apply a tattoo to a willing creature. The complexity and size of the tattoo determine the time and DC of the check. A successful check means the tattoo is applied cleanly and safely; a failed check might result in a poorly drawn tattoo, scarring, or a minor infection. A simple tattoo (DC 10) might take 1 to 2 hours, while an intricate or large design (DC 15+) could take 4 to 8 hours or more.
+
+\vfill \hfill \textit{\footnotesize continues}
+\newpage
+\CardTitle[continued 3/3]{Tattooist's Tools}
+\begin{tabular}{lc}
+\head{Activity}                              & \head{DC}  \\
+Identify a common tattoo's meaning or origin & 10         \\
+Create a simple, artistic tattoo             & 10         \\
+Cover or modify an existing tattoo           & 15         \\
+Create a temporary tattoo for disguise       & 15         \\
+Discern that a tattoo is fake or altered     & 15         \\
+Inscribe a hidden message within a tattoo    & 20         \\
+Perfectly replicate a complex tattoo         & 20
+\end{tabular}
+\end{Card}
+
+\end{document}

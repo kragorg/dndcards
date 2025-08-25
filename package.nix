@@ -33,7 +33,9 @@ stdenv.mkDerivation rec {
     "elara-reminders.tex"
     "elara-spells.tex"
     "kragor-reminders.tex"
+    "kragor-reminders-l3.tex"
     "kragor-spells.tex"
+    "kragor-spells-l3.tex"
     "more-spells.tex"
     "scarlet-spells.tex"
   ];
