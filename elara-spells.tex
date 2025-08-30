@@ -80,7 +80,7 @@ You create an image of an object within range that lasts for the duration.
 
 If a creature takes a Study action to examine the image, the creature can determine that it is an illusion with a successful Intelligence (Investigation) check against your spell save DC. If a creature discerns the illusion for what it is, the illusion becomes faint to the creature.
 
-If you create an image of an object—such as a chair, muddy footprints, or a small chest—it must be no larger than a 5-foot Cube. The image can't create sound, light, smell, or any other sensory effect. Physical interaction with the image reveals it to be an illusion, since things can pass through it.
+If you create an image of an object---such as a chair, muddy footprints, or a small chest---it must be no larger than a 5-foot Cube. The image can't create sound, light, smell, or any other sensory effect. Physical interaction with the image reveals it to be an illusion, since things can pass through it.
 
 \begin{components}
 V & \textit{Mirus umbra (MEE-roos OOM-bra)} \\
@@ -200,6 +200,57 @@ A creature of your choice that you can see within range regains Hit Points equal
 
 \begin{components}
 V & \textit{Te curo (te KOO-ro)}
+\end{components}
+\end{Spell}
+
+
+\begin{Spell}[
+    level=1st,
+    time=1 Action,
+    range=60 ft.,
+    components={V},
+    duration=Instantaneous,
+    school=Enchantment,
+    attack=WIS,
+    effect=Prone
+]{Command}
+You speak a one-word command to a creature you can see within range. The target must succeed on a Wisdom saving throw or follow the command on its next turn. Choose the command from these options:
+
+\textbf{Approach.} The target moves toward you by the shortest and most direct route, ending its turn if it moves within 5 feet of you.
+
+\textbf{Drop.} The target drops whatever it is holding and then ends its turn.
+
+\textbf{Flee.} The target spends its turn moving away from you by the fastest available means.
+
+\textbf{Grovel.} The target has the Prone condition and then ends its turn.
+
+\textbf{Halt.} On its turn, the target doesn't move and takes no action or Bonus Action.
+
+\begin{components}
+V & \textit{C\=og\=eris (koh-GAY-riss)}
+\end{components}
+\end{Spell}
+
+
+\begin{Spell}[
+    tags=Concentration,
+    level=1st,
+    time=1 Action,
+    range=60 ft./5ft. sphere,
+    components={V, S, M},
+    duration=1 minute,
+    school=Enchantment,
+    attack=WIS 12,
+    effect=Incapacitated
+]{Sleep}
+Each creature of your choice in a 5-foot-radius Sphere centered on a point within range must succeed on a Wisdom saving throw or have the Incapacitated condition until the end of its next turn, at which point it must repeat the save. If the target fails the second save, the target has the Unconscious condition for the duration. The spell ends on a target if it takes damage or someone within 5 feet of it takes an action to shake it out of the spell's effect.
+
+Creatures that don't sleep, such as elves, or that have Immunity to the Exhaustion condition automatically succeed on saves against this spell.
+
+\begin{components}
+V & \textit{Somnus te sequitur (SOM-noos tay SEH-kwih-toor)} \\
+S & \\
+M & \textit{a pinch of sand, or rose petals}
 \end{components}
 \end{Spell}
 \end{document}
