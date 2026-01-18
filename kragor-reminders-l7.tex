@@ -1,0 +1,159 @@
+\input{include.tex}
+
+\begin{document}
+\pagestyle{empty}
+\CardTitle{Kragor Grimstride}
+
+\begin{tabular}{p{0.3\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}%
+  \head{Attack}            & \head{Range}     & \head{Hit}     & \head{Damage} \\
+  Warhammer $+1$           & 5 feet (melee)   & $+8$           & $1d10+5$ Psychic$^{\ddag}$ \\
+  \m{Eldritch Blast}       & 120 feet         & $+9^{\dag}$    & $1d10+4$ Force \\
+                           &                  &                & and push 10 ft \\
+\end{tabular}
+
+{\rule{\linewidth}{0.4pt}}
+{\footnotesize $\dag$: Base $+7$ and $+2$ from \textit{Rod of the Pact Keeper +2}. \\
+$\ddag$: or Bludgeoning or Necrotic or Radiant.}
+\vspace{1em}
+
+\begin{tabular}{p{0.25\linewidth}p{0.37\linewidth}p{0.30\linewidth}}
+  \head{Actions}              & \head{Bonus Actions}                      & \head{Other} \\
+  Fiendish Vigor              & Pact of the Blade: Bond                   & Luck \freq{3/day} \\
+  Misty Visions               & Pact of the Blade: Conjure                & Relentless Endurance \freq{1/day} \\
+  \m{Command} \freq{1/day}    & Adrenaline Rush \freq{3/rest}             & Magical Cunning \freq{1/day} \\
+  \m{Misty Step} \freq{1/day} & Awakened Mind                             & Psychic Spells \\
+                              & Clairvoyant Combatant \freq{1/rest}       & Agonizing Blast \\
+                              &                                           & Repelling Blast \\
+                              &                                           & Thirsting Blade \\
+                              &                                           &
+\end{tabular}
+
+\newpage
+\CardTitle{Kragor Grimstride}
+
+\begin{tabular}{r@{\hspace{0.5em}}c@{\hspace{0.5em}}c@{\hspace{0.5em}}c@{\hspace{0.5em}}c@{\hspace{0.5em}}c@{\hspace{0.5em}}c}
+                  & \head{Strength} & \head{Dexterity} & \head{Constitution} & \head{Intelligence} & \head{Wisdom} & \head{Charisma} \\
+\textbf{Score}    & $\mathbf{10}$   & $\mathbf{16}$    & $\mathbf{13}$       & $\mathbf{8}$        & $\mathbf{10}$ & $\mathbf{18}$ \\
+\textbf{Modifier} & $+0$            & $+3$             & $+1$                & $-1$                & $+0$          & $+4$ \\
+\textbf{Save}     & $+0$            & $+3$             & $+1$                & $-1$                & $+3$          & $+7$ \\
+\end{tabular}
+
+{\rule{\linewidth}{0.4pt}}
+
+\begin{center}
+\begin{tikzpicture}
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center] (hp) {
+  {\large \textbf{$45 + 12$}}\\[0.1cm]
+  {\footnotesize \textbf{HP}}
+};
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (ac1) at ($(hp.east)+(0.2cm,0)$) {
+  {\large \textbf{$15$}}\\[0.1cm]
+  {\footnotesize \textbf{AC}}
+};
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (init) at ($(ac1.east)+(0.2cm,0)$) {
+  {\large \textbf{$+3$}}\\[0.1cm]
+  {\footnotesize \textbf{Initiative}}
+};
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (dc) at ($(init.east)+(0.2cm,0)$) {
+  {\large \textbf{$17^{\dag}$}}\\[0.1cm]
+  {\footnotesize \textbf{Spell DC}}
+};
+\end{tikzpicture}
+
+  \textit{Passive Perception}: $\mathbf{10}$, \textit{Investigation}: $\mathbf{9}$, \textit{Insight}: $\mathbf{13}$
+\end{center}
+
+\begin{center}
+  \head{Skills}
+\end{center}
+
+\begin{center}
+\begin{tabular}{p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}}
+  \skill{Acrobatics}{+3}       & \skill{History}{-1}        & \skill{Performance}{+4} \\
+  \skill{Animal Handling}{+0}  & \skill*{Insight}{+3}       & \skill{Persuasion}{+4} \\
+  \skill*{Arcana}{+2}          & \skill{Intimidation}{+4}   & \skill{Religion}{-1} \\
+  \skill{Athletics}{+0}        & \skill{Investigation}{-1}  & \skill{Sleight of Hand}{+3} \\
+  \skill*{Deception}{+7}       & \skill{Medicine}{+0}       & \skill*{Stealth}{+6} \\
+  \skill{Nature}{-1}           & \skill{Perception}{+0}     & \skill{Survival}{+0} \\
+\end{tabular}
+\end{center}
+\vfill {\footnotesize $\dag$: Base $15$ and $+2$ from \textit{Rod of the Pact Keeper +2}.}
+\newpage
+
+
+\begin{Card}[Class]{Great Old One Warlock}
+\textbf{Magical Cunning.} You can perform an esoteric rite for 1 minute. At the end of it, you regain expended Pact Magic spell slots but no more than a number equal to half your maximum (round up). Once you use this feature, you can't do so again until you finish a Long Rest.
+
+\textbf{Psychic Spells.} When you cast a Warlock spell that deals damage, you can change its damage type to Psychic. In addition, when you cast a Warlock spell that is an Enchantment or Illusion, you can do so without Verbal or Somatic components.
+
+\textbf{Awakened Mind.} You can form a telepathic connection between your mind and the mind of another. As a Bonus Action, choose one creature you can see within 30 feet of yourself. You and the chosen creature can communicate telepathically with each other while the two of you are within a number of miles of each other equal to your Charisma modifier (minimum of 1 mile). To understand each other, you each must mentally use a language the other knows.
+
+The telepathic connection lasts for a number of minutes equal to your Warlock level. It ends early if you use this feature to connect with a different creature.
+\vfill \hfill \textit{\footnotesize continues}
+\newpage
+\CardTitle[continued]{Great Old One Warlock}
+
+\textbf{Clairvoyant Combatant.} When you form a telepathic bond with a creature using your Awakened Mind, you can force that creature to make a Wisdom saving throw against your spell save DC. On a failed save, the creature has Disadvantage on attack rolls against you, and you have Advantage on attack rolls against that creature for the duration of the bond.
+
+Once you use this feature, you can't use it again until you finish a Short or Long Rest unless you expend a Pact Magic spell slot (no action required) to restore your use of it.
+\end{Card}
+
+\begin{Card}[Class]{Eldritch Invocations}
+\textbf{Fiendish Vigor.} You can cast \textit{False Life} on yourself without expending a spell slot. When you cast the spell with this feature, you don't roll the die for the Temporary Hit Points; you automatically get the highest number on the die.
+
+  \textbf{Agonizing Blast.} Choose one of your known Warlock cantrips that deals damage.\textsuperscript{\dag} You can add your Charisma modifier to that spell's damage rolls.
+
+  \textbf{Repelling Blast.} Choose one of your known Warlock cantrips that requires an attack roll.\textsuperscript{\dag} When you hit a Large or smaller creature with that cantrip, you can push the creature up to 10 feet straight away from you.
+
+\textbf{Misty Visions.} You can cast Silent Image without expending a spell slot.
+
+\textbf{Thirsting Blade.} You gain the Extra Attack feature for your pact weapon only. With that feature, you can attack twice with the weapon instead of once when you take the Attack action on your turn.
+\vfill {\footnotesize \dag\textit{Eldritch Blast.} \hfill \textit{continues}}
+\newpage
+\CardTitle[continued]{Eldritch Invocations}
+\textbf{Pact of the Blade.} As a Bonus Action, you can conjure a pact weapon in your hand—a Simple or Martial Melee weapon of your choice with which you bond—or create a bond with a magic weapon you touch; you can't bond with a magic weapon if someone else is attuned to it or another Warlock is bonded with it. Until the bond ends, you have proficiency with the weapon, and you can use it as a Spellcasting Focus.
+
+Whenever you attack with the bonded weapon, you can use your Charisma modifier for the attack and damage rolls instead of using Strength or Dexterity; and you can cause the weapon to deal Necrotic, Psychic, or Radiant damage or its normal damage type.
+
+Your bond with the weapon ends if you use this feature's Bonus Action again, if the weapon is more than 5 feet away from you for 1 minute or more, or if you die. A conjured weapon disappears when the bond ends.
+\end{Card}
+
+
+\begin{Card}[Species]{Orc}
+\textbf{Adrenaline Rush.} You can take the Dash action as a Bonus Action. When you do so, you gain a number of Temporary Hit Points equal to your Proficiency Bonus. You can use this trait a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Short or Long Rest.
+
+\textbf{Relentless Endurance.} When you are reduced to 0 Hit Points but not killed outright, you can drop to 1 Hit Point instead. Once you use this trait, you can't do so again until you finish a Long Rest.
+
+\textbf{Darkvision \textit{(120 ft)}.} You have Darkvision with a range of 120 ft.
+\end{Card}
+
+
+\begin{Card}[Feat]{Lucky}
+\textbf{Luck Points.} You have a number of Luck Points equal to your Proficiency Bonus and can spend the points on the benefits below. You regain your expended Luck Points when you finish a Long Rest.
+
+\textbf{Advantage.} When you roll a d20 for a D20 Test, you can spend 1 Luck Point to give yourself Advantage on the roll.
+
+\textbf{Disadvantage.} When a creature rolls a d20 for an attack roll against you, you can spend 1 Luck Point to impose Disadvantage on that roll.
+\end{Card}
+
+
+\begin{Card}[Feat]{Fey Touched}
+Your exposure to the Feywild's magic grants you the following benefits.
+
+\textbf{Ability Score Increase.} Increase your Intelligence, Wisdom, or Charisma score by 1, to a maximum of 20.\textsuperscript{\dag}
+
+\textbf{Fey Magic.} Choose one level 1 spell from the Divination or Enchantment school of magic.\textsuperscript{\ddag} You always have that spell and the Misty Step spell prepared. You can cast each of these spells without expending a spell slot. Once you cast either spell in this way, you can't cast that spell in this way again until you finish a Long Rest. You can also cast these spells using spell slots you have of the appropriate level. The spells' spellcasting ability is the ability increased by this feat.
+
+\vfill {\footnotesize%
+\dag\textit{Charisma.} \\
+\ddag\textit{Command.}}
+\end{Card}
+
+
+\begin{Card}[Item (Rare)]{Rod of the Pact Keeper $+2$}
+  While holding this rod, you gain a bonus to spell attack rolls and to the saving throw DCs of your Warlock spells. The bonus is determined by the rod's rarity.
+
+In addition, you can regain one spell slot as a Magic action while holding the rod. You can't use this property again until you finish a Long Rest.
+\end{Card}
+
+\end{document}
