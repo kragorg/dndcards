@@ -24,7 +24,7 @@ fonts=(
 latexmk=(
   latexmk
   --pdflua
-  --interaction=batchmode
+  --interaction=nonstopmode
   --halt-on-error
 )
 install=(

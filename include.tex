@@ -7,7 +7,9 @@
 \usepackage{keyval}
 \usepackage[skip=0em]{parskip}
 \usepackage{xcolor}
+\usepackage{xspace}
 \usepackage{ETbb}
+\usepackage[perpage,para,bottom,norule,symbol*]{footmisc}
 
 \definecolor{headercolor}{HTML}{8B2020}
 
@@ -24,8 +26,17 @@
   {\rule{\linewidth}{0.4pt}}%
 }
 
+\renewcommand{\footnoterule}{}
+\newcounter{fmarkcount}
+\newcounter{ftextcount}
+\newcommand{\fmark}{\stepcounter{fmarkcount}\footnotemark[\value{fmarkcount}]\xspace}
+\newcommand{\fmarkprev}{\footnotemark[\value{fmarkcount}]\xspace}
+\newcommand{\ftext}[1]{\stepcounter{ftextcount}\footnotetext[\value{ftextcount}]{#1}}
+
 \newenvironment{Card}[2][]{%
   \CardTitle[#1]{#2}%
+  \setcounter{fmarkcount}{0}%
+  \setcounter{ftextcount}{0}%
   \setlength{\parskip}{0.1in}%
   }{\newpage}
 
@@ -36,7 +47,7 @@
   \else{ (\uppercase\expandafter{\romannumeral #1})}%
   \fi}}
 \newcommand{\smol}[1]{\footnotesize #1}
-\newcommand{\freq}[1]{\smol{(#1)}}
+\newcommand{\freq}[1]{\footnotesize \textit{#1}}%{\smol{(#1)}}
 
 \newcommand{\HPACInitiative}[3]{
   \begin{center}

@@ -1,0 +1,145 @@
+\input{include.tex}
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{Card}[Stats]{Isaac ``Zek'' Crespo / Human Draconic Sorcerer 3}
+\setlength{\parskip}{0em}
+\begin{tabular}{rcccccc}
+                  & \head{Strength} & \head{Dexterity} & \head{Constitution} & \head{Intelligence} & \head{Wisdom} & \head{Charisma} \\
+\textbf{Score}    & $\mathbf{9}$    & $\mathbf{16}$    & $\mathbf{12}$       & $\mathbf{10}$       & $\mathbf{10}$ & $\mathbf{17}$ \\
+\textbf{Modifier} & $-1$            & $+3$             & $+1$                & $+0$                & $+0$          & $+3$ \\
+\textbf{Save}     & $-1$            & $+3$             & $+3$                & $+0$                & $+0$          & $+5$ \\
+\end{tabular}
+
+{\rule{\linewidth}{0.4pt}}
+\begin{center}
+\begin{tikzpicture}
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center] (hp) {
+  {\large $\mathbf{20}$}\\[0.1cm]
+  {\footnotesize \textbf{HP}}
+};
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (ac1) at ($(hp.east)+(0.2cm,0)$) {
+  {\large $\mathbf{16}$}\\[0.1cm]
+  {\footnotesize \textbf{AC}}
+};
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (init) at ($(ac1.east)+(0.2cm,0)$) {
+  {\large $\mathbf{+3}$}\\[0.1cm]
+  {\footnotesize \textbf{Initiative}}
+};
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (dc) at ($(init.east)+(0.2cm,0)$) {
+  {\large $\mathbf{13}$}\\[0.1cm]
+  {\footnotesize \textbf{Spell DC}}
+};
+\end{tikzpicture}
+
+\textit{Passive Perception}: $\mathbf{12}$, \textit{Investigation}: $\mathbf{12}$, \textit{Insight}: $\mathbf{10}$
+
+{\rule{\linewidth}{0.4pt}}
+
+\head{Skills}
+
+\begin{tabular}{p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}}
+  \skill*{Acrobatics}{$+5$}      & \skill{History}{$+0$}        & \skill{Performance}{$+3$} \\
+  \skill{Animal Handling}{$+0$}  & \skill{Insight}{$+0$}        & \skill*{Persuasion}{$+5$} \\
+  \skill*{Arcana}{$+2$}          & \skill{Intimidation}{$+3$}   & \skill{Religion}{$+0$} \\
+  \skill{Athletics}{$-1$}        & \skill*{Investigation}{$+2$} & \skill*{Sleight of Hand}{$+5$} \\
+  \skill*{Deception}{$+5$}       & \skill{Medicine}{$+0$}       & \skill*{Stealth}{$+5$} \\
+  \skill{Nature}{$+0$}           & \skill*{Perception}{$+2$}    & \skill{Survival}{$+0$}
+\end{tabular}
+\end{center}
+{\rule{\linewidth}{0.4pt}}
+\end{Card}
+
+\begin{Card}[Actions]{Isaac ``Zek'' Crespo / Human Draconic Sorcerer 3}
+\begin{tabular}{p{0.3\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}%
+  \head{Attack}            & \head{Range}     & \head{Hit}     & \head{Damage} \\
+  Light Crossbow\fmark     & 80 ft (320 ft)   & $+5$           & $1d8+3$ Piercing\fmark \\
+  Quarterstaff\footnotemark[1]  & 5 ft (melee)     & $+5$           & $1d8+3$ Bludgeoning\fmark \\
+\end{tabular}
+\ftext{Using \textit{True Strike}.}
+\ftext{Choice of Piercing or Radiant.}
+\ftext{Choice of Bludgeoning or Radiant.}
+{\rule{\linewidth}{0.4pt}}
+\begin{tabular}{p{0.25\linewidth}p{0.37\linewidth}p{0.30\linewidth}}
+\head{Actions}              & \head{Bonus Actions}                      & \head{Other} \\
+                            & Innate Sorcery \freq{2/rest}              & Sorcery Points: 3 \\
+                            & Create Spell Slot                         & Quickened Spell \\
+                            &                                           & Seeking Spell \\
+                            &                                           & Heroic Inspiration \\
+                            &                                           & \\
+                            &                                           &
+\end{tabular}
+\end{Card}
+
+
+\begin{Card}[Class]{Sorcerer Level 1}
+\textbf{Innate Sorcery.} An event in your past left an indelible mark on you, infusing you with simmering magic. As a Bonus Action, you can unleash that magic for 1 minute, during which you gain the following benefits:
+
+\begin{itemize}
+\item The spell save DC of your Sorcerer spells increases by 1.
+\item You have Advantage on the attack rolls of Sorcerer spells you cast.
+\end{itemize}
+
+You can use this feature twice, and you regain all expended uses of it when you finish a Long Rest.
+\end{Card}
+
+\begin{Card}[1 of 2, Class]{Sorcerer Level 2}
+\textbf{Font of Magic.} You can tap into the wellspring of magic within yourself. This wellspring is represented by Sorcery Points, which allow you to create a variety of magical effects. You have 3 Sorcery Points at level 3. You regain all expended Sorcery Points when you finish a Long Rest. You can use your Sorcery Points to fuel the options below, along with other features, such as Metamagic, that use those points.
+
+\begin{itemize}
+\item \textbf{Converting Spell Slots to Sorcery Points.} You can expend a spell slot to gain a number of Sorcery Points equal to the slot's level (no action required).
+
+\item \textbf{Creating Spell Slots.} As a Bonus Action, you can transform unexpended Sorcery Points into one spell slot. A level 1 spell slot costs 2 Sorcery Points; a level 2 spells slot costs 3. Any spell slot you create with this feature vanishes when you finish a Long Rest.
+\end{itemize}
+
+\end{Card}
+
+\begin{Card}[2 of 2, Class]{Sorcerer Level 2}
+\textbf{Metamagic.} Because your magic flows from within, you can alter your spells to suit your needs. To use an option, you must spend the number of Sorcery Points that it costs. You can use only one Metamagic option on a spell when you cast it unless otherwise noted in one of those options. Whenever you gain a Sorcerer level, you can replace one of your Metamagic options with one you don't know.
+
+\begin{itemize}
+\item \textbf{Quickened Spell.} When you cast a spell with a casting time of an action, you can spend 2 Sorcery Points to change the casting time to a Bonus Action for this casting. You can't modify a spell in this way if you've already cast a level 1+ spell on the current turn, nor can you cast a level 1+ spell on the current turn after modifying a spell in this way.
+
+\item \textbf{Seeking Spell.} If you make an attack roll for a spell and miss, you can spend 1 Sorcery Point to reroll the $d20$, and you must use the new roll. You can use Seeking Spell even if you've already used a different Metamagic option.
+\end{itemize}
+\end{Card}
+
+\begin{Card}[Class]{Draconic Sorcerer Level 3}
+\textbf{Draconic Resilience.} The magic in your body manifests physical traits of your draconic gift. Your Hit Point maximum increases by 3, and it increases by 1 whenever you gain another Sorcerer level.
+
+Parts of you are also covered by dragon-like scales. While you aren't wearing armor, your base Armor Class equals 10 plus your Dexterity and Charisma modifiers.
+\end{Card}
+
+
+\begin{Card}[Species]{Human}
+\textbf{Size.} Your Size is Small.
+
+\textbf{Resourceful.} You gain Heroic Inspiration whenever you finish a Long Rest.
+
+\textbf{Skillful.} You gain proficiency in one skill of your choice.\fmark
+\ftext{Stealth.}
+
+\textbf{Versatile.} You gain an Origin feat of your choice.\fmark
+\ftext{Magic Initiate (Wizard).}
+\end{Card}
+
+
+\begin{Card}[Feat]{Magic Initiate (Wizard)}
+\textbf{Two Cantrips.} You learn two cantrips of your choice from the Wizard spell list. Charisma is your spellcasting ability for this feat's spells.\fmark
+\ftext{\textit{Mending} and \textit{Minor Illusion}.}
+
+\textbf{Level 1 Spell.} Choose a level 1 spell from the Wizard spell list.\fmark  You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest. You can also cast the spell using any spell slots you have.
+\ftext{\textit{Find Familiar}.}
+
+\textbf{Spell Change.} Whenever you gain a new level, you can replace one of the spells you chose for this feat with a different spell of the same level from the chosen spell list.
+
+\end{Card}
+
+\begin{Card}[Feat]{Skilled}
+\textbf{Skill Proficiencies.} You gain proficiency in any combination of three skills or tools of your choice.\fmark
+
+\ftext{Acrobatics, Investigation, Perception.}
+\end{Card}
+
+\end{document}

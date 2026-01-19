@@ -1,0 +1,86 @@
+\input{include.tex}
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{Card}[Stats]{Kragor Grimstride / Orc Great Old One Warlock 3}
+\setlength{\parskip}{0em}
+\begin{tabular}{rcccccc}
+                  & \head{Strength} & \head{Dexterity} & \head{Constitution} & \head{Intelligence} & \head{Wisdom} & \head{Charisma} \\
+\textbf{Score}    & $\mathbf{10}$   & $\mathbf{16}$    & $\mathbf{16}$       & $\mathbf{8}$        & $\mathbf{15}$ & $\mathbf{19}$ \\
+\textbf{Modifier} & $+0$            & $+3$             & $+3$                & $-1$                & $+2$          & $+4$ \\
+\textbf{Save}     & $+0$            & $+3$             & $+3$                & $-1$                & $+4$          & $+6$ \\
+\end{tabular}
+
+{\rule{\linewidth}{0.4pt}}
+\begin{center}
+\begin{tikzpicture}
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center] (hp) {
+  {\large $\mathbf{27 + 12}$}\\[0.1cm]
+  {\footnotesize \textbf{HP}}
+};
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (ac1) at ($(hp.east)+(0.2cm,0)$) {
+  {\large $\mathbf{14}$}\\[0.1cm]
+  {\footnotesize \textbf{AC}}
+};
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (init) at ($(ac1.east)+(0.2cm,0)$) {
+  {\large $\mathbf{+3}$}\\[0.1cm]
+  {\footnotesize \textbf{Initiative}}
+};
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (dc) at ($(init.east)+(0.2cm,0)$) {
+  {\large $\mathbf{14}$}\\[0.1cm]
+  {\footnotesize \textbf{Spell DC\fmark}}
+};
+\end{tikzpicture}
+\ftext{Base $8$, $+6$ spell attack bonus.}
+
+\textit{Passive Perception}: $\mathbf{12}$, \textit{Investigation}: $\mathbf{9}$, \textit{Insight}: $\mathbf{14}$
+
+{\rule{\linewidth}{0.4pt}}
+
+\head{Skills}
+
+\begin{tabular}{p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}}
+  \skill{Acrobatics}{$+3$}       & \skill{History}{$-1$}        & \skill{Performance}{$+4$} \\
+  \skill{Animal Handling}{$+2$}  & \skill*{Insight}{$+4$}       & \skill{Persuasion}{$+4$} \\
+  \skill*{Arcana}{$+1$}          & \skill{Intimidation}{$+4$}   & \skill{Religion}{$-1$} \\
+  \skill{Athletics}{$+0$}        & \skill{Investigation}{$-1$}  & \skill{Sleight of Hand}{$+3$} \\
+  \skill*{Deception}{$+6$}       & \skill{Medicine}{$+2$}       & \skill*{Stealth}{$+5$} \\
+  \skill{Nature}{$-1$}           & \skill{Perception}{$+2$}     & \skill{Survival}{$+2$}
+\end{tabular}
+\end{center}
+{\rule{\linewidth}{0.4pt}}
+\end{Card}
+
+\begin{Card}[Actions]{Kragor Grimstride / Orc Great Old One Warlock 3}
+\begin{tabular}{p{0.3\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}%
+  \head{Attack}         & \head{Range}     & \head{Hit}     & \head{Damage}           \\
+  Longsword $+1$        & 5 ft (melee)     & $+7$           & $1d10+5$ Psychic\fmark  \\
+  Light Crossbow\fmark  & 80 ft (320 ft)   & $+6$           & $1d8+4$ Radiant\fmark
+\end{tabular}
+{\rule{\linewidth}{0.4pt}}
+\begin{tabular}{p{0.25\linewidth}p{0.37\linewidth}p{0.30\linewidth}}
+  \head{Actions}    & \head{Bonus Actions}           & \head{Other} \\
+  \m{False Life}    & Pact of the Blade: Bond        & Luck \freq{2/day} \\
+  \m{Silent Image}  & Pact of the Blade: Conjure     & Relentless Endurance \freq{1/day} \\
+                    & Adrenaline Rush \freq{2/rest}  & Magical Cunning \freq{1/day} \\
+                    & Awakened Mind                  & Psychic Spells \\
+                    &                                &
+\end{tabular}
+\ftext{Choice of Slashing, Necrotic, Radiant, or Psychic.}
+\ftext{Using \textit{True Strike}.}
+\ftext{Choice of Piercing, Radiant, or Psychic.}
+\end{Card}
+
+\input{cards/great-old-one-l3.tex}
+\begin{Card}[1 of 2, Class]{Eldritch Invocations}
+\input{invocations/pact-of-the-blade.tex}
+\end{Card}
+\begin{Card}[2 of 2, Class]{Eldritch Invocations}
+\input{invocations/fiendish-vigor.tex}
+\input{invocations/misty-visions.tex}
+\end{Card}
+\input{cards/species-orc.tex}
+\input{cards/feat-lucky.tex}
+
+\end{document}

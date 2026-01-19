@@ -1,0 +1,95 @@
+\input{include.tex}
+\begin{document}
+
+\begin{Card}[Stats]{Kragor Grimstride / Orc Great Old One Warlock 7}
+\setlength{\parskip}{0em}
+\begin{tabular}{rcccccc}
+                  & \head{Strength} & \head{Dexterity} & \head{Constitution} & \head{Intelligence} & \head{Wisdom} & \head{Charisma} \\
+\textbf{Score}    & $\mathbf{10}$   & $\mathbf{16}$    & $\mathbf{13}$       & $\mathbf{8}$        & $\mathbf{10}$ & $\mathbf{18}$ \\
+\textbf{Modifier} & $+0$            & $+3$             & $+1$                & $-1$                & $+0$          & $+4$ \\
+\textbf{Save}     & $+0$            & $+3$             & $+1$                & $-1$                & $+3$          & $+7$ \\
+\end{tabular}
+
+{\rule{\linewidth}{0.4pt}}
+\begin{center}
+\begin{tikzpicture}
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center] (hp) {
+  {\large $\mathbf{45 + 12}$}\\[0.1cm]
+  {\footnotesize \textbf{HP}}
+};
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (ac1) at ($(hp.east)+(0.2cm,0)$) {
+  {\large $\mathbf{15}$}\\[0.1cm]
+  {\footnotesize \textbf{AC}}
+};
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (init) at ($(ac1.east)+(0.2cm,0)$) {
+  {\large $\mathbf{+3}$}\\[0.1cm]
+  {\footnotesize \textbf{Initiative}}
+};
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (dc) at ($(init.east)+(0.2cm,0)$) {
+  {\large $\mathbf{17}$}\\[0.1cm]
+  {\footnotesize \textbf{Spell DC\fmark}}
+  };
+\end{tikzpicture}
+\ftext{Base $8$, $+7$ spell attack bonus, $+2$ from \textit{Rod of the Pact Keeper +2}.}
+
+\textit{Passive Perception}: $\mathbf{10}$, \textit{Investigation}: $\mathbf{9}$, \textit{Insight}: $\mathbf{13}$
+
+{\rule{\linewidth}{0.4pt}}
+
+\head{Skills}
+
+\begin{tabular}{p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}}
+  \skill{Acrobatics}{$+3$}       & \skill{History}{$-1$}        & \skill{Performance}{$+4$} \\
+  \skill{Animal Handling}{$+0$}  & \skill*{Insight}{$+3$}       & \skill{Persuasion}{$+4$} \\
+  \skill*{Arcana}{$+2$}          & \skill{Intimidation}{$+4$}   & \skill{Religion}{$-1$} \\
+  \skill{Athletics}{$+0$}        & \skill{Investigation}{$-1$}  & \skill{Sleight of Hand}{$+3$} \\
+  \skill*{Deception}{$+7$}       & \skill{Medicine}{$+0$}       & \skill*{Stealth}{$+6$} \\
+  \skill{Nature}{$-1$}           & \skill{Perception}{$+0$}     & \skill{Survival}{$+0$} \\
+\end{tabular}
+\end{center}
+{\rule{\linewidth}{0.4pt}}
+\end{Card}
+
+\begin{Card}[Actions]{Kragor Grimstride / Orc Great Old One Warlock 7}
+\begin{tabular}{p{0.3\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}%
+  \head{Attack}            & \head{Range}     & \head{Hit}  & \head{Damage}           \\
+  Warhammer $+1$           & 5 feet (melee)   & $+8$        & $1d10+5$ Psychic\fmark  \\
+  \m{Eldritch Blast}       & 120 feet         & $+9$\fmark  & $1d10+4$ Force\fmark    \\
+                           &                  &             & and push 10 ft
+\end{tabular}
+\ftext{Choice of Bludgeoning, Necrotic, Radiant, or Psychic.}
+\ftext{Base $+7$ and $+2$ from \textit{Rod of the Pact Keeper +2}.}
+\ftext{Choice of Force or Psychic.}
+{\rule{\linewidth}{0.4pt}}
+\begin{tabular}{p{0.25\linewidth}p{0.37\linewidth}p{0.30\linewidth}}
+  \head{Actions}              & \head{Bonus Actions}                      & \head{Other} \\
+  \m{False Life}              & Pact of the Blade: Bond                   & Luck \freq{3/day} \\
+  \m{Silent Image}            & Pact of the Blade: Conjure                & Relentless Endurance \freq{1/day} \\
+  \m{Command} \freq{1/day}    & Adrenaline Rush \freq{3/rest}             & Magical Cunning \freq{1/day} \\
+  \m{Misty Step} \freq{1/day} & Awakened Mind                             & Psychic Spells \\
+                              & Clairvoyant Combatant \freq{1/rest}       & Agonizing Blast \\
+                              &                                           & Repelling Blast \\
+                              &                                           & Thirsting Blade \\
+                              &                                           &
+\end{tabular}
+\end{Card}
+
+\input{cards/great-old-one-l3.tex}
+\input{cards/great-old-one-l6.tex}
+\begin{Card}[1 of 2, Class]{Eldritch Invocations}
+\input{invocations/pact-of-the-blade.tex}
+\end{Card}
+\begin{Card}[2 of 2, Class]{Eldritch Invocations}
+\input{invocations/fiendish-vigor.tex}
+\input{invocations/misty-visions.tex}
+\input{invocations/agonizing-blast.tex}
+\input{invocations/repelling-blast.tex}
+\ftext{\m{Eldritch Blast}}
+\input{invocations/thirsting-blade.tex}
+\end{Card}
+\input{cards/species-orc.tex}
+\input{cards/feat-lucky.tex}
+\input{cards/feat-fey-touched.tex}
+\input{cards/item-rod-of-the-pact-keeper.tex}
+
+\end{document}

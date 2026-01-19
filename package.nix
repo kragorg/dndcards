@@ -30,17 +30,18 @@ stdenv.mkDerivation rec {
   src = ./.;
   texfiles = lib.escapeShellArgs [
     "actions.tex"
-    "elara-reminders.tex"
+    "elara-deck.tex"
     "elara-spells.tex"
-    "kragor-placard-l7.tex"
-    "kragor-reminders.tex"
-    "kragor-reminders-l3.tex"
-    "kragor-reminders-l7.tex"
+    "kragor-al-deck.tex"
+    "kragor-al-placard.tex"
+    "kragor-al-spells.tex"
+    "kragor-deck.tex"
     "kragor-spells.tex"
-    "kragor-spells-l3.tex"
-    "kragor-spells-l7.tex"
-    "more-spells.tex"
+    "rezina-deck.tex"
     "scarlet-spells.tex"
+    "toge-deck.tex"
+    "zek-deck.tex"
+    "zek-spells.tex"
   ];
 
   phases = [ "buildPhase" ];

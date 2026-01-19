@@ -18,10 +18,12 @@
         pkgs = nixpkgs.legacyPackages.${system};
         tex = pkgs.texliveSmall.withPackages (
           ps: with ps; [
-            scheme-small
+            bigfoot
             collection-fontsextra
             etbb
+            footmisc
             latexmk
+            scheme-small
             xstring
           ]
         ) ;
@@ -43,7 +45,7 @@
               cd obj
             '';
             packages = dnd-cards.nativeBuildInputs ++ [
-              pkgs.nixfmt-rfc-style
+              pkgs.nixfmt
             ];
           };
         };
