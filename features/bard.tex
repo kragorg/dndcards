@@ -1,0 +1,44 @@
+\NewDocumentCommand{\MusicalInstruments}{m}{%
+\textbf{Musical Instruments.} You have proficiency with three Musical Instruments of your choice. \textbf{Selection:} \begin{InlineList}#1\end{InlineList}.
+
+}%
+\NewDocumentCommand{\BardicInspiration}{m}{%
+\textbf{Bardic Inspiration.} You can supernaturally inspire others through words, music, or dance. This inspiration is represented by your Bardic Inspiration die, which is a $#1$.
+
+As a Bonus Action, you can inspire another creature within 60 feet of yourself who can see or hear you. That creature gains one of your Bardic Inspiration dice. A creature can have only one Bardic Inspiration die at a time.
+
+Once within the next hour when the creature fails a D20 Test, the creature can roll the Bardic Inspiration die and add the number rolled to the d20, potentially turning the failure into a success. A Bardic Inspiration die is expended when it's rolled.
+
+You can confer a Bardic Inspiration die a number of times equal to your Charisma modifier (minimum of once), and you regain all expended uses when you finish a Long Rest.
+
+}%
+\NewDocumentCommand{\BardSpellcasting}{mm}{%
+\textbf{Spellcasting.} You can cast spells through your bardic arts. Charisma is your spellcasting ability for your Bard spells (Spell DC #1, Spell Attack $#2$). You can use a Musical Instrument as a Spellcasting Focus for your Bard spells.
+
+}%
+\ExplSyntaxOn
+\NewDocumentCommand{\Expertise}{}{%
+\textbf{Expertise.}~You~gain~Expertise~in~two~skill~proficiencies~of~your~choice.~\textbf{Selection:}~
+\begin{InlineList}
+\prop_map_inline:Nn \g_dnd_skill_expertise_prop { \item ##1 }
+\end{InlineList}.
+\par
+}%
+\ExplSyntaxOff
+\NewDocumentCommand{\JackOfAllTrades}{}{%
+\textbf{Jack of All Trades.} You can add half your Proficiency Bonus (round down) to any ability check you make that uses a skill proficiency you lack and that doesn't otherwise use your Proficiency Bonus.
+\HasJackOfAllTrades
+
+}%
+\NewDocumentCommand{\BeguilingMagic}{}{%
+\textbf{Beguiling Magic.} You always have \textit{Charm Person} and \textit{Mirror Image} prepared.
+
+In addition, immediately after you cast an Enchantment or Illusion spell using a spell slot, you can cause a creature you can see within 60 feet of yourself to make a Wisdom saving throw against your spell save DC. On a failed save, the target has the Charmed or Frightened condition (your choice) for 1 minute. The target repeats the save at the end of each of its turns, ending the effect on itself on a success.
+
+Once you use this benefit, you can't use it again until you finish a Long Rest. You can also restore your use of it by expending one use of your Bardic Inspiration (no action required).
+
+}%
+\NewDocumentCommand{\MantleOfInspiration}{}{%
+\textbf{Mantle of Inspiration.} You can weave fey magic into a song or dance to fill others with vigor. As a Bonus Action, you can expend a use of Bardic Inspiration, rolling a Bardic Inspiration die. When you do so, choose a number of other creatures within 60 feet of yourself, up to a number equal to your Charisma modifier (minimum of one creature). Each of those creatures gains a number of Temporary Hit Points equal to two times the number rolled on the Bardic Inspiration die, and then each can use its Reaction to move up to its Speed without provoking Opportunity Attacks.
+
+}%

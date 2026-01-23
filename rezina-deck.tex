@@ -1,126 +1,82 @@
-\input{include.tex}
+\documentclass[landscape]{article}
+\usepackage{dndcards}
+\usepackage{character}
+\usepackage{spells}
 
 \begin{document}
-\pagestyle{empty}
+\Character{
+  pc={Rezina},
+  summary={Sera Luma Bard 1},
+  levels=1,
+  str=9, dex*=14, con=12, int=12, wis=10, cha*=18,
+  hp=9, ac=14,
+  spellcasting=cha}
+\SkillProficiencies{Arcana, Investigation, Performance, Persuasion, Stealth, Survival}
 
-\begin{Card}[Stats]{Rezina / Sera Luma Bard 1}
-\setlength{\parskip}{0em}
-\begin{tabular}{rcccccc}
-                  & \head{Strength} & \head{Dexterity} & \head{Constitution} & \head{Intelligence} & \head{Wisdom} & \head{Charisma} \\
-\textbf{Score}    & $\mathbf{9}$    & $\mathbf{14}$    & $\mathbf{12}$       & $\mathbf{12}$       & $\mathbf{10}$ & $\mathbf{18}$ \\
-\textbf{Modifier} & $-1$            & $+2$             & $+1$                & $+1$                & $+0$          & $+4$ \\
-\textbf{Save}     & $-1$            & $+4$             & $+1$                & $+1$                & $+0$          & $+6$ \\
-\end{tabular}
+\TitleCard[\Summary]{\PC}
+\StatCard{\PC, \Summary}
 
-{\rule{\linewidth}{0.4pt}}
-\begin{center}
-\begin{tikzpicture}
-\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center] (hp) {
-  {\large $\mathbf{9}$}\\[0.1cm]
-  {\footnotesize \textbf{HP}}
-};
-\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (ac1) at ($(hp.east)+(0.2cm,0)$) {
-  {\large $\mathbf{14}$}\\[0.1cm]
-  {\footnotesize \textbf{AC}}
-};
-\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (init) at ($(ac1.east)+(0.2cm,0)$) {
-  {\large $\mathbf{+2}$}\\[0.1cm]
-  {\footnotesize \textbf{Initiative}}
-};
-\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (dc) at ($(init.east)+(0.2cm,0)$) {
-  {\large $\mathbf{14}$}\\[0.1cm]
-  {\footnotesize \textbf{Spell DC}}
-};
-\end{tikzpicture}
-
-\textit{Passive Perception}: $\mathbf{10}$, \textit{Investigation}: $\mathbf{13}$, \textit{Insight}: $\mathbf{10}$
-
-{\rule{\linewidth}{0.4pt}}
-
-\head{Skills}
-
-\begin{tabular}{p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}}
-  \skill{Acrobatics}{$+2$}       & \skill{History}{$+1$}        & \skill*{Performance}{$+6$} \\
-  \skill{Animal Handling}{$+0$}  & \skill{Insight}{$+0$}        & \skill*{Persuasion}{$+6$} \\
-  \skill*{Arcana}{$+3$}          & \skill{Intimidation}{$+4$}   & \skill{Religion}{$+1$} \\
-  \skill{Athletics}{$-1$}        & \skill*{Investigation}{$+3$}  & \skill{Sleight of Hand}{$+2$} \\
-  \skill{Deception}{$+4$}        & \skill{Medicine}{$+0$}       & \skill*{Stealth}{$+4$} \\
-  \skill{Nature}{$+1$}           & \skill{Perception}{$+0$}     & \skill*{Survival}{$+2$} \\
-\end{tabular}
-\end{center}
-{\rule{\linewidth}{0.4pt}}
-\end{Card}
-
-\begin{Card}[Actions]{Rezina / Sera Luma Bard 1}
-\begin{tabular}{p{0.3\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}%
-  \head{Attack}            & \head{Range}     & \head{Hit}  & \head{Damage}           \\
-  Shortsword\fmark         & 5 ft (melee)     & $+6$        & $1d6+4$ Radiant         \\
-  Shortsword (off-hand)    & 5 ft (melee)     & $+2$        & $1d6$ Piercing          \\
-  Shortbow\fmarkprev       & 80 ft (320 ft)   & $+6$        & $1d6+4$ Radiant         \\
-  \m{Sorcerous Burst}      & 120 ft           & $+6$        & $1d8$ elemental\fmark   \\
-\end{tabular}
-\ftext{Using \textit{True Strike}.}
-\ftext{Choose Acid, Cold, Fire, Lightning, Thunder, Poison, or Psychic.}
-{\rule{\linewidth}{0.4pt}}
-\begin{tabular}{p{0.25\linewidth}p{0.37\linewidth}p{0.30\linewidth}}
-  \head{Actions}                       & \head{Bonus Actions}                  & \head{Other} \\
-  Wing Flap                            & Two-Weapon Fighting (Shortsword)      & Fated \freq{1/rest} \\
-  \m{Charm Person} \freq{1/rest}       & Bardic Inspiration $d6$ \freq{4/rest} & Glide \\
-  \m{Detect Magic} \freq{1/rest}       &                                       & Touched \\
-                                       &                                       & Songbird \\
-                                       &                                       & Center of Attention \\
-\end{tabular}
+\begin{Card}[Actions]{\PC, \Summary}
+  \begin{tabular}{p{0.3\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}%
+    \head{Attack}            & \head{Range}     & \head{Hit}  & \head{Damage/Effect}    \\
+    Shortsword\fmark         & 5 ft (melee)     & $+6$        & $1d6+4$ Radiant         \\
+    Shortsword (off-hand)    & 5 ft (melee)     & $+2$        & $1d6$ Piercing          \\
+    Shortbow\footnotemark[1] & 80 ft (320 ft)   & $+6$        & $1d6+4$ Radiant         \\
+    \m{Sorcerous Burst}      & 120 ft           & $+6$        & $1d8$ elemental\fmark   \\
+  \end{tabular}
+  %
+  \ftext{Using \textit{True Strike}.}
+  \ftext{Choose Acid, Cold, Fire, Lightning, Thunder, Poison, or Psychic.}
+  %
+  {\rule{\linewidth}{0.4pt}}
+  \begin{tabular}{p{0.25\linewidth}p{0.40\linewidth}p{0.30\linewidth}}
+    \head{Actions}                       & \head{Bonus Actions}                  & \head{Other} \\
+    Wing Flap                            & Two-Weapon Fighting (Shortsword)      & Fated \freq{1/rest} \\
+    \m{Charm Person}\freq{1/day}         & Bardic Inspiration $d6$ \freq{4/day}  & Glide \\
+    \m{Detect Magic}\freq{1/day}         &                                       & Touched \\
+                                         &                                       & Songbird \\
+                                         &                                       & Center of Attention \\
+  \end{tabular}
 \end{Card}
 
 
 \begin{Card}[Class]{Bard}
-\textbf{Bardic Inspiration.} As a Bonus Action, you can inspire another creature within 60 ft. that can see or hear you. That creature gains one of your Bardic Inspiration dice ($1d6$). Once within the next hour, when the creature fails a D20 Test, the creature can roll the Bardic Inspiration die and add the number rolled to the total, potentially turning the failure into a success.
-
-You can confer your Bardic Inspiration die 4 times per Long Rest.
-
-\textbf{Spellcasting.} You can cast spells through your bardic arts. Charisma is your spellcasting ability for your Bard spells (Spell DC 14, Spell Attack $+6$). You can use a Musical Instrument as a Spellcasting Focus for your Bard spells.
-
-\textbf{Proficiencies.} You have the following proficiencies:
-\begin{itemize}
-\item \textbf{Skills:} Arcana, Investigation, Persuasion
-\item \textbf{Instruments:} Birdpipes, Flute, Hand Drum
-\end{itemize}
+  \MusicalInstruments{Birdpipes, Flue, Hand Drum}
+  \BardSpellcasting
+  \BardicInspiration{d6}
 \end{Card}
 
-\begin{Card}[Species]{Sera Luma}
-\textbf{Size.} Small
-
-\textbf{Speed.} Your base walking speed is 25 feet.
-
-\textbf{Glide.} Using your feathered arms, you can slow your fall, and glide short distances.
-
-\textbf{Wing Flap.} As a bonus action, you can propel yourself upward a distance equal to half your movement speed. You can use it in conjunction with a regular jump, but not while gliding.
-
-\textbf{Touched.} You know one cantrip from the sorcerer spell list.\fmark Charisma is your spellcasting ability for this cantrip.
-\ftext{Sorcerous Burst.}
-
-\textbf{Fated.} You can choose to reroll any attack, skill check, or saving throw. You can decide to do this after your roll, but only before the outcome of the roll has been determined. You can't use this feature again until you have completed a long rest.
-
-\vfill \hfill \textit{\footnotesize continues}
+\begin{Card}{Feats}
+\MagicInitiate{Druid}{Guidance, Gust Barrier}{Detect Magic}
 \end{Card}
 
-\begin{Card}[continued]{Sera Luma}
-\textbf{Languages.} You can speak, read, and write Birdfolk. You can also understand Auran, though you cannot speak it naturally.
+\SpeciesCardSeraLuma
 
-\textbf{Center of Attention.} You have proficiency in the Performance skill.
-
-\textbf{Songbird.} You may cast the charm person spell once per long rest. This spell does not require any somatic components. Charisma is your spellcasting ability for this.
+\begin{Card}{Rezina's Prepared Spells}
+  \begin{tabular}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
+  \head{Cantrip}     & \head{1st Level}    & \\
+    Guidance         &  Charm Person       & \\
+    Gust Barrier     &  Command            & \\
+    Mage Hand        &  Detect Magic       & \\
+    Sorcerous Burst  &  Healing Word       & \\
+    True Strike      &  Silvery Barbs      & \\
+                     &  Sleep              &
+  \end{tabular}
 \end{Card}
 
+\SpellGuidance
+\SpellGustBarrier
+\SpellMageHand
+\SpellSorcerousBurst
+\SpellTrueStrike
 
-\begin{Card}[Feat]{Magic Initiate (Druid)}
-\textbf{Two Cantrips.} You learn two cantrips of your choice from the Druid spell list. Charisma is your spellcasting ability for this feat's spells.\fmark
+\SpellCharmPerson
+\SpellCommand
+\SpellDetectMagic
+\SpellHealingWord
+\SpellSilveryBarbs
+\SpellSleep
 
-\textbf{Level 1 Spell.} Choose a level 1 spell from the Druid spell list.\fmark You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest. You can also cast the spell using any spell slots you have.
-\ftext{\textit{Guidance} and \textit{Gust Barrier}.}
-\ftext{\textit{Detect Magic}.}
-
-\textbf{Spell Change.} Whenever you gain a new level, you can replace one of the spells you chose for this feat with a different spell of the same level from the chosen spell list.
-\end{Card}
+\Placard
 
 \end{document}
