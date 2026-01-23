@@ -1,0 +1,41 @@
+\NewDocumentCommand{\MagicInitiate}{mmm}{%
+\textbf{Magic Initiate (#1).} You gain the following benefits.
+
+\begin{itemize}
+\item \textbf{Two Cantrips.} You learn two cantrips of your choice from the #1 spell list. Charisma is your spellcasting ability for this feat's spells. {\textbf{Selection:}
+\textit{\begin{InlineList}#2\end{InlineList}}}.
+\item \textbf{Level 1 Spell.} Choose a level 1 spell from the #1 spell list. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest. You can also cast the spell using any spell slots you have. {\textbf{Selection:} \textit{\begin{InlineList}#3\end{InlineList}}}.
+\item \textbf{Spell Change.} Whenever you gain a new level, you can replace one of the spells you chose for this feat with a different spell of the same level from the chosen spell list.
+\end{itemize}
+
+}%
+\NewDocumentCommand{\Skilled}{m}{%
+\textbf{Skilled.} You gain proficiency in any combination of three skills or tools of your choice. \textbf{Selection:}
+\begin{InlineList}#1\end{InlineList}.
+
+}%
+\NewDocumentCommand{\Lucky}{}{%
+\textbf{Luck Points.} You have a number of Luck Points equal to your Proficiency Bonus and can spend the points on the benefits below. You regain your expended Luck Points when you finish a Long Rest.
+\begin{itemize}
+\item \textbf{Advantage.} When you roll a $d20$ for a D20 Test, you can spend 1 Luck Point to give yourself Advantage on the roll.
+\item \textbf{Disadvantage.} When a creature rolls a $d20$ for an attack roll against you, you can spend 1 Luck Point to impose Disadvantage on that roll.
+\end{itemize}
+
+}%
+\NewDocumentCommand{\FeyTouched}{mm}{%
+\textbf{Fey Touched.} Your exposure to the Feywild's magic grants you the following benefits.
+
+\begin{itemize}
+\item \textbf{Ability Score Increase.} Increase your Intelligence, Wisdom, or Charisma score by 1, to a maximum of 20. \textbf{Selection:} #1.
+\item \textbf{Fey Magic.} Choose one level 1 spell from the Divination or Enchantment school of magic. You always have that spell and the \textit{Misty Step} spell prepared. You can cast each of these spells without expending a spell slot. Once you cast either spell in this way, you can't cast that spell in this way again until you finish a Long Rest. You can also cast these spells using spell slots you have of the appropriate level. The spells' spellcasting ability is the ability increased by this feat. \textbf{Selection:} \textit{#2}.
+\end{itemize}
+
+}%
+\NewDocumentCommand{\Alert}{}{%
+\textbf{Alert.} You gain the following benefits.
+\begin{itemize}
+\item \textbf{Initiative Proficiency.} When you roll Initiative, you can add your Proficiency Bonus to the roll.
+\item \textbf{Initiative Swap.} Immediately after you roll Initiative, you can swap your Initiative with the Initiative of one willing ally in the same combat. You can't make this swap if you or the ally has the Incapacitated condition.
+\end{itemize}
+
+}%

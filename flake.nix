@@ -20,10 +20,13 @@
           ps: with ps; [
             bigfoot
             collection-fontsextra
+            enumitem
             etbb
             footmisc
             latexmk
+            pdflscape
             scheme-small
+            totcount
             xstring
           ]
         ) ;

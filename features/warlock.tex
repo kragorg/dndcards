@@ -1,0 +1,63 @@
+\NewDocumentCommand{\PactMagic}{mm}{%
+\textbf{Pact Magic.} Through occult ceremony, you have formed a pact with a mysterious entity to gain magical powers. Charisma is the spellcasting ability for your Warlock spells (Spell DC $#1$, Spell Attack Bonus $#2$). You can use an Arcane Focus as a Spellcasting Focus for your Warlock spells.
+
+}%
+\NewDocumentCommand{\MagicalCunning}{}{%
+\textbf{Magical Cunning.} You can perform an esoteric rite for 1 minute. At the end of it, you regain expended Pact Magic spell slots but no more than a number equal to half your maximum (round up). Once you use this feature, you can't do so again until you finish a Long Rest.
+
+}%
+\NewDocumentCommand{\AwakenedMind}{}{%
+\textbf{Awakened Mind.} You can form a telepathic connection between your mind and the mind of another. As a Bonus Action, choose one creature you can see within 30 feet of yourself. You and the chosen creature can communicate telepathically with each other while the two of you are within a number of miles of each other equal to your Charisma modifier (minimum of 1 mile). To understand each other, you each must mentally use a language the other knows.
+
+The telepathic connection lasts for a number of minutes equal to your Warlock level. It ends early if you use this feature to connect with a different creature.
+
+}%
+\NewDocumentCommand{\MistyVisions}{}{%
+\textbf{Misty Visions.} You can cast \textit{Silent Image} without expending a spell slot.
+
+}%
+\NewDocumentCommand{\FiendishVigor}{}{%
+\textbf{Fiendish Vigor.} You can cast \textit{False Life} on yourself without expending a spell slot. When you cast the spell with this feature, you don't roll the die for the Temporary Hit Points; you automatically get the highest number on the die.
+
+}%
+\NewDocumentCommand{\PsychicSpells}{}{%
+\textbf{Psychic Spells.} When you cast a Warlock spell that deals damage, you can change its damage type to Psychic. In addition, when you cast a Warlock spell that is an Enchantment or Illusion, you can do so without Verbal or Somatic components.
+
+}%
+\NewDocumentCommand{\AgonizingBlast}{m}{%
+\textbf{Agonizing Blast.} Choose one of your known Warlock cantrips that deals damage. You can add your Charisma modifier to that spell's damage rolls. \textbf{Selection:} \textit{#1}.
+
+}%
+\NewDocumentCommand{\RepellingBlast}{m}{%
+\textbf{Repelling Blast.} Choose one of your known Warlock cantrips that requires an attack roll. When you hit a Large or smaller creature with that cantrip, you can push the creature up to 10 feet straight away from you. \textbf{Selection:} \textit{#1}.
+
+}%
+\NewDocumentCommand{\PactOfTheBlade}{}{%
+\textbf{Pact of the Blade.} As a Bonus Action, you can conjure a pact weapon in your hand---a Simple or Martial Melee weapon of your choice with which you bond---or create a bond with a magic weapon you touch; you can't bond with a magic weapon if someone else is attuned to it or another Warlock is bonded with it. Until the bond ends, you have proficiency with the weapon, and you can use it as a Spellcasting Focus.
+
+Whenever you attack with the bonded weapon, you can use your Charisma modifier for the attack and damage rolls instead of using Strength or Dexterity; and you can cause the weapon to deal Necrotic, Psychic, or Radiant damage or its normal damage type.
+
+Your bond with the weapon ends if you use this feature's Bonus Action again, if the weapon is more than 5 feet away from you for 1 minute or more, or if you die. A conjured weapon disappears when the bond ends.
+
+}%
+\NewDocumentCommand{\ThirstingBlade}{}{%
+\textbf{Thirsting Blade.} You gain the Extra Attack feature for your pact weapon only. With that feature, you can attack twice with the weapon instead of once when you take the Attack action on your turn.
+
+}%
+\NewDocumentCommand{\PactOfTheTome}{m}{%
+\textbf{Pact of the Tome.} Stitching together strands of shadow, you conjure forth a book in your hand at the end of a Short or Long Rest. This Book of Shadows (you determine its appearance) contains eldritch magic that only you can access, granting you the benefits below. The book disappears if you conjure another book with this feature or if you die.
+
+\begin{itemize}
+\item \textbf{Cantrips and Rituals.} When the book appears, choose three cantrips, and choose two level 1 spells that have the Ritual tag. The spells can be from any class's spell list, and they must be spells you don't already have prepared. While the book is on your person, you have the chosen spells prepared, and they function as Warlock spells for you.
+\textbf{Selection:} \textit{\begin{InlineList}#1\end{InlineList}}.
+
+\item \textbf{Spellcasting Focus.} You can use the book as a Spellcasting Focus.
+\end{itemize}
+
+}%
+\NewDocumentCommand{\ClairvoyantCombatant}{}{%
+\textbf{Clairvoyant Combatant.} When you form a telepathic bond with a creature using your Awakened Mind, you can force that creature to make a Wisdom saving throw against your spell save DC. On a failed save, the creature has Disadvantage on attack rolls against you, and you have Advantage on attack rolls against that creature for the duration of the bond.
+
+Once you use this feature, you can't use it again until you finish a Short or Long Rest unless you expend a Pact Magic spell slot (no action required) to restore your use of it.
+
+}%

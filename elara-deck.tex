@@ -1,138 +1,96 @@
-\input{include.tex}
+\documentclass[landscape]{article}
+\usepackage{dndcards}
+\usepackage{character}
+\usepackage{spells}
 
 \begin{document}
+\Character{
+  pc={Elara Starglimmer},
+  summary={Aasimar Glamour Bard 3},
+  player=Sheila,
+  levels=3,
+  str=9, dex*=16, con=12, int=10, wis=10, cha*=17,
+  hp=21, ac=15,
+  spellcasting=cha}
+\SkillProficiencies{Arcana, Perception*, Persuasion*, Stealth, Survival}
 
-\begin{Card}[Stats]{Elara Starglimmer / Aasimar Glamour Bard 3}
-\setlength{\parskip}{0em}
-\begin{tabular}{rcccccc}
-                  & \head{Strength} & \head{Dexterity} & \head{Constitution} & \head{Intelligence} & \head{Wisdom} & \head{Charisma} \\
-\textbf{Score}    & $\mathbf{11}$   & $\mathbf{16}$    & $\mathbf{12}$       & $\mathbf{10}$       & $\mathbf{10}$ & $\mathbf{19}$ \\
-\textbf{Modifier} & $+0$            & $+3$             & $+1$                & $+0$                & $+0$          & $+4$ \\
-\textbf{Save}     & $+0$            & $+5$             & $+1$                & $+0$                & $+0$          & $+6$ \\
-\end{tabular}
+\TitleCard[\Summary]{\PC}
+\StatCard{\PC, \Summary}
 
-{\rule{\linewidth}{0.4pt}}
-\begin{center}
-\begin{tikzpicture}
-\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center] (hp) {
-  {\large $\mathbf{21}$}\\[0.1cm]
-  {\footnotesize \textbf{HP}}
-};
-\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (ac1) at ($(hp.east)+(0.2cm,0)$) {
-  {\large $\mathbf{14}$}\\[0.1cm]
-  {\footnotesize \textbf{AC}}
-};
-\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (init) at ($(ac1.east)+(0.2cm,0)$) {
-  {\large $\mathbf{+3}$}\\[0.1cm]
-  {\footnotesize \textbf{Initiative}}
-};
-\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (dc) at ($(init.east)+(0.2cm,0)$) {
-  {\large $\mathbf{14}$}\\[0.1cm]
-  {\footnotesize \textbf{Spell DC}}
-};
-\end{tikzpicture}
-
-\textit{Passive Perception}: $\mathbf{14}$, \textit{Investigation}: $\mathbf{11}$, \textit{Insight}: $\mathbf{11}$
-
-{\rule{\linewidth}{0.4pt}}
-
-\head{Skills}
-
-\begin{tabular}{p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}}
-  \skill{Acrobatics}{$+4$}       & \skill{History}{$+1$}        & \skill{Performance}{$+5$} \\
-  \skill{Animal Handling}{$+1$}  & \skill{Insight}{$+1$}        & \skill*{Persuasion}{$+8$} \\
-  \skill*{Arcana}{$+2$}          & \skill{Intimidation}{$+5$}   & \skill{Religion}{$+1$} \\
-  \skill{Athletics}{$+1$}        & \skill{Investigation}{$+1$}  & \skill{Sleight of Hand}{$+4$} \\
-  \skill{Deception}{$+5$}        & \skill{Medicine}{$+1$}       & \skill*{Stealth}{$+5$} \\
-  \skill{Nature}{$+1$}           & \skill*{Perception}{$+4$}    & \skill{Survival}{$+2$} \\
-\end{tabular}
-\end{center}
-{\rule{\linewidth}{0.4pt}}
+\begin{Card}[Actions]{\PC, \Summary}
+  \begin{tabular}{p{0.3\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}%
+    \head{Attack}             & \head{Range}     & \head{Hit}     & \head{Damage/Effect}              \\
+    Shortsword\fmark          & 5 ft (melee)     & $+5$           & $1d6+3$ Piercing\fmark            \\
+    Shortbow\footnotemark[1]  & 80 ft (320 ft)   & $+5$           & $1d6+3$ Piercing\footnotemark[2]  \\
+    Dagger (off-hand)         & 5 ft (melee)     & $+3$           & $1d4$ Piercing                    \\
+    Dagger (thrown)           & 20 ft (60 ft)    & $+5$           & $1d4+3$ Piercing                  \\
+    \m{Starry Wisp}           & 60 ft            & $+5$           & $1d8$ Radiant
+  \end{tabular}
+  %
+  \ftext{Using \textit{True Strike}.}
+  \ftext{Choice of Piercing or Radiant.}
+  %
+  {\rule{\linewidth}{0.4pt}}
+  \begin{tabular}{p{0.27\linewidth}p{0.36\linewidth}p{0.27\linewidth}}
+    \head{Actions}                       & \head{Bonus Actions}                  & \head{Other} \\
+    \textit{Light}                       & Two-Weapon Fighting (Dagger)          & Beguiling Magic \freq{1/day}\fmark \\
+    Healing Hands \freq{1/day}           & Celestial Revelation \freq{1/day}     & Celestial Resistance \\
+    \m{Speak with Animals} \freq{1/day}  & Bardic Inspiration $d6$ \freq{4/day}  & \\
+                                         & Mantle of Inspiration\fmark           & \\
+                                         &                                       &
+  \end{tabular}
+  %
+  \ftext{You can restore your use of Beguiling Magic by expending one use of
+  your Bardic Inspiration (no action required).}
+  \ftext{Consumes one use of your Bardic Inspiration.}
 \end{Card}
 
+\begin{Card*}[Class]{College of Glamour Bard}
+  \BardSpellcasting
+  \BardicInspiration{d6}
+  \MusicalInstruments{Harp, Flute, Hand Drum}
+  \continued
+  \BeguilingMagic
+  \MantleOfInspiration
+  \continued
+  \Expertise
+  \JackOfAllTrades
+\end{Card*}
 
-\begin{Card}[Actions]{Elara Starglimmer / Aasimar Glamour Bard 3}
-\begin{tabular}{p{0.3\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}%
-  \head{Attack}             & \head{Range}     & \head{Hit}     & \head{Damage}                    \\
-  Shortsword\fmark          & 5 ft (melee)     & $+6$           & $1d6+4$ Radiant\fmark            \\
-  Shortbow\footnotemark[1]  & 80 ft (320 ft)   & $+6$           & $1d6+4$ Radiant\footnotemark[2]  \\
-  Dagger (off-hand)         & 5 ft (melee)     & $+3$           & $1d4$ Piercing                   \\
-  Dagger (thrown)           & 20 ft (60 ft)    & $+5$           & $1d4+3$ Piercing                 \\
-  \m{Starry Wisp}           & 60 ft            & $+6$           & $1d8$ Radiant
-\end{tabular}
-\ftext{Using \textit{True Strike}.}
-\ftext{Choice of Piercing or Radiant.}
-{\rule{\linewidth}{0.4pt}}
-\begin{tabular}{p{0.27\linewidth}p{0.36\linewidth}p{0.27\linewidth}}
-  \head{Actions}                       & \head{Bonus Actions}                  & \head{Other} \\
-  Healing Hands \freq{1/day}           & Two-Weapon Fighting (Dagger)          & Beguiling Magic \freq{1/day}\fmark \\
-  \m{Speak with Animals} \freq{1/day}  & Celestial Revelation \freq{1/day}     & Celestial Resistance \\
-                                       & Bardic Inspiration $d6$ \freq{4/day}  & \\
-                                       & Mantle of Inspiration\fmark           & \\
-                                       &                                       &
-\end{tabular}
-\ftext{You can restore your use of Beguiling Magic by expending one use of your Bardic Inspiration (no action required).}
-\ftext{Consumes one use of your Bardic Inspiration.}
+\begin{Card}{Feats}
+  \MagicInitiate{Druid}{Guidance, Starry Wisp}{Speak With Animals}
 \end{Card}
 
+\SpeciesCardAasimar
 
-\begin{Card}[Class]{College of Glamour Bard}
-\textbf{Bardic Inspiration.} As a Bonus Action, you can inspire another creature within 60 ft. that can see or hear you. That creature gains one of your Bardic Inspiration dice ($1d6$). Once within the next hour, when the creature fails a D20 Test, the creature can roll the Bardic Inspiration die and add the number rolled to the total, potentially turning the failure into a success. You can confer your Bardic Inspiration die 4 times per Long Rest.
-
-\textbf{Spellcasting.} You can cast spells through your bardic arts. Charisma is your spellcasting ability for your Bard spells (Spell DC 14, Spell Attack $+6$). You can use a Musical Instrument as a Spellcasting Focus for your Bard spells.
-
-\textbf{Expertise.} You gain Expertise in two skill proficiencies of your choice.\fmark
-
-\textbf{Jack of All Trades.} You can add half your Proficiency Bonus (1) to ability checks you make that uses a skill proficiency you lack and that doesn't otherwise use your Proficiency Bonus.
-\ftext{Persuasion and Perception.}
-\vfill \hfill \textit{\footnotesize continues}
+\begin{Card}{Elara's Prepared Spells}
+  \begin{tabular}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
+  \head{Cantrip}    & \head{1st Level}    & \head{2nd Level} \\
+    Guidance        &  Charm Person       & Invisibility \\
+    Light           &  Command            & Mirror Image \\
+    Minor Illusion  &  Dissonant Whispers & \\
+    Starry Wisp     &  Faerie Fire        & \\
+    True Strike     &  Healing Word       & \\
+                    &  Sleep              & \\
+                    &  Speak with Animals &
+  \end{tabular}
 \end{Card}
 
+\SpellGuidance
+\SpellLight
+\SpellMinorIllusion
+\SpellStarryWisp
+\SpellTrueStrike
+\SpellCharmPerson
+\SpellCommand
+\SpellDissonantWhispers
+\SpellFaerieFire
+\SpellHealingWord
+\SpellSleep
+\SpellSpeakWithAnimals
+\SpellInvisibility
+\SpellMirrorImage
 
-\begin{Card}[continued]{College of Glamour Bard}
-\textbf{Beguiling Magic.} You always have Charm Person and Mirror Image prepared.
-
-In addition, immediately after you cast an Enchantment or Illusion spell using a spell slot, you can cause a creature you can see within 60 ft. of you to make a DC 14 Wis. saving throw. On a failed save, the target has the Charmed or Frightened condition (your choice) for 1 minute, and it repeats the save at the end of each of its turns, ending the effect on itself on a success.
-
-You can only use this benefit once per Long Rest, but you can also restore your use of it by expending one use of your Bardic Inspiration (no action required).
-
-\textbf{Mantle of Inspiration.} As a Bonus Action, you can expend a use of Bardic Inspiration, rolling a Bardic Inspiration die ($1d6$). When you do, choose up to 4 creatures within 60 ft. of yourself. Each of those creatures gains Temporary HP equal to two times the number rolled on the Bardic Inspiration die, and then can use its reaction to move up to its Speed without provoking Opportunity Attacks.
-\end{Card}
-
-
-\begin{Card}[Species]{Aasimar}
-\textbf{Celestial Resistance.} You have Resistance to Necrotic and Radiant damage.
-
-\textbf{Darkvision.} You have Darkvision with a range of 60 ft.
-
-\textbf{Healing Hands.} As a Magic action, you touch a creature and roll a number of $d4$s equal to your Proficiency Bonus. The creature regains a number of Hit Points equal to the total rolled. Once you use this trait, you can't use it again until you finish a Long Rest.
-
-\textbf{Light Bearer.} You know the Light cantrip. Charisma is your spellcasting ability for it.
-
-\vfill \hfill \textit{\footnotesize continues}
-\end{Card}
-
-
-\begin{Card}[continued]{Aasimar}
-\textbf{Celestial Revelation.} Once every Long Rest, you can transform as a Bonus Action using one of the options below (choose the option each time you transform). The transformation lasts for 1 minute or until you end it (no action required). Once on each of your turns before the transformation ends, you can deal extra damage to one target when you deal damage to it with an attack or a spell. The extra damage equals your Proficiency Bonus, and the extra damage's type is either Necrotic for Necrotic Shroud or Radiant for Heavenly Wings and Inner Radiance.
-
-\textbf{Heavenly Wings.} Two spectral wings sprout from your back temporarily. Until the transformation ends, you have a Fly Speed equal to your Speed.
-
-\textbf{Inner Radiance.} Searing light temporarily radiates from your eyes and mouth. For the duration, you shed Bright Light in a 10-foot radius and Dim Light for an additional 10 feet, and at the end of each of your turns, each creature within 10 feet of you takes Radiant damage equal to your Proficiency Bonus.
-
-\textbf{Necrotic Shroud.} Your eyes briefly become pools of darkness, and flightless wings sprout from your back temporarily. Creatures other than your allies within 10 feet of you must succeed on a Charisma saving throw (DC $8 +$ Charisma modifier and Proficiency Bonus) or have the Frightened condition until the end of your next turn.
-\end{Card}
-
-
-\begin{Card}[Feat]{Magic Initiate (Druid)}
-\textbf{Two Cantrips.} You learn two cantrips of your choice from the Druid spell list. Charisma is your spellcasting ability for this feat's spells.\fmark
-
-\textbf{Level 1 Spell.} Choose a level 1 spell from the Druid spell list.\fmark You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest. You can also cast the spell using any spell slots you have.
-
-\textbf{Spell Change.} Whenever you gain a new level, you can replace one of the spells you chose for this feat with a different spell of the same level from the chosen spell list.
-
-\ftext{\textit{Guidance} and \textit{Starry Wisp}.}
-\ftext{\textit{Speak with Animals}.}
-\end{Card}
+\Placard
 
 \end{document}

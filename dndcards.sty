@@ -1,0 +1,148 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesExplPackage{dndcards}{2026/01/28}{1.0}{D&D Index Cards}
+
+\tl_new:N \l_dndcards_class_tl
+\bool_new:N \l_dndcards_class_given_bool
+
+\keys_define:nn { dndcards/config }
+  {
+    class .tl_set:N   = \l_dndcards_class_tl
+  }
+
+\ProcessKeyOptions[dndcards/config]
+
+\RequirePackage[paperwidth=6in, paperheight=4in, margin=0.25in]{geometry}
+\RequirePackage{pdflscape}
+\RequirePackage{ETbb}
+\RequirePackage{array}
+\RequirePackage{booktabs}
+\RequirePackage[skip=0em]{parskip}
+\RequirePackage{totcount}
+\RequirePackage{xcolor}
+\RequirePackage{xspace}
+\RequirePackage[perpage,para,bottom,norule,symbol*]{footmisc}
+
+\RequirePackage[inline]{enumitem}
+\setlist[itemize]{topsep=0em,partopsep=0em,parsep=0em,itemsep=0.5em}
+\newlist{InlineListStyle}{itemize*}{1}
+\setlist[InlineListStyle]{label={},labelsep=0em,before=\unskip,itemjoin={{,~}}}
+
+\RequirePackage{tikz}
+\ExplSyntaxOff
+\usetikzlibrary{calc}
+\ExplSyntaxOn
+
+\definecolor{headercolor}{HTML}{8B2020}
+
+\NewDocumentCommand{\TitleCard}{O{}m}{
+    \group_begin:
+    \vspace*{\fill}
+    \begin{center}
+    \Huge \textcolor{headercolor}{\scshape #2} \par
+    \tl_if_empty:nF {#1} {
+        \Large #1 \par
+    }
+    \end{center}
+    \vspace*{\fill}
+    \newpage
+    \group_end:
+}
+
+\NewDocumentCommand{\ThinRule}{}{\rule{\linewidth}{0.4pt}}
+
+\NewDocumentCommand{\CardHeader}{om}{
+  {
+    \Large\textbf{\textcolor{headercolor}{\textsc{#2}}}
+    \IfValueT{#1}{\hfill\small\textit{#1}}
+  }\par
+  \vspace{-\parskip}
+  \ThinRule
+}
+
+\renewcommand{\footnoterule}{}
+
+\newcounter{fmarkcount}
+\newcounter{ftextcount}
+\NewDocumentCommand{\fmark}{}{
+  \stepcounter{fmarkcount}
+  \unskip
+  \footnotemark[ \value{fmarkcount} ]
+  \xspace
+}
+
+\NewDocumentCommand{\ftext}{m}{
+  \stepcounter{ftextcount}
+  \footnotetext[ \value{ftextcount} ] {#1}
+}
+
+\int_new:N \g__dndcards_cardno_int
+\tl_new:N \g__dndcards_cardtitle_tl
+\tl_new:N \g__dndcards_cardtags_tl
+\tl_new:N \g__dndcards_cardcounter_tl
+
+\NewDocumentEnvironment{Card}{sO{}m}{
+  \int_gincr:N \g__dndcards_cardno_int
+  \bool_if:nTF { #1 } {
+    \tl_gset:Nn \g__dndcards_cardtitle_tl { #3 }
+    \tl_if_novalue:nTF { #2 } {} {
+      \tl_gset:Nn \g__dndcards_cardtags_tl { #2 }
+    }
+    \tl_gset:Nx \g__dndcards_cardcounter_tl { cardno \int_use:N \g__dndcards_cardno_int }
+    \exp_args:NV \newtotcounter \g__dndcards_cardcounter_tl
+    \exp_args:NV \stepcounter \g__dndcards_cardcounter_tl
+  } {}
+  \int_gset:Nn \c@fmarkcount 0
+  \int_gset:Nn \c@ftextcount 0
+  \CardHeader
+    [
+      #2
+      \bool_if:nTF { # 1 } {
+        \tl_set:Nx \l_tmpa_tl { cardno \int_use:N \g__dndcards_cardno_int }
+        \c_space_tl ( \exp_args:NV \arabic { \l_tmpa_tl }
+        \c_space_tl of \c_space_tl
+        \exp_args:NV \total { \l_tmpa_tl } )
+      } {}
+    ]
+    { #3 }
+  \setlength{\parskip}{0.1in}
+} {
+  \newpage
+}
+
+\NewDocumentEnvironment{Card*}{O{}m}{
+  \begin{Card} * [ #1 ] { #2 }
+}{
+  \end{Card}
+}
+
+\NewDocumentCommand{\continued}{}{
+  \tl_set:Nx \l_tmpa_tl { cardno \int_use:N \g__dndcards_cardno_int }
+  \exp_args:NV \stepcounter \l_tmpa_tl
+  \int_gset:Nn \c@fmarkcount 0
+  \int_gset:Nn \c@ftextcount 0
+  \newpage
+  \CardHeader
+    [
+      \g__dndcards_cardtags_tl
+      \tl_set:Nx \l_tmpa_tl { cardno \int_use:N \g__dndcards_cardno_int }
+      \c_space_tl ( \exp_args:NV \arabic { \l_tmpa_tl }
+      \c_space_tl of \c_space_tl
+      \exp_args:NV \total { \l_tmpa_tl } )
+    ]
+    { \g__dndcards_cardtitle_tl }
+    \par
+}
+
+\NewDocumentCommand{\head}{m}{
+  \textbf{
+    \small \scshape \textcolor{ headercolor }{ #1 }
+  }
+}
+
+\NewDocumentCommand{\freq}{m}{
+  \footnotesize \textit{ #1 }
+}
+
+\NewDocumentCommand{\m}{m}{
+  \textit{ #1 }
+}

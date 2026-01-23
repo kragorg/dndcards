@@ -1,0 +1,26 @@
+\NewDocumentCommand{\WeaponPropertyLabel}{mm}{\textbf{Mastery Property: #1} \textit{(\begin{InlineList}[afterlabel=\unskip]#2\end{InlineList})}.}
+\NewDocumentCommand{\Sap}{m}{%
+\WeaponPropertyLabel{Sap}{#1}
+If you hit a creature with this weapon, that creature has Disadvantage on its next attack roll before the start of your next turn.
+
+}%
+\NewDocumentCommand{\Push}{m}{%
+\WeaponPropertyLabel{Push}{#1}
+If you hit a creature with this weapon, you can push the creature up to 10 feet straight away from yourself if it is Large or smaller.
+
+}%
+\NewDocumentCommand{\Vex}{m}{%
+\WeaponPropertyLabel{Vex}{#1}
+If you hit a creature with a Shortsword and deal damage to it, you have Advantage on your next attack roll against that creature before the end of your next turn.
+
+}%
+\NewDocumentCommand{\Nick}{m}{%
+\WeaponPropertyLabel{Nick}{#1}
+When you make the extra attack of the Light property, you can make it as part of the Attack action instead of as a Bonus Action. This extra attack can only be made once per turn.
+
+}%
+\NewDocumentCommand{\Slow}{m}{%
+\WeaponPropertyLabel{Slow}{#1}
+If you hit a creature with a Longbow and deal damage to the creature, you can reduce its Speed by 10 ft. until the start of your next turn. If the creature is hit more than once with this property, the Speed reduction doesn't exceed 10 ft.
+
+}%

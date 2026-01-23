@@ -1,62 +1,28 @@
-\input{include.tex}
+\documentclass[landscape]{article}
+\usepackage{dndcards}
+\usepackage{character}
+\usepackage{spells}
 
 \begin{document}
-\pagestyle{empty}
+\Character{
+  pc={Toge Greygrin},
+  summary={Hedge Fighter 1},
+  player=Jacques,
+  levels=1,
+  str*=16, dex=20, con*=16, int=12, wis=15, cha=11,
+  hp=13, ac=14,
+  spellcasting=int}
+\SkillProficiencies{Acrobatics, Perception, Sleight of Hand, Stealth}
 
-\begin{Card}[Stats]{Toge Greygrin / Hedge Fighter 1}
-\setlength{\parskip}{0em}
-\begin{tabular}{rcccccc}
-                  & \head{Strength} & \head{Dexterity} & \head{Constitution} & \head{Intelligence} & \head{Wisdom} & \head{Charisma} \\
-\textbf{Score}    & $\mathbf{16}$   & $\mathbf{20}$    & $\mathbf{16}$       & $\mathbf{12}$       & $\mathbf{15}$ & $\mathbf{11}$ \\
-\textbf{Modifier} & $+3$            & $+5$             & $+3$                & $+1$                & $+2$          & $+0$ \\
-\textbf{Save}     & $+5$            & $+5$             & $+5$                & $+1$                & $+2$          & $+0$ \\
-\end{tabular}
+\TitleCard[\Summary]{\PC}
+\StatCard{\PC, \Summary}
 
-{\rule{\linewidth}{0.4pt}}
-\begin{center}
-\begin{tikzpicture}
-\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center] (hp) {
-  {\large $\mathbf{13}$}\\[0.1cm]
-  {\footnotesize \textbf{HP}}
-};
-\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (ac1) at ($(hp.east)+(0.2cm,0)$) {
-  {\large $\mathbf{19}$}\\[0.1cm]
-  {\footnotesize \textbf{AC}}
-};
-\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (init) at ($(ac1.east)+(0.2cm,0)$) {
-  {\large $\mathbf{+7}$}\\[0.1cm]
-  {\footnotesize \textbf{Initiative}}
-};
-\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (dc) at ($(init.east)+(0.2cm,0)$) {
-  {\large $\mathbf{10}$}\\[0.1cm]
-  {\footnotesize \textbf{Spell DC}}
-};
-\end{tikzpicture}
-
-\textit{Passive Perception}: $\mathbf{14}$, \textit{Investigation}: $\mathbf{11}$, \textit{Insight}: $\mathbf{12}$
-
-{\rule{\linewidth}{0.4pt}}
-
-\head{Skills}
-
-\begin{tabular}{p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}}
-  \skill*{Acrobatics}{$+7$}      & \skill{History}{$+1$}        & \skill{Performance}{$+0$} \\
-  \skill{Animal Handling}{$+2$}  & \skill{Insight}{$+2$}        & \skill{Persuasion}{$+0$} \\
-  \skill{Arcana}{$+1$}           & \skill{Intimidation}{$+0$}   & \skill{Religion}{$+1$} \\
-  \skill{Athletics}{$+3$}        & \skill{Investigation}{$+1$}  & \skill*{Sleight of Hand}{$+7$} \\
-  \skill{Deception}{$+0$}        & \skill{Medicine}{$+2$}       & \skill*{Stealth}{$+7$} \\
-  \skill{Nature}{$+1$}           & \skill*{Perception}{$+4$}    & \skill{Survival}{$+2$}
-\end{tabular}
-\end{center}
-{\rule{\linewidth}{0.4pt}}
-\end{Card}
-
-\begin{Card}[Actions]{Toge Greygrin / Hedge Fighter 1}
-\begin{tabular}{p{0.3\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}%
-  \head{Attack}                 & \head{Range}     & \head{Hit}     & \head{Damage} \\
-  Shortsword                    & 5 feet (melee)   & $+7$           & $1d6+5$ Slashing \\
-  Scimitar                      & 5 feet (melee)   & $+7$           & $1d6+5$ Slashing \\
-  Longbow                       & 150 feet (600)   & $+7$           & $1d6+5$ Piercing
+\begin{Card}[Actions]{\PC, \Summary}
+\begin{tabular}{p{0.2\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}%
+  \head{Attack}                 & \head{Range}     & \head{Hit}     & \head{Damage/Effect}             \\
+  Shortsword                    & 5 feet (melee)   & $+7$           & $1d6+5$ Piercing, \textit{Vex}   \\
+  Scimitar                      & 5 feet (melee)   & $+7$           & $1d6+5$ Slashing, \textit{Nick}  \\
+  Longbow                       & 150 feet (600)   & $+7$           & $1d8+5$ Piercing, \textit{Slow}
 \end{tabular}
 {\rule{\linewidth}{0.4pt}}
 \begin{tabular}{p{0.25\linewidth}p{0.37\linewidth}p{0.30\linewidth}}
@@ -68,53 +34,23 @@
 \end{tabular}
 \end{Card}
 
-
 \begin{Card}[Class]{Fighter}
-\textbf{Fighting Style.} You gain a Fighting Style feat of your choice,\fmark and whenever you gain a Fighter level, you can replace the feat you chose with a different Fighting Style feat.
-\ftext{Two-Weapon Fighting}
-
-\textbf{Second Wind.} As a Bonus Action, you can draw upon a limited well of physical and mental stamina and regain $1d10+1$ HP. You can use this 2 times per Long Rest, and can regain one expended use when you finish a Short Rest.
-
-\textbf{Weapon Mastery.} You have mastery with the following weapons:
-\begin{itemize}
-\item \textbf{Shortsword (Vex)} If you hit a creature with a Shortsword and deal damage to it, you have Advantage on your next attack roll against that creature before the end of your next turn.
-\item \textbf{Scimitar (Nick)} When you make the extra attack of the Light property, you can make it as part of the Attack action instead of as a Bonus Action. This extra attack can only be made once per turn.
-\item \textbf{Longbow (Slow)} If you hit a creature with a Longbow and deal damage to the creature, you can reduce its Speed by 10 ft. until the start of your next turn. If the creature is hit more than once with this property, the Speed reduction doesn't exceed 10 ft.
-\end{itemize}
+  \SecondWind
+  \Vex{Shortsword}
+  \Nick{Scimitar}
+  \Slow{Longbow}
 \end{Card}
 
-\begin{Card}[Species]{Hedge}
-\textbf{Natural Burrowers.} You have a burrowing speed of 15 feet. You are capable of burrowing through soil, but are unable to dig through anything more substantial with just your clawed hands.
-
-\textbf{Spiny Quills.} You have a base armor class of 19. Even though you can't wear armor, you can still benefit from the armor class bonus provided by shields so long as you are proficient with them.
-
-\textbf{Curl Up.} You can use your action to curl up, exposing attackers to a wall of your toughened quills. While curled up you cannot move, attack, or cast spells with somatic components, and your base armor class becomes 19. You cannot benefit from any Dexterity bonus to armor class while curled up, but you can still use shields.
-
-Any creature that misses you with a melee attack while you are curled up takes $2d4$ points of piercing damage from your sharp quills. If a creature hits you while you are curled up, you are knocked prone in your space at the end of the turn. You may uncurl yourself at any point during your turn.
-
-\vfill \hfill \textit{\footnotesize continues}
+\begin{Card}{Feats}
+\Alert
+\TwoWeaponFighting
 \end{Card}
 
+\SpeciesCardHedge
 
-\begin{Card}[continued]{Hedge}
+\SpellDruidcraft
+\SpellAnimalMessenger
 
-\textbf{Forest Magic.} You know the druidcraft cantrip. Additionally, you can cast animal messenger as a 2nd level spell once with this trait, and regain the ability to do so after a short or long rest. Charisma is your spellcasting ability for these spells.
-
-\textbf{Speak With Bugs.} Through sounds and gestures, you can communicate simple ideas with creatures of the beast subtype that represent insects, spiders, worms, and other creepy crawlies, regardless of their size.
-\end{Card}
-
-
-\begin{Card}[Feat]{Two-Weapon Fighting}
-When you make an extra attack as a result of using a weapon that has the Light property, you can add your ability modifier to the damage of that attack if you aren't already adding it to the damage.
-\end{Card}
-
-\begin{Card}[Feat]{Alert}
-\textbf{Initiative Proficiency.} When you roll Initiative, add +2 to the roll.
-
-\textbf{Initiative Swap.} Immediately after you roll Initiative, you can swap your Initiative with the Initiative of one willing ally in the same combat. You can't make this swap if you or the ally has the Incapacitated condition.
-\end{Card}
-
-\include{spells/druidcraft.tex}
-\include{spells/animal-messenger.tex}
+\Placard
 
 \end{document}

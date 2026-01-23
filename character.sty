@@ -1,0 +1,1100 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesExplPackage{character}
+    {2026/01/28}{1.0}{D&D Index Cards: Character}
+
+\prop_new:N \g_dnd_stats_prop
+\prop_new:N \g_dnd_profs_prop
+\prop_new:N \g_dnd_names_prop
+\clist_new:N \l_dnd_order_clist
+
+\prop_gput:Nnn \g_dnd_names_prop {levels} {Levels}
+\prop_gput:Nnn \g_dnd_names_prop {player} {Player}
+\prop_gput:Nnn \g_dnd_names_prop {pc} {Character}
+\prop_gput:Nnn \g_dnd_names_prop {str} {Strength}
+\prop_gput:Nnn \g_dnd_names_prop {dex} {Dexterity}
+\prop_gput:Nnn \g_dnd_names_prop {con} {Constitution}
+\prop_gput:Nnn \g_dnd_names_prop {int} {Intelligence}
+\prop_gput:Nnn \g_dnd_names_prop {wis} {Wisdom}
+\prop_gput:Nnn \g_dnd_names_prop {cha} {Charisma}
+\prop_gput:Nnn \g_dnd_names_prop {hp} {HP}
+\prop_gput:Nnn \g_dnd_names_prop {thp} {Temp~HP}
+\prop_gput:Nnn \g_dnd_names_prop {ac} {AC}
+\prop_gput:Nnn \g_dnd_names_prop {init} {Initiative}
+\prop_gput:Nnn \g_dnd_names_prop {spellcasting} {Spellcasting}
+
+\NewDocumentCommand{\PC}{}{
+    \prop_item:Nn \g_dnd_stats_prop {pc}
+}
+
+\NewDocumentCommand{\Summary}{}{
+    \prop_item:Nn \g_dnd_stats_prop {summary}
+}
+
+\cs_new:Npn \__dnd_format_stat:n #1 {
+    \int_compare:nNnTF {#1} > { -1 } { +\int_eval:n{#1} } { \int_eval:n{#1} }
+}
+\cs_generate_variant:Nn \__dnd_format_stat:n { e }
+
+\cs_new:Npn \__dnd_modifier:n #1 {
+    \int_eval:n {
+        \int_if_odd:nTF {#1} { (#1 - 11) } { (#1 - 10) }
+        / 2
+    }
+}
+
+\keys_define:nn { dnd/stats } {
+    unknown .code:n = {
+        \str_set:Nx \l_tmpa_str { \l_keys_key_str }
+        \str_if_eq:eeTF { \str_item:Nn \l_tmpa_str { -1 } } { * }
+        {
+            \str_set:Nx \l_tmpb_str { \str_range:Nnn \l_tmpa_str { 1 } { -2 } }
+            \prop_gput:NVn \g_dnd_stats_prop \l_tmpb_str { #1 }
+            \prop_gput:NVn \g_dnd_profs_prop \l_tmpb_str { true }
+        }
+        {
+            \prop_gput:NVn \g_dnd_stats_prop \l_tmpa_str { #1 }
+        }
+    }
+}
+
+\cs_new:Npn \__dnd_proficiency_bonus: {
+    \int_eval:n {
+        \int_div_truncate:nn { \prop_item:Nn \g_dnd_stats_prop {levels} } {4} + 2
+    }
+}
+
+\cs_new_protected:Npn \__dnd_output_modifier:n #1 {
+    \__dnd_format_stat:e { \__dnd_modifier:n { \prop_item:Nn \g_dnd_stats_prop {#1} } }
+}
+
+\cs_new_protected:Npn \__dnd_output_save:n #1 {
+    \prop_if_in:NnTF \g_dnd_profs_prop {#1}
+    {
+        \__dnd_format_stat:e { \__dnd_modifier:n { \prop_item:Nn \g_dnd_stats_prop {#1} } + \__dnd_proficiency_bonus: }
+    }
+    {
+        \__dnd_format_stat:e { \__dnd_modifier:n { \prop_item:Nn \g_dnd_stats_prop {#1} } }
+    }
+}
+
+\NewDocumentCommand{\Character}{m}{
+    \keys_set:nn { dnd/stats } {#1}
+}
+
+\NewDocumentCommand{\AbilityScoresTable}{}{
+    \clist_set:Nn \l_dnd_order_clist { str, dex, con, int, wis, cha }
+
+    \begin{tabular}{rcccccc}
+        \clist_map_inline:Nn \l_dnd_order_clist {
+            & \head{\prop_item:Nn \g_dnd_names_prop {##1}}
+        } \\
+
+        \textbf{Score}
+        \clist_map_inline:Nn \l_dnd_order_clist {
+            & {\boldmath $\prop_item:Nn \g_dnd_stats_prop {##1}$}
+        } \\
+
+        \textbf{Modifier}
+        \clist_map_inline:Nn \l_dnd_order_clist {
+            & {\prop_if_in:NnT \g_dnd_profs_prop {##1} \boldmath $\__dnd_output_modifier:n {##1}$}
+        } \\
+
+        \textbf{Save}
+        \clist_map_inline:Nn \l_dnd_order_clist {
+            & {\prop_if_in:NnT \g_dnd_profs_prop {##1} \boldmath $\__dnd_output_save:n {##1}$}
+        }
+    \end{tabular}
+}
+
+\cs_new:Npn \ArmorClass {
+    \prop_item:Nn \g_dnd_stats_prop {ac}
+}
+
+\cs_generate_variant:Nn \prop_item:Nn { Ne }
+
+\cs_new:Npn \SpellAttack {
+    \__dnd_format_stat:e {
+        \int_eval:n {
+            \__dnd_proficiency_bonus: +
+            \__dnd_modifier:n {
+                \prop_item:Ne \g_dnd_stats_prop {
+                    \prop_item:Nn \g_dnd_stats_prop {spellcasting}
+                }
+            }
+        }
+    }
+}
+
+\cs_new:Npn \SpellDC {
+    \int_eval:n {
+        8 +
+        \__dnd_proficiency_bonus: +
+        \__dnd_modifier:n {
+            \prop_item:Ne \g_dnd_stats_prop {
+                \prop_item:Nn \g_dnd_stats_prop {spellcasting}
+            }
+        }
+    }
+}
+
+\cs_new:Npn \InitiativeBonus {
+    \__dnd_format_stat:e { \__dnd_modifier:n { \prop_item:Nn \g_dnd_stats_prop {dex} } }
+}
+
+\cs_new:Npn \HPandTHP {
+    \prop_item:Nn \g_dnd_stats_prop {hp}
+    \prop_if_in:NnT \g_dnd_stats_prop {thp}
+    {
+        \int_compare:nNnT { \prop_item:Nn \g_dnd_stats_prop {thp} } > { 0 }
+        {
+            ~+~ \prop_item:Nn \g_dnd_stats_prop {thp}
+        }
+    }
+}
+
+\prop_new:N \g_dnd_skill_profs_prop
+\prop_new:N \g_dnd_skill_expertise_prop
+\bool_new:N \g_dnd_jack_of_all_trades_bool
+
+\prop_new:N \g_dnd_skill_abilities_prop
+\prop_gput:Nnn \g_dnd_skill_abilities_prop {Acrobatics} {dex}
+\prop_gput:Nnn \g_dnd_skill_abilities_prop {Animal~Handling} {wis}
+\prop_gput:Nnn \g_dnd_skill_abilities_prop {Arcana} {int}
+\prop_gput:Nnn \g_dnd_skill_abilities_prop {Athletics} {str}
+\prop_gput:Nnn \g_dnd_skill_abilities_prop {Deception} {cha}
+\prop_gput:Nnn \g_dnd_skill_abilities_prop {History} {int}
+\prop_gput:Nnn \g_dnd_skill_abilities_prop {Insight} {wis}
+\prop_gput:Nnn \g_dnd_skill_abilities_prop {Intimidation} {cha}
+\prop_gput:Nnn \g_dnd_skill_abilities_prop {Investigation} {int}
+\prop_gput:Nnn \g_dnd_skill_abilities_prop {Medicine} {wis}
+\prop_gput:Nnn \g_dnd_skill_abilities_prop {Nature} {int}
+\prop_gput:Nnn \g_dnd_skill_abilities_prop {Perception} {wis}
+\prop_gput:Nnn \g_dnd_skill_abilities_prop {Performance} {cha}
+\prop_gput:Nnn \g_dnd_skill_abilities_prop {Persuasion} {cha}
+\prop_gput:Nnn \g_dnd_skill_abilities_prop {Religion} {int}
+\prop_gput:Nnn \g_dnd_skill_abilities_prop {Sleight~of~Hand} {dex}
+\prop_gput:Nnn \g_dnd_skill_abilities_prop {Stealth} {dex}
+\prop_gput:Nnn \g_dnd_skill_abilities_prop {Survival} {wis}
+
+\NewDocumentCommand{\SkillProficiencies}{m}{
+    \clist_map_inline:nn {#1} {
+        \__dnd_parse_skill_proficiency:n {##1}
+    }
+}
+
+\cs_new_protected:Npn \__dnd_parse_skill_proficiency:n #1 {
+    \tl_set:Nn \l_tmpa_tl {#1}
+    \tl_trim_spaces:N \l_tmpa_tl
+    \tl_if_empty:NF \l_tmpa_tl {
+        \str_set:Nx \l_tmpa_str { \tl_to_str:N \l_tmpa_tl }
+        \str_if_eq:eeTF { \str_item:Nn \l_tmpa_str { -1 } } { * }
+        {
+            \str_set:Nx \l_tmpb_str { \str_range:Nnn \l_tmpa_str { 1 } { -2 } }
+            \prop_gput:NVn \g_dnd_skill_profs_prop \l_tmpb_str {true}
+            \prop_gput:NVn \g_dnd_skill_expertise_prop \l_tmpb_str {true}
+            \__dnd_ensure_skill_file:
+            \iow_now:Nx \g__dnd_skill_iow { \exp_not:N \DndSetExpertise {\l_tmpb_str} }
+        }
+        {
+            \prop_gput:NVn \g_dnd_skill_profs_prop \l_tmpa_str {true}
+        }
+    }
+}
+
+\NewDocumentCommand{\DndSetExpertise}{m}{
+    \prop_gput:Nnn \g_dnd_skill_expertise_prop {#1} {true}
+}
+
+\NewDocumentCommand{\DndSetJackOfAllTrades}{}{
+    \bool_gset_true:N \g_dnd_jack_of_all_trades_bool
+}
+
+\iow_new:N \g__dnd_skill_iow
+\bool_new:N \g__dnd_skill_file_open_bool
+
+\cs_new_protected:Npn \__dnd_ensure_skill_file:
+{
+    \bool_if:NF \g__dnd_skill_file_open_bool
+    {
+        \iow_open:Nn \g__dnd_skill_iow { \c_sys_jobname_str .dndskills }
+        \bool_gset_true:N \g__dnd_skill_file_open_bool
+    }
+}
+
+\AtBeginDocument{
+    \file_if_exist:nT { \c_sys_jobname_str .dndskills }
+    {
+        \file_input:n { \c_sys_jobname_str .dndskills }
+    }
+}
+
+\AtEndDocument{
+    \bool_if:NT \g__dnd_skill_file_open_bool
+    {
+        \iow_close:N \g__dnd_skill_iow
+    }
+}
+
+\NewDocumentCommand{\SkillExpertise}{m}{
+    \__dnd_ensure_skill_file:
+    \clist_map_inline:nn {#1} {
+        \prop_gput:Nnn \g_dnd_skill_expertise_prop {##1} {true}
+        \iow_now:Nn \g__dnd_skill_iow { \DndSetExpertise {##1} }
+    }
+}
+
+\NewDocumentCommand{\HasJackOfAllTrades}{}{
+    \__dnd_ensure_skill_file:
+    \bool_gset_true:N \g_dnd_jack_of_all_trades_bool
+    \iow_now:Nn \g__dnd_skill_iow { \DndSetJackOfAllTrades }
+}
+
+\prg_new_conditional:Npnn \__dnd_if_skill_proficient:n #1 { p, T, F, TF } {
+    \prop_if_in:NnTF \g_dnd_skill_profs_prop {#1}
+        { \prg_return_true: }
+        { \prg_return_false: }
+}
+
+\prg_new_conditional:Npnn \__dnd_if_skill_expertise:n #1 { p, T, F, TF } {
+    \prop_if_in:NnTF \g_dnd_skill_expertise_prop {#1}
+        { \prg_return_true: }
+        { \prg_return_false: }
+}
+
+\NewDocumentCommand{\IfSkillProficient}{mmm}{
+    \__dnd_if_skill_proficient:nTF {#1} {#2} {#3}
+}
+
+\NewDocumentCommand{\SkillEntry}{m}{
+    \footnotesize {
+        \bfseries
+        \__dnd_if_skill_expertise:nTF {#1}
+            { \itshape \scshape }
+            { \__dnd_if_skill_proficient:nT {#1} { \itshape \scshape } }
+        #1
+        }
+    \hfill
+    $ \__dnd_format_stat:e { \__dnd_skill_bonus:n {#1} } $
+}
+
+\cs_new:Npn \__dnd_skill_bonus:n #1 {
+    \int_eval:n {
+        \__dnd_modifier:n { \prop_item:Ne \g_dnd_stats_prop { \prop_item:Nn \g_dnd_skill_abilities_prop {#1} } }
+        +
+        \__dnd_if_skill_expertise:nTF {#1}
+        {
+            2 * \__dnd_proficiency_bonus:
+        }
+        {
+            \__dnd_if_skill_proficient:nTF {#1}
+            {
+                \__dnd_proficiency_bonus:
+            }
+            {
+                \bool_if:NTF \g_dnd_jack_of_all_trades_bool
+                {
+                    \int_div_truncate:nn { \__dnd_proficiency_bonus: } { 2 }
+                }
+                { 0 }
+            }
+        }
+    }
+}
+
+\NewDocumentCommand{\SkillBonus}{m}{
+    \__dnd_format_stat:e { \__dnd_skill_bonus:n {#1} }
+}
+
+\NewDocumentCommand{\PassiveScore}{m}{
+    \int_eval:n { 10 + \__dnd_skill_bonus:n {#1} }
+}
+
+\NewDocumentCommand{\AtAGlance}{}{
+    \begin{tikzpicture}
+    \node[draw=headercolor, line~width=0.5pt, minimum~width=2cm, minimum~height=1.2cm, align=center] (hp) {
+        {\large $\mathbf{ \HPandTHP }$}\\[0.1cm]
+        {\footnotesize \textbf{HP}}
+    };
+    \node[draw=headercolor, line~width=0.5pt, minimum~width=2cm, minimum~height=1.2cm, align=center, anchor=west] (ac) at ($(hp.east)+(0.2cm,0)$) {
+        {\large $\mathbf{ \ArmorClass }$}\\[0.1cm]
+        {\footnotesize \textbf{AC}}
+    };
+    \node[draw=headercolor, line~width=0.5pt, minimum~width=2cm, minimum~height=1.2cm, align=center, anchor=west] (init) at ($(ac.east)+(0.2cm,0)$) {
+        {\large $\mathbf{ \InitiativeBonus }$}\\[0.1cm]
+        {\footnotesize \textbf{Initiative}}
+    };
+    \prop_if_in:NnT \g_dnd_stats_prop {spellcasting} {
+        \node[draw=headercolor, line~width=0.5pt, minimum~width=2cm, minimum~height=1.2cm, align=center, anchor=west] (dc) at ($(init.east)+(0.2cm,0)$) {
+            {\large $\mathbf{ \SpellDC }$}\\[0.1cm]
+            {\footnotesize \textbf{Spell~DC}}
+        };
+    }
+    \end{tikzpicture}
+    \par
+    \textit{Passive~Perception}:~$\mathbf{\PassiveScore{Perception}}$,~
+    \textit{Investigation}:~$\mathbf{\PassiveScore{Investigation}}$,~
+    \textit{Insight}:~$\mathbf{\PassiveScore{Insight}}$
+}
+
+\NewDocumentCommand{\Placard}{}{
+    \group_begin:
+    \pagestyle{empty}
+    \newgeometry{paperwidth=4in, paperheight=6in, margin=0.25in}
+    \begin{landscape}
+        \setlength{\parskip}{0em}
+        \vspace*{0.5\textheight}
+        \Large
+        \textbf{\textcolor{headercolor}{\scshape \PC}}
+        \hfill
+        \textit{\prop_item:Nn \g_dnd_stats_prop {player}} \par
+        \ThinRule \par
+        \Summary \par
+        \vspace{1em}
+        \begin{tabular}{
+                >{\raggedleft\arraybackslash}p{0.15\linewidth} |
+                p{0.20\linewidth}
+                >{\raggedleft\arraybackslash}p{0.30\linewidth} |
+                p{0.15\linewidth}}
+        \head{AC}   & $\ArmorClass$   & \head{Initiative} & $\InitiativeBonus$ \\
+        \head{HP}   & $\HPandTHP $    & \head{Spell~DC}   & $\SpellDC$ \\
+        \head{PPer} & $\PassiveScore{Perception}$       & & \\
+        \head{PInv} & $\PassiveScore{Investigation}$    & & \\
+        \head{PIns} & $\PassiveScore{Insight}$          & &
+        \end{tabular}
+        \restoregeometry
+    \end{landscape}
+    \newpage
+    \group_end:
+}
+
+\NewDocumentCommand{\SkillTable}{}{
+    \begin{tabular}{
+        p{0.26\linewidth}
+        @{\hspace{0.8cm}}
+        p{0.26\linewidth}
+        @{\hspace{0.8cm}}
+        p{0.26\linewidth}
+        }
+        \SkillEntry{Acrobatics}        &
+        \SkillEntry{Insight}           &
+        \SkillEntry{Performance}       \\
+
+        \SkillEntry{Animal~Handling}   &
+        \SkillEntry{Intimidation}      &
+        \SkillEntry{Persuasion}        \\
+
+        \SkillEntry{Arcana}            &
+        \SkillEntry{Investigation}     &
+        \SkillEntry{Religion}          \\
+
+        \SkillEntry{Athletics}         &
+        \SkillEntry{Medicine}          &
+        \SkillEntry{Sleight~of~Hand}   \\
+
+        \SkillEntry{Deception}         &
+        \SkillEntry{Nature}            &
+        \SkillEntry{Stealth}           \\
+
+        \SkillEntry{History}           &
+        \SkillEntry{Perception}        &
+        \SkillEntry{Survival}
+    \end{tabular}
+    \par
+}
+
+\NewDocumentCommand{\StatCard}{m}{
+    \begin{Card}[Stats]{#1}
+        \setlength{\parskip}{0em}
+        \par \AbilityScoresTable
+        \par \ThinRule
+        \begin{center}
+            \par \AtAGlance
+            \par \ThinRule
+            \par \head{Skills}
+            \par \SkillTable
+        \end{center}
+        \par \ThinRule
+    \end{Card}
+    \par
+}
+
+\cs_new:Npn \__dnd_format_propkeys:n #1 {
+    \tl_clear:N \l_tmpa_tl
+    \tl_put_right:Nn \l_tmpa_tl { \begin{InlineListStyle} }
+    \prop_map_inline:Nn #1 {
+        \tl_put_right:Nn \l_tmpa_tl { \item ##1 }
+    }
+    \tl_put_right:Nn \l_tmpa_tl { \end{InlineListStyle} }
+    \l_tmpa_tl
+}
+
+\NewDocumentCommand{\ExpertiseSkillList}{}{
+    \__dnd_format_propkeys:n \g_dnd_skill_expertise_prop
+}
+
+\cs_new:Npn \__dnd_format_inline_list:n #1 #2 {
+    \tl_clear:N \l_tmpa_tl
+    \tl_put_right:Nn \l_tmpa_tl { \begin{InlineListStyle}[#1] }
+        \clist_map_inline:nn {#2} {
+        \tl_put_right:Nn \l_tmpa_tl { \item ##1 }
+    }
+    \tl_put_right:Nn \l_tmpa_tl { \end{InlineListStyle} }
+    \l_tmpa_tl
+}
+
+\NewDocumentCommand{\InlineList}{O{}m}{
+    \__dnd_format_inline_list:n {#1} {#2}
+}
+
+\cs_new:Npn \__dnd_format_spell_list:n #1 {
+    \tl_clear:N \l_tmpa_tl
+    \tl_put_right:Nn \l_tmpa_tl { \begin{InlineListStyle} }
+    \clist_map_inline:nn {#1} {
+        \tl_put_right:Nn \l_tmpa_tl { \item \textit{ ##1 } }
+    }
+    \tl_put_right:Nn \l_tmpa_tl { \end{InlineListStyle} }
+    \l_tmpa_tl
+}
+
+\NewDocumentCommand{\SpellList}{m}{
+    \__dnd_format_spell_list:n {#1}
+}
+
+\ExplSyntaxOff
+%%
+%% Bard class features
+%%
+\NewDocumentCommand{\MusicalInstruments}{m}{
+    \textbf{Musical Instruments.} You have proficiency with three
+    Musical Instruments of your choice. \textbf{Selection:}
+    \InlineList{#1}.
+    \par
+}
+
+\NewDocumentCommand{\BardicInspiration}{m}{
+    \textbf{Bardic Inspiration.} You can supernaturally inspire others
+    through words, music, or dance. This inspiration is represented by
+    your Bardic Inspiration die, which is a $#1$.
+
+    As a Bonus Action, you can inspire another creature within 60 feet
+    of yourself who can see or hear you. That creature gains one of your
+    Bardic Inspiration dice. A creature can have only one Bardic
+    Inspiration die at a time.
+
+    Once within the next hour when the creature fails a D20 Test, the
+    creature can roll the Bardic Inspiration die and add the number
+    rolled to the d20, potentially turning the failure into a success. A
+    Bardic Inspiration die is expended when it's rolled.
+
+    You can confer a Bardic Inspiration die a number of times equal to
+    your Charisma modifier (minimum of once), and you regain all
+    expended uses when you finish a Long Rest.
+    \par
+}
+
+\NewDocumentCommand{\BardSpellcasting}{}{
+    \textbf{Spellcasting.} You can cast spells through your bardic arts.
+    Charisma is your spellcasting ability for your Bard spells (Spell DC
+    $\SpellDC$, Spell Attack $\SpellAttack$). You can use a Musical
+    Instrument as a Spellcasting Focus for your Bard spells.
+    \par
+}
+
+\NewDocumentCommand{\Expertise}{}{
+    \textbf{Expertise.} You gain Expertise in two skill proficiencies of
+    your choice. \textbf{Selection:} \ExpertiseSkillList.
+    \par
+}
+
+\NewDocumentCommand{\JackOfAllTrades}{}{
+    \HasJackOfAllTrades
+    \textbf{Jack of All Trades.} You can add half your Proficiency Bonus
+    (round down) to any ability check you make that uses a skill
+    proficiency you lack and that doesn't otherwise use your Proficiency
+    Bonus.
+    \par
+}
+
+\NewDocumentCommand{\BeguilingMagic}{}{
+    \textbf{Beguiling Magic.} You always have \textit{Charm Person} and
+    \textit{Mirror Image} prepared.
+
+    In addition, immediately after you cast an Enchantment or Illusion
+    spell using a spell slot, you can cause a creature you can see
+    within 60 feet of yourself to make a Wisdom saving throw against
+    your spell save DC. On a failed save, the target has the Charmed or
+    Frightened condition (your choice) for 1 minute. The target repeats
+    the save at the end of each of its turns, ending the effect on
+    itself on a success.
+
+    Once you use this benefit, you can't use it again until you finish a
+    Long Rest. You can also restore your use of it by expending one use
+    of your Bardic Inspiration (no action required).
+    \par
+}
+
+\NewDocumentCommand{\MantleOfInspiration}{}{
+    \textbf{Mantle of Inspiration.} You can weave fey magic into a song
+    or dance to fill others with vigor. As a Bonus Action, you can
+    expend a use of Bardic Inspiration, rolling a Bardic Inspiration
+    die. When you do so, choose a number of other creatures within 60
+    feet of yourself, up to a number equal to your Charisma modifier
+    (minimum of one creature). Each of those creatures gains a number of
+    Temporary Hit Points equal to two times the number rolled on the
+    Bardic Inspiration die, and then each can use its Reaction to move
+    up to its Speed without provoking Opportunity Attacks.
+    \par
+}
+
+
+%%
+%% Fighter class features
+%%
+\NewDocumentCommand{\SecondWind}{}{
+    \textbf{Second Wind.} You have a limited well of physical and mental
+    stamina that you can draw on. As a Bonus Action, you can use it to
+    regain Hit Points equal to 1d10 plus your Fighter level. You can use
+    this feature twice. You regain one expended use when you finish a
+    Short Rest, and you regain all expended uses when you finish a Long
+    Rest.
+    \par
+}
+
+%%
+%% Sorcerer class features
+%%
+\NewDocumentCommand{\InnateSorcery}{}{
+    \textbf{Innate Sorcery.} An event in your past left an indelible
+    mark on you, infusing you with simmering magic. As a Bonus Action,
+    you can unleash that magic for 1 minute, during which you gain the
+    following benefits. You can use this feature twice, and you regain
+    all expended uses of it when you finish a Long Rest.
+
+    \begin{itemize}
+        \item The spell save DC of your Sorcerer spells increases by 1.
+
+        \item You have Advantage on the attack rolls of Sorcerer spells
+            you cast.
+    \end{itemize}
+    \par
+}
+
+\NewDocumentCommand{\FontOfMagic}{}{
+    \textbf{Font of Magic.} You can tap into the wellspring of magic
+    within yourself. This wellspring is represented by Sorcery Points,
+    which allow you to create a variety of magical effects. You have 3
+    Sorcery Points at level 3. You regain all expended Sorcery Points
+    when you finish a Long Rest. You can use your Sorcery Points to fuel
+    the options below, along with other features, such as Metamagic,
+    that use those points.
+
+    \begin{itemize}
+        \item \textbf{Converting Spell Slots to Sorcery Points.} You can
+            expend a spell slot to gain a number of Sorcery Points equal
+            to the slot's level (no action required).
+        \item \textbf{Creating Spell Slots.} As a Bonus Action, you can
+            transform unexpended Sorcery Points into one spell slot. A
+            level 1 spell slot costs 2 Sorcery Points; a level 2 spells
+            slot costs 3. Any spell slot you create with this feature
+            vanishes when you finish a Long Rest.
+    \end{itemize}
+    \par
+}
+
+\NewDocumentCommand{\Metamagic}{}{
+    \textbf{Metamagic.} Because your magic flows from within, you can
+    alter your spells to suit your needs. To use an option, you must
+    spend the number of Sorcery Points that it costs. You can use only
+    one Metamagic option on a spell when you cast it unless otherwise
+    noted in one of those options. Whenever you gain a Sorcerer level,
+    you can replace one of your Metamagic options with one you don't
+    know.
+    \par
+}
+
+\NewDocumentCommand{\QuickenedSpell}{}{
+    \textbf{Quickened Spell.} When you cast a spell with a casting time
+    of an action, you can spend 2 Sorcery Points to change the casting
+    time to a Bonus Action for this casting. You can't modify a spell in
+    this way if you've already cast a level $1+$ spell on the current
+    turn, nor can you cast a level $1+$ spell on the current turn after
+    modifying a spell in this way.
+    \par
+}
+
+\NewDocumentCommand{\SeekingSpell}{}{
+    \textbf{Seeking Spell.} If you make an attack roll for a spell and
+    miss, you can spend 1 Sorcery Point to reroll the $d20$, and you
+    must use the new roll. You can use Seeking Spell even if you've
+    already used a different Metamagic option.
+    \par
+}
+
+\NewDocumentCommand{\DraconicResilience}{}{
+    \textbf{Draconic Resilience.} The magic in your body manifests
+    physical traits of your draconic gift. Your Hit Point maximum
+    increases by 3, and it increases by 1 whenever you gain another
+    Sorcerer level.
+
+    Parts of you are also covered by dragon-like scales. While you
+    aren't wearing armor, your base Armor Class equals 10 plus your
+    Dexterity and Charisma modifiers.
+    \par
+}
+
+
+%%
+%% Warlock class features
+%%
+\NewDocumentCommand{\PactMagic}{}{
+    \textbf{Pact Magic.} Through occult ceremony, you have formed a pact
+    with a mysterious entity to gain magical powers. Charisma is the
+    spellcasting ability for your Warlock spells (Spell DC $\SpellDC$,
+    Spell Attack $\SpellAttack$). You can use an Arcane Focus
+    as a Spellcasting Focus for your Warlock spells.
+    \par
+}
+
+\NewDocumentCommand{\MagicalCunning}{}{
+    \textbf{Magical Cunning.} You can perform an esoteric rite for 1
+    minute. At the end of it, you regain expended Pact Magic spell slots
+    but no more than a number equal to half your maximum (round up).
+    Once you use this feature, you can't do so again until you finish a
+    Long Rest.
+    \par
+}
+
+\NewDocumentCommand{\AwakenedMind}{}{
+    \textbf{Awakened Mind.} You can form a telepathic connection between
+    your mind and the mind of another. As a Bonus Action, choose one
+    creature you can see within 30 feet of yourself. You and the chosen
+    creature can communicate telepathically with each other while the
+    two of you are within a number of miles of each other equal to your
+    Charisma modifier (minimum of 1 mile). To understand each other, you
+    each must mentally use a language the other knows.
+
+    The telepathic connection lasts for a number of minutes equal to
+    your Warlock level. It ends early if you use this feature to connect
+    with a different creature.
+    \par
+}
+
+\NewDocumentCommand{\MistyVisions}{}{
+    \textbf{Misty Visions.} You can cast \textit{Silent Image} without
+    expending a spell slot.
+    \par
+}
+
+\NewDocumentCommand{\FiendishVigor}{}{
+    \textbf{Fiendish Vigor.} You can cast \textit{False Life} on
+    yourself without expending a spell slot. When you cast the spell
+    with this feature, you don't roll the die for the Temporary Hit
+    Points; you automatically get the highest number on the die.
+    \par
+}
+
+\NewDocumentCommand{\PsychicSpells}{}{
+    \textbf{Psychic Spells.} When you cast a Warlock spell that deals
+    damage, you can change its damage type to Psychic. In addition, when
+    you cast a Warlock spell that is an Enchantment or Illusion, you can
+    do so without Verbal or Somatic components.
+    \par
+}
+
+\NewDocumentCommand{\AgonizingBlast}{m}{
+    \textbf{Agonizing Blast.} Choose one of your known Warlock cantrips
+    that deals damage. You can add your Charisma modifier to that
+    spell's damage rolls. \textbf{Selection:} \textit{#1}.
+    \par
+}
+
+\NewDocumentCommand{\RepellingBlast}{m}{
+    \textbf{Repelling Blast.} Choose one of your known Warlock cantrips
+    that requires an attack roll. When you hit a Large or smaller
+    creature with that cantrip, you can push the creature up to 10 feet
+    straight away from you. \textbf{Selection:} \textit{#1}.
+    \par
+}
+
+\NewDocumentCommand{\PactOfTheBlade}{}{
+    \textbf{Pact of the Blade.} As a Bonus Action, you can conjure a
+    pact weapon in your hand---a Simple or Martial Melee weapon of your
+    choice with which you bond---or create a bond with a magic weapon
+    you touch; you can't bond with a magic weapon if someone else is
+    attuned to it or another Warlock is bonded with it. Until the bond
+    ends, you have proficiency with the weapon, and you can use it as a
+    Spellcasting Focus.
+
+    Whenever you attack with the bonded weapon, you can use your
+    Charisma modifier for the attack and damage rolls instead of using
+    Strength or Dexterity; and you can cause the weapon to deal
+    Necrotic, Psychic, or Radiant damage or its normal damage type.
+
+    Your bond with the weapon ends if you use this feature's Bonus
+    Action again, if the weapon is more than 5 feet away from you for 1
+    minute or more, or if you die. A conjured weapon disappears when the
+    bond ends.
+    \par
+}
+
+\NewDocumentCommand{\ThirstingBlade}{}{
+    \textbf{Thirsting Blade.} You gain the Extra Attack feature for your
+    pact weapon only. With that feature, you can attack twice with the
+    weapon instead of once when you take the Attack action on your
+    turn.
+    \par
+}
+
+\NewDocumentCommand{\PactOfTheTome}{m}{
+    \textbf{Pact of the Tome.} Stitching together strands of shadow, you
+    conjure forth a book in your hand at the end of a Short or Long
+    Rest. This Book of Shadows (you determine its appearance) contains
+    eldritch magic that only you can access, granting you the benefits
+    below. The book disappears if you conjure another book with this
+    feature or if you die.
+
+    \begin{itemize}
+        \item \textbf{Cantrips and Rituals.} When the book appears,
+            choose three cantrips, and choose two level 1 spells that
+            have the Ritual tag. The spells can be from any class's
+            spell list, and they must be spells you don't already have
+            prepared. While the book is on your person, you have the
+            chosen spells prepared, and they function as Warlock spells
+            for you. \textbf{Selection:} \SpellList{#1}.
+        \item \textbf{Spellcasting Focus.} You can use the book as a
+            Spellcasting Focus.
+    \end{itemize}
+    \par
+}
+
+\NewDocumentCommand{\ClairvoyantCombatant}{}{
+    \textbf{Clairvoyant Combatant.} When you form a telepathic bond with
+    a creature using your Awakened Mind, you can force that creature to
+    make a Wisdom saving throw against your spell save DC. On a failed
+    save, the creature has Disadvantage on attack rolls against you, and
+    you have Advantage on attack rolls against that creature for the
+    duration of the bond.
+
+    Once you use this feature, you can't use it again until you finish a
+    Short or Long Rest unless you expend a Pact Magic spell slot (no
+    action required) to restore your use of it.
+    \par
+}
+
+%%
+%% Feats
+%%
+\NewDocumentCommand{\MagicInitiate}{mmm}{
+    \textbf{Magic Initiate (#1).} You gain the following benefits.
+    \begin{itemize}
+    \item \textbf{Two Cantrips.} You learn two cantrips of your choice
+        from the #1 spell list. Charisma is your spellcasting ability
+        for this feat's spells. \textbf{Selection:} \SpellList{#2}.
+    \item \textbf{Level 1 Spell.} Choose a level 1 spell from the #1
+        spell list. You always have that spell prepared. You can cast it
+        once without a spell slot, and you regain the ability to
+        cast it in that way when you finish a Long Rest. You can
+        also cast the spell using any spell slots you have.
+        \textbf{Selection:} \SpellList{#3}.
+    \item \textbf{Spell Change.} Whenever you gain a new level, you can
+        replace one of the spells you chose for this feat with a
+        different spell of the same level from the chosen spell
+        list.
+    \end{itemize}
+    \par
+}
+
+\NewDocumentCommand{\Skilled}{m}{
+    \textbf{Skilled.} You gain proficiency in any combination of three
+    skills or tools of your choice. \textbf{Selection:} \InlineList{#1}.
+    \par
+}
+
+\NewDocumentCommand{\Lucky}{}{
+    \textbf{Luck Points.} You have a number of Luck Points equal to your
+    Proficiency Bonus and can spend the points on the benefits below.
+    You regain your expended Luck Points when you finish a Long Rest.
+    \begin{itemize}
+    \item \textbf{Advantage.} When you roll a $d20$ for a D20 Test, you
+        can spend 1 Luck Point to give yourself Advantage on the roll.
+    \item \textbf{Disadvantage.} When a creature rolls a $d20$ for an
+        attack roll against you, you can spend 1 Luck Point to impose
+        Disadvantage on that roll.
+    \end{itemize}
+    \par
+}
+
+\NewDocumentCommand{\FeyTouched}{mm}{
+    \textbf{Fey Touched.} Your exposure to the Feywild's magic grants
+    you the following benefits.
+
+    \begin{itemize}
+        \item \textbf{Ability Score Increase.} Increase your
+            Intelligence, Wisdom, or Charisma score by 1, to a maximum
+            of 20. \textbf{Selection:} #1.
+        \item \textbf{Fey Magic.} Choose one level 1 spell from the
+            Divination or Enchantment school of magic. You always have
+            that spell and the \textit{Misty Step} spell prepared. You
+            can cast each of these spells without expending a spell
+            slot. Once you cast either spell in this way, you can't cast
+            that spell in this way again until you finish a Long Rest.
+            You can also cast these spells using spell slots you have of
+            the appropriate level. The spells' spellcasting ability is
+            the ability increased by this feat. \textbf{Selection:}
+            \textit{#2}.
+    \end{itemize}
+    \par
+}
+
+\NewDocumentCommand{\Alert}{}{
+    \textbf{Alert.} You gain the following benefits.
+    \begin{itemize}
+        \item \textbf{Initiative Proficiency.} When you roll Initiative,
+            you can add your Proficiency Bonus to the roll.
+        \item \textbf{Initiative Swap.} Immediately after you roll
+            Initiative, you can swap your Initiative with the Initiative
+            of one willing ally in the same combat. You can't make this
+            swap if you or the ally has the Incapacitated condition.
+    \end{itemize}
+    \par
+}
+
+
+%%
+%% Fighting styles
+%%
+\NewDocumentCommand{\Dueling}{}{
+    \textbf{Fighting Style: Dueling.} When you're holding a Melee weapon
+    in one hand and no other weapons, you gain a +2 bonus to damage
+    rolls with that weapon.
+    \par
+}
+
+\NewDocumentCommand{\TwoWeaponFighting}{}{
+    \textbf{Two-Weapon Fighting.} When you make an extra attack as a
+    result of using a weapon that has the Light property, you can add
+    your ability modifier to the damage of that attack if you aren't
+    already adding it to the damage.
+    \par
+}
+
+%%
+%% Weapon mastery
+%%
+\NewDocumentCommand{\WeaponPropertyLabel}{mm}{
+    \textbf{Mastery Property: #1}
+    \textit{(\InlineList[afterlabel=\unskip]{#2})}.
+}
+
+\NewDocumentCommand{\Sap}{m}{
+    \WeaponPropertyLabel{Sap}{#1}
+    If you hit a creature with this weapon, that creature has
+    Disadvantage on its next attack roll before the start of your next
+    turn.
+    \par
+}
+
+\NewDocumentCommand{\Push}{m}{
+    \WeaponPropertyLabel{Push}{#1}
+    If you hit a creature with this weapon, you can push the creature up
+    to 10 feet straight away from yourself if it is Large or smaller.
+    \par
+}
+
+\NewDocumentCommand{\Vex}{m}{
+    \WeaponPropertyLabel{Vex}{#1}
+    If you hit a creature with a Shortsword and deal damage to it, you
+    have Advantage on your next attack roll against that creature before
+    the end of your next turn.
+    \par
+}
+
+\NewDocumentCommand{\Nick}{m}{
+    \WeaponPropertyLabel{Nick}{#1}
+    When you make the extra attack of the Light property, you can make
+    it as part of the Attack action instead of as a Bonus Action. This
+    extra attack can only be made once per turn.
+    \par
+}
+
+\NewDocumentCommand{\Slow}{m}{
+    \WeaponPropertyLabel{Slow}{#1}
+    If you hit a creature with a Longbow and deal damage to the
+    creature, you can reduce its Speed by 10 ft. until the start of your
+    next turn. If the creature is hit more than once with this property,
+    the Speed reduction doesn't exceed 10 ft.
+    \par
+}
+
+
+%%
+%% Aasimar species features
+%%
+\NewDocumentCommand{\SpeciesCardAasimar}{}{
+    \begin{Card*}[Species]{Aasimar}
+        \textbf{Celestial Resistance.} You have Resistance to Necrotic
+        and Radiant damage.
+
+        \textbf{Darkvision.} You have Darkvision with a range of 60 ft.
+
+        \textbf{Healing Hands.} As a Magic action, you touch a creature
+        and roll a number of $d4$s equal to your Proficiency Bonus. The
+        creature regains a number of Hit Points equal to the total
+        rolled. Once you use this trait, you can't use it again until
+        you finish a Long Rest.
+
+        \textbf{Light Bearer.} You know the \textit{Light} cantrip.
+        Charisma is your spellcasting ability for it.
+        \continued
+        \textbf{Celestial Revelation.} Once every Long Rest, you can
+        transform as a Bonus Action using one of the options below
+        (choose the option each time you transform). The transformation
+        lasts for 1 minute or until you end it (no action required).
+        Once on each of your turns before the transformation ends, you
+        can deal extra damage to one target when you deal damage to it
+        with an attack or a spell. The extra damage equals your
+        Proficiency Bonus, and the extra damage's type is either
+        Necrotic for Necrotic Shroud or Radiant for Heavenly Wings and
+        Inner Radiance.
+
+        \begin{itemize}
+            \item \textbf{Heavenly Wings.} Two spectral wings sprout
+                from your back temporarily. Until the transformation
+                ends, you have a Fly Speed equal to your Speed.
+
+            \item \textbf{Inner Radiance.} Searing light temporarily
+                radiates from your eyes and mouth. For the duration, you
+                shed Bright Light in a 10-foot radius and Dim Light for
+                an additional 10 feet, and at the end of each of your
+                turns, each creature within 10 feet of you takes Radiant
+                damage equal to your Proficiency Bonus.
+
+            \item \textbf{Necrotic Shroud.} Your eyes briefly become
+                pools of darkness, and flightless wings sprout from your
+                back temporarily. Creatures other than your allies
+                within 10 feet of you must succeed on a Charisma saving
+                throw (DC $8 +$ Charisma modifier and Proficiency Bonus)
+                or have the Frightened condition until the end of your
+                next turn.
+        \end{itemize}
+    \end{Card*}
+}
+
+
+%%
+%% Hedge species features
+%%
+\NewDocumentCommand{\SpeciesCardHedge}{}{
+    \begin{Card*}[Species]{Hedge}
+      \textbf{Natural Burrowers.} You have a burrowing speed of 15 feet. You
+      are capable of burrowing through soil, but are unable to dig through
+      anything more substantial with just your clawed hands.
+
+      \textbf{Spiny Quills.} You have a base armor class of 19. Even though
+      you can't wear armor, you can still benefit from the armor class bonus
+      provided by shields so long as you are proficient with them.
+
+      \textbf{Curl Up.} You can use your action to curl up, exposing
+      attackers to a wall of your toughened quills. While curled up you
+      cannot move, attack, or cast spells with somatic components, and your
+      base armor class becomes 19. You cannot benefit from any Dexterity
+      bonus to armor class while curled up, but you can still use shields.
+
+      Any creature that misses you with a melee attack while you are curled
+      up takes $2d4$ points of piercing damage from your sharp quills. If a
+      creature hits you while you are curled up, you are knocked prone in
+      your space at the end of the turn. You may uncurl yourself at any
+      point during your turn.
+      \continued
+      \textbf{Forest Magic.} You know the druidcraft cantrip. Additionally,
+      you can cast animal messenger as a 2nd level spell once with this
+      trait, and regain the ability to do so after a short or long rest.
+      Charisma is your spellcasting ability for these spells.
+
+      \textbf{Speak With Bugs.} Through sounds and gestures, you can
+      communicate simple ideas with creatures of the beast subtype that
+      represent insects, spiders, worms, and other creepy crawlies,
+      regardless of their size.
+    \end{Card*}
+}
+
+
+%%
+%% Human species features
+%%
+\NewDocumentCommand{\SpeciesCardHuman}{mmm}{
+    \begin{Card}[Species]{Human}
+        \textbf{Size.} Your Size is #1.
+
+        \textbf{Resourceful.} You gain Heroic Inspiration whenever you
+        finish a Long Rest.
+
+        \textbf{Skillful.} You gain proficiency in one skill of your
+        choice. \textbf{Selection:} #2.
+
+        \textbf{Versatile.} You gain an Origin feat of your choice.
+        \textbf{Selection:} #3.
+    \end{Card}
+}
+
+
+%%
+%% Sera Luma species features
+%%
+\NewDocumentCommand{\SpeciesCardSeraLuma}{}{
+    \begin{Card*}[Species]{Sera Luma}
+        \textbf{Size.} Small
+
+        \textbf{Speed.} Your base walking speed is 25 feet.
+
+        \textbf{Glide.} Using your feathered arms, you can slow your
+        fall, and glide short distances.
+
+        \textbf{Wing Flap.} As a bonus action, you can propel yourself
+        upward a distance equal to half your movement speed. You can use
+        it in conjunction with a regular jump, but not while gliding.
+
+        \textbf{Touched.} You know one cantrip from the sorcerer spell
+        list.\fmark Charisma is your spellcasting ability for this
+        cantrip. \ftext{Sorcerous Burst.}
+
+        \textbf{Fated.} You can choose to reroll any attack, skill
+        check, or saving throw. You can decide to do this after your
+        roll, but only before the outcome of the roll has been
+        determined. You can't use this feature again until you have
+        completed a long rest.
+        \continued
+
+        \textbf{Languages.} You can speak, read, and write Birdfolk. You
+        can also understand Auran, though you cannot speak it
+        naturally.
+
+        \textbf{Center of Attention.} You have proficiency in the
+        Performance skill.
+
+        \textbf{Songbird.} You may cast the \textit{Charm Person} spell
+        once per long rest. This spell does not require any somatic
+        components. Charisma is your spellcasting ability for this.
+    \end{Card*}
+}
+
+
+%%
+%% Orc species features
+%%
+\NewDocumentCommand{\SpeciesCardOrc}{}{
+    \begin{Card}[Species]{Orc}
+        \textbf{Adrenaline Rush.} You can take the Dash action as a
+        Bonus Action. When you do so, you gain a number of Temporary Hit
+        Points equal to your Proficiency Bonus. You can use this trait a
+        number of times equal to your Proficiency Bonus, and you regain
+        all expended uses when you finish a Short or Long Rest.
+        \par
+        \textbf{Relentless Endurance.} When you are reduced to 0 Hit
+        Points but not killed outright, you can drop to 1 Hit Point
+        instead. Once you use this trait, you can't do so again until
+        you finish a Long Rest.
+        \par
+        \textbf{Darkvision.} You have Darkvision with a range of 120 ft.
+    \end{Card}
+}
