@@ -1,0 +1,85 @@
+\input{include.tex}
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{Card}[Stats]{Kragor Grimstride / Orc / Fighter 1 / Warlock 2}
+\setlength{\parskip}{0em}
+\begin{tabular}{rcccccc}
+                  & \head{Strength} & \head{Dexterity} & \head{Constitution} & \head{Intelligence} & \head{Wisdom} & \head{Charisma} \\
+\textbf{Score}    & $\mathbf{10}$   & $\mathbf{14}$    & $\mathbf{14}$       & $\mathbf{8}$        & $\mathbf{12}$ & $\mathbf{17}$ \\
+\textbf{Modifier} & $+0$            & $+2$             & $+2$                & $-1$                & $+1$          & $+3$ \\
+\textbf{Save}     & $+2$            & $+2$             & $+4$                & $-1$                & $+1$          & $+3$ \\
+\end{tabular}
+
+{\rule{\linewidth}{0.4pt}}
+\begin{center}
+\begin{tikzpicture}
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center] (hp) {
+  {\large $\mathbf{26 + 12}$}\\[0.1cm]
+  {\footnotesize \textbf{HP}}
+};
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (ac1) at ($(hp.east)+(0.2cm,0)$) {
+  {\large $\mathbf{18}$}\\[0.1cm]
+  {\footnotesize \textbf{AC}}
+};
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (init) at ($(ac1.east)+(0.2cm,0)$) {
+  {\large $\mathbf{+2}$}\\[0.1cm]
+  {\footnotesize \textbf{Initiative}}
+};
+\node[draw=headercolor, line width=0.5pt, minimum width=2cm, minimum height=1.2cm, align=center, anchor=west] (dc) at ($(init.east)+(0.2cm,0)$) {
+  {\large $\mathbf{13}$}\\[0.1cm]
+  {\footnotesize \textbf{Spell DC\fmark}}
+};
+\end{tikzpicture}
+\ftext{Base $8$, $+5$ spell attack bonus.}
+
+\textit{Passive Perception}: $\mathbf{13}$, \textit{Investigation}: $\mathbf{9}$, \textit{Insight}: $\mathbf{13}$
+
+{\rule{\linewidth}{0.4pt}}
+
+\head{Skills}
+
+\begin{tabular}{p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}@{\hspace{0.8cm}}p{0.26\linewidth}}
+  \skill{Acrobatics}{$+2$}       & \skill{History}{$-1$}        & \skill{Performance}{$+3$} \\
+  \skill{Animal Handling}{$+1$}  & \skill*{Insight}{$+3$}       & \skill{Persuasion}{$+3$} \\
+  \skill*{Arcana}{$+1$}          & \skill{Intimidation}{$+3$}   & \skill{Religion}{$-1$} \\
+  \skill{Athletics}{$+2$}        & \skill{Investigation}{$-1$}  & \skill{Sleight of Hand}{$+2$} \\
+  \skill*{Deception}{$+3$}       & \skill{Medicine}{$+1$}       & \skill*{Stealth}{$+2$} \\
+  \skill{Nature}{$-1$}           & \skill{Perception}{$+3$}     & \skill{Survival}{$+1$}
+\end{tabular}
+\end{center}
+{\rule{\linewidth}{0.4pt}}
+\end{Card}
+
+\begin{Card}[Actions]{Kragor Grimstride / Orc / Fighter 1 /  Warlock 2}
+\begin{tabular}{p{0.3\linewidth}p{0.2\linewidth}p{0.1\linewidth}p{0.3\linewidth}}%
+  \head{Attack}                   & \head{Range}     & \head{Hit}     & \head{Damage}                                    \\
+  Longsword $+1$\fmark            & 5 ft (melee)     & $+6$           & $1d10+4$ Slashing,\fmark \textit{Sap}            \\
+  Warhammer\footnotemark[1]       & 5 ft (melee)     & $+5$           & $1d10+3$ Slashing,\footnotemark[2] \textit{Push} \\
+  Heavy Crossbow\footnotemark[1]  & 100 ft (400 ft)  & $+5$           & $1d10+3$ Piercing,\fmark \textit{Push}
+\end{tabular}
+{\rule{\linewidth}{0.4pt}}
+\begin{tabular}{p{0.25\linewidth}p{0.37\linewidth}p{0.30\linewidth}}
+  \head{Actions}         & \head{Bonus Actions}           & \head{Other} \\
+  \m{False Life}         & Second Wind\freq{2/day}        & Luck \freq{2/day} \\
+  \m{Silent Image}       & Adrenaline Rush \freq{2/rest}  & Relentless Endurance \freq{1/day} \\
+                         &                                & Magical Cunning \freq{1/day} \\
+                         &                                &
+\end{tabular}
+\ftext{Using \textit{True Strike}.}
+\ftext{Choice of Slashing or Radiant.}
+\ftext{Choice of Piercing or Radiant.}
+\end{Card}
+
+\begin{Card}[Class]{Eldritch Invocations}
+\input{invocations/fiendish-vigor.tex}
+\input{invocations/misty-visions.tex}
+\input{invocations/pact-of-the-tome.tex}
+\ftext{\m{Mind Sliver}, \m{Shape Water}, and \m{Prestidigitation}.}
+\ftext{\m{Alarm} and \m{Detect Magic}}
+\end{Card}
+\input{cards/species-orc.tex}
+\input{cards/feat-lucky.tex}
+
+\end{document}
