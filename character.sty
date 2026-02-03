@@ -77,8 +77,35 @@
     }
 }
 
+\msg_new:nnn { dnd } { missing-field }
+  { Character~definition~missing~required~field:~'#1' }
+\msg_new:nnn { dnd } { wrong-save-count }
+  { Character~must~have~exactly~2~saving~throw~proficiencies~(starred~abilities),~found~#1 }
+\cs_new_protected:Npn \__dnd_validate_character: {
+    \clist_map_inline:nn { pc, summary, player, levels, hp, ac } {
+        \prop_if_in:NnF \g_dnd_stats_prop {##1} {
+            \msg_error:nnn { dnd } { missing-field } {##1}
+        }
+    }
+    \clist_map_inline:nn { str, dex, con, int, wis, cha } {
+        \prop_if_in:NnF \g_dnd_stats_prop {##1} {
+            \msg_error:nnn { dnd } { missing-field } {##1}
+        }
+    }
+    \int_zero:N \l_tmpa_int
+    \clist_map_inline:nn { str, dex, con, int, wis, cha } {
+        \prop_if_in:NnT \g_dnd_profs_prop {##1} {
+            \int_incr:N \l_tmpa_int
+        }
+    }
+    \int_compare:nNnF { \l_tmpa_int } = { 2 } {
+        \msg_error:nnx { dnd } { wrong-save-count } { \int_use:N \l_tmpa_int }
+    }
+}
+
 \NewDocumentCommand{\Character}{m}{
     \keys_set:nn { dnd/stats } {#1}
+    \__dnd_validate_character:
 }
 
 \NewDocumentCommand{\AbilityScoresTable}{}{
