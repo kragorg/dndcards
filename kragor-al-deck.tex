@@ -19,26 +19,55 @@
 
 \begin{Card}[Actions]{\PC, \Summary}
   \begin{tabular}{p{0.25\linewidth}p{0.2\linewidth}p{0.1\linewidth}p{0.4\linewidth}}%
-    \head{Attack}            & \head{Range}     & \head{Hit}  & \head{Damage/Effect}        \\
-    Warhammer $+1$           & 5 feet (melee)   & $+8$        & $1d10+5$ Bludgeoning\fmark  \\
-    \m{Eldritch Blast}       & 120 feet         & $+9$\fmark  & $1d10+4$ Force\fmark and push 10 ft
+    \head{Attack}       & \head{Range}    & \head{Hit}  & \head{Damage/Effect}                 \\
+    Warhammer $+1$      & 5 feet (melee)  & $+8$        & $1d10+5$ Bludgeoning\fmark           \\
+    \m{Eldritch Blast}  & 120 feet        & $+9$\fmark  & $1d10+4$ Force\fmark and push 10 ft
   \end{tabular}%
   %
   \ftext{Choice of Bludgeoning, Necrotic, Radiant, or Psychic.}%
   \ftext{Base $+7$ and $+2$ from \textit{Rod of the Pact Keeper $+2$}.}%
   \ftext{Choice of Force or Psychic.}
   %
-  {\rule{\linewidth}{0.4pt}}
-  \begin{tabular}{p{0.25\linewidth}p{0.37\linewidth}p{0.30\linewidth}}
-    \head{Actions}              & \head{Bonus Actions}                      & \head{Other} \\
-    \m{False Life}              & Pact of the Blade: Bond                   & Luck \freq{3/day} \\
-    \m{Silent Image}            & Pact of the Blade: Conjure                & Relentless Endurance \freq{1/day} \\
-    \m{Command} \freq{1/day}    & Adrenaline Rush \freq{3/rest}             & Magical Cunning \freq{1/day} \\
-    \m{Misty Step} \freq{1/day} & Awakened Mind                             & Psychic Spells \\
-                                & Clairvoyant Combatant \freq{1/rest}       & Agonizing Blast \\
-                                &                                           & Repelling Blast \\
-                                &                                           & Thirsting Blade \\
-                                &                                           &
+  \ThinRule \par
+  \begin{tabular}{p{0.25\linewidth}p{0.37\linewidth}p{0.23\linewidth}}
+    \head{Actions}         & \head{Bonus Actions}          & \head{Other}                 \\
+    \m{False Life}         & Pact of the Blade: Bond       & Luck\fmarkA                  \\
+    \m{Silent Image}       & Pact of the Blade: Conjure    & Relentless Endurance\fmarka  \\
+    \m{Command}\fmarka     & Adrenaline Rush\fmarka        & Magical Cunning\fmarka       \\
+    \m{Misty Step}\fmarka  & Awakened Mind                 & Psychic Spells               \\
+                           & Clairvoyant Combatant\fmarka  & Agonizing Blast              \\
+                           &                               & Repelling Blast              \\
+                           &                               & Thirsting Blade
+  \end{tabular}
+  \ftext{Limited use.}
+\end{Card}
+
+\begin{Card}[Resources]{\PC, \Summary}
+  \begin{ResourceTable}
+    \header{Short Rest}                  & \header{Long Rest}                  \\
+    \resource{Adrenaline Rush}{3}        & \resource{Relentless Endurance}{1}  \\
+    \resource{Pact Slots}{2}             & \resource{Magical Cunning}{1}       \\
+    \resource{Clairvoyant Combatant}{1}  & \resource{Luck}{3}                  \\
+                                        && \resource{\m{Command}}{1}           \\
+                                        && \resource{\m{Misty Step}}{1}
+  \end{ResourceTable}
+\end{Card}
+
+\begin{Card}{Kragor's Prepared Spells}
+  \begin{tabular}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
+    \head{Cantrip}            & \head{2nd Level}  & \head{2nd Level}     \\
+    Eldritch Blast            & Detect Thoughts   & Confusion            \\
+    Mage Hand                 & Misty Step        & Sickening Radiance   \\
+    Mind Silver               & Phantasmal Force  & Summon Aberration    \\
+                              & Suggestion        & Summon Fey           \\
+    \head{1st Level}          &                   &                      \\
+    Armor of Agathys          & \head{3rd Level}  &                      \\
+    Command                   & Clairvoyance      &                      \\
+    Dissonant Whispers        & Fly               &                      \\
+    False Life                & Hunger of Hadar   &                      \\
+    Hex                       & Hypnotic Pattern  &                      \\
+    Silent Image              & Major Image       &                      \\
+    Tasha's Hideous Laughter  &                   &
   \end{tabular}
 \end{Card}
 
@@ -71,24 +100,6 @@
 
   In addition, you can regain one spell slot as a Magic action while holding the
   rod. You can't use this property again until you finish a Long Rest.
-\end{Card}
-
-\begin{Card}{Kragor's Prepared Spells}
-  \begin{tabular}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
-    \head{Cantrip}            & \head{2nd Level}  & \head{2nd Level}     \\
-    Eldritch Blast            & Detect Thoughts   & Confusion            \\
-    Mage Hand                 & Misty Step        & Sickening Radiance   \\
-    Mind Silver               & Phantasmal Force  & Summon Aberration    \\
-                              & Suggestion        & Summon Fey           \\
-    \head{1st Level}          &                   &                      \\
-    Armor of Agathys          & \head{3rd Level}  &                      \\
-    Command                   & Clairvoyance      &                      \\
-    Dissonant Whispers        & Fly               &                      \\
-    False Life                & Hunger of Hadar   &                      \\
-    Hex                       & Hypnotic Pattern  &                      \\
-    Silent Image              & Major Image       &                      \\
-    Tasha's Hideous Laughter  &                   &
-  \end{tabular}
 \end{Card}
 
 \SpellEldritchBlast

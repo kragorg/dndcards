@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
     "elara-deck.tex"
     "kragor-al-deck.tex"
     "kragor-deck.tex"
-    "kragor-fighter-deck.tex"
     "rezina-deck.tex"
     "toge-deck.tex"
     "zek-deck.tex"

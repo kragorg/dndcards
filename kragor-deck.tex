@@ -18,6 +18,7 @@
 \StatCard{\PC, \Summary}
 
 \begin{Card}[Actions]{\PC, \Summary}
+  \centering
   \begin{tabular}{p{0.3\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}%
     \head{Attack}         & \head{Range}     & \head{Hit}     & \head{Damage/Effect}     \\
     Longsword $+1$        & 5 ft (melee)     & $+6$           & $1d10+4$ Slashing\fmark  \\
@@ -25,17 +26,39 @@
     Eldritch Blast        & 120 ft           & $+5$           & $1d10$ Force
   \end{tabular}
   %
-  {\rule{\linewidth}{0.4pt}}
+  \ftext{Choice of Slashing, Necrotic, Radiant, or Psychic.}
+  \ThinRule \par
   \begin{tabular}{p{0.25\linewidth}p{0.37\linewidth}p{0.30\linewidth}}
-    \head{Actions}    & \head{Bonus Actions}           & \head{Other} \\
-    \m{False Life}    & Pact of the Blade: Bond        & Luck \freq{2/day} \\
-    \m{Silent Image}  & Pact of the Blade: Conjure     & Relentless Endurance \freq{1/day} \\
-                      & Adrenaline Rush \freq{2/rest}  & Magical Cunning \freq{1/day} \\
-                      & Awakened Mind                  & Psychic Spells \\
-                      &                                &
+    \head{Actions}    & \head{Bonus Actions}        & \head{Other}                 \\
+    \m{False Life}    & Pact of the Blade: Bond     & Luck\fmarkA                  \\
+    \m{Silent Image}  & Pact of the Blade: Conjure  & Relentless Endurance\fmarka  \\
+                      & Adrenaline Rush\fmarka      & Magical Cunning\fmarka       \\
+                      & Awakened Mind               & Psychic Spells
   \end{tabular}
   %
-  \ftext{Choice of Slashing, Necrotic, Radiant, or Psychic.}
+  \ftext{Limited use.}
+\end{Card}
+
+\begin{Card}[Resources]{\PC, \Summary}
+  \begin{ResourceTable}
+    \header{Short Rest}            & \header{Long Rest}                  \\
+    \resource{Adrenaline Rush}{2}  & \resource{Relentless Endurance}{1}  \\
+    \resource{Pact Slots}{2}       & \resource{Magical Cunning}{1}       \\
+                                  && \resource{Luck}{2}
+  \end{ResourceTable}
+\end{Card}
+
+\begin{Card}{Kragor's Prepared Spells}
+  \begin{tabular}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
+    \head{Cantrip}  & \head{1st Level}          & \head{2nd Level} \\
+    Eldritch Blast  & Armor of Agathys          & Detect Thoughts  \\
+    Mage Hand       & Detect Magic              & Phantasmal Force \\
+    True Strike     & Dissonant Whispers        & Suggestion       \\
+                    & False Life                &                  \\
+                    & Hex                       &                  \\
+                    & Silent Image              &                  \\
+                    & Tasha's Hideous Laughter  &
+  \end{tabular}
 \end{Card}
 
 \begin{Card}[Class]{Great Old One Warlock}
@@ -55,19 +78,6 @@
 \end{Card}
 
 \SpeciesCardOrc
-
-\begin{Card}{Kragor's Prepared Spells}
-  \begin{tabular}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
-    \head{Cantrip}  & \head{1st Level}          & \head{2nd Level} \\
-    Eldritch Blast  & Armor of Agathys          & Detect Thoughts  \\
-    Mage Hand       & Detect Magic              & Phantasmal Force \\
-    True Strike     & Dissonant Whispers        & Suggestion       \\
-                    & False Life                &                  \\
-                    & Hex                       &                  \\
-                    & Silent Image              &                  \\
-                    & Tasha's Hideous Laughter  &
-  \end{tabular}
-\end{Card}
 
 \SpellEldritchBlast
 \SpellMageHand

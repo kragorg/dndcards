@@ -61,18 +61,39 @@
 
 \renewcommand{\footnoterule}{}
 
-\newcounter{fmarkcount}
-\newcounter{ftextcount}
-\NewDocumentCommand{\fmark}{}{
-  \stepcounter{fmarkcount}
+\int_new:N \g_fmark_count_int
+\int_new:N \g_ftext_count_int
+\cs_new:Npn \fmark {
+  \int_gincr:N \g_fmark_count_int
   \unskip
-  \footnotemark[ \value{fmarkcount} ]
+  \footnotemark[ \int_use:N \g_fmark_count_int ]
+  \xspace
+}
+\cs_new:Npn \ftext #1 {
+  \int_gincr:N \g_ftext_count_int
+  \footnotetext[ \int_use:N \g_ftext_count_int ] { #1 }
+}
+\cs_new:Npn \__fmark_define:N #1
+  {
+    \fmark
+    \int_gset:Nn #1 { \int_use:N \g_fmark_count_int }
+  }
+\cs_new:Npn \__fmark_use:N #1 {
+  \unskip
+  \footnotemark [ \int_use:N #1 ]
   \xspace
 }
 
-\NewDocumentCommand{\ftext}{m}{
-  \stepcounter{ftextcount}
-  \footnotetext[ \value{ftextcount} ] {#1}
+\int_step_inline:nnn { `a } { `z } {
+  \int_new:c { g_fmark_saved \char_generate:nn {#1} {11} _int }
+  \cs_new:cpx { fmark \char_generate:nn { #1 - 32 } {11} } {
+    \exp_not:N \__fmark_define:N
+    \exp_not:c { g_fmark_saved \char_generate:nn {#1} {11} _int }
+  }
+  \cs_new:cpx { fmark \char_generate:nn {#1} {11} } {
+    \exp_not:N \__fmark_use:N
+    \exp_not:c { g_fmark_saved \char_generate:nn {#1} {11} _int }
+  }
 }
 
 \int_new:N \g__dndcards_cardno_int
@@ -91,8 +112,8 @@
     \exp_args:NV \newtotcounter \g__dndcards_cardcounter_tl
     \exp_args:NV \stepcounter \g__dndcards_cardcounter_tl
   } {}
-  \int_gset:Nn \c@fmarkcount 0
-  \int_gset:Nn \c@ftextcount 0
+  \int_gset:Nn \g_fmark_count_int 0
+  \int_gset:Nn \g_ftext_count_int 0
   \CardHeader
     [
       #2
@@ -118,8 +139,8 @@
 \NewDocumentCommand{\continued}{}{
   \tl_set:Nx \l_tmpa_tl { cardno \int_use:N \g__dndcards_cardno_int }
   \exp_args:NV \stepcounter \l_tmpa_tl
-  \int_gset:Nn \c@fmarkcount 0
-  \int_gset:Nn \c@ftextcount 0
+  \int_gset:Nn \g_fmark_count_int 0
+  \int_gset:Nn \g_ftext_count_int 0
   \newpage
   \CardHeader
     [
@@ -145,4 +166,45 @@
 
 \NewDocumentCommand{\m}{m}{
   \textit{ #1 }
+}
+
+\dim_new:N \__dndcards_resourcetab_dim
+
+\NewDocumentEnvironment{ResourceTable}{}{
+  \dim_set:Nn \__dndcards_resourcetab_dim { 0.25 \linewidth }
+  \cs_set:Npn \header ##1 {
+    \multicolumn{2}{
+      >{ \centering\arraybackslash }
+      p{ \dim_eval:n { \__dndcards_resourcetab_dim * 2 } }
+    }{
+      \head{ ##1 }
+      \vspace{ 0.5em }
+    }
+  }
+  \cs_set:Npn \resource ##1##2 {
+    ##1
+    &
+    \int_step_inline:nn { ##2 } {
+      \raisebox{-0.5ex}{
+        \tikz[baseline=0.1ex]{\draw[line~width=0.8pt, headercolor] (0,0) rectangle (0.4cm,0.4cm);}
+      }
+      \kern0.5em
+    }
+  }
+  \group_begin:
+  \renewcommand{\arraystretch}{1.5}
+  \centering
+  \begin{tabular}{
+    @{}
+    >{ \raggedleft \arraybackslash}   p{\__dndcards_resourcetab_dim }
+    >{ \raggedright \arraybackslash}  p{\__dndcards_resourcetab_dim }
+    @{}
+    >{ \raggedleft \arraybackslash}   p{\__dndcards_resourcetab_dim }
+    >{ \raggedright \arraybackslash}  p{\__dndcards_resourcetab_dim }
+    @{}
+    @{}
+  }
+} {
+  \end{tabular}
+  \group_end:
 }

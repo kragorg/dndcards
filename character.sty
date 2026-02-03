@@ -1006,8 +1006,8 @@
       your space at the end of the turn. You may uncurl yourself at any
       point during your turn.
       \continued
-      \textbf{Forest Magic.} You know the druidcraft cantrip. Additionally,
-      you can cast animal messenger as a 2nd level spell once with this
+      \textbf{Forest Magic.} You know the \m{Druidcraft} cantrip. Additionally,
+      you can cast \m{Animal Messenger} as a 2nd level spell once with this
       trait, and regain the ability to do so after a short or long rest.
       Charisma is your spellcasting ability for these spells.
 
@@ -1041,11 +1041,9 @@
 %%
 %% Sera Luma species features
 %%
-\NewDocumentCommand{\SpeciesCardSeraLuma}{}{
+\NewDocumentCommand{\SpeciesCardSeraLuma}{m}{
     \begin{Card*}[Species]{Sera Luma}
         \textbf{Size.} Small
-
-        \textbf{Speed.} Your base walking speed is 25 feet.
 
         \textbf{Glide.} Using your feathered arms, you can slow your
         fall, and glide short distances.
@@ -1055,8 +1053,8 @@
         it in conjunction with a regular jump, but not while gliding.
 
         \textbf{Touched.} You know one cantrip from the sorcerer spell
-        list.\fmark Charisma is your spellcasting ability for this
-        cantrip. \ftext{Sorcerous Burst.}
+        list. Charisma is your spellcasting ability for this
+        cantrip. \textbf{Selection:} \SpellList{#1}.
 
         \textbf{Fated.} You can choose to reroll any attack, skill
         check, or saving throw. You can decide to do this after your

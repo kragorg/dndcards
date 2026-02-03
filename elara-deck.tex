@@ -19,30 +19,55 @@
 
 \begin{Card}[Actions]{\PC, \Summary}
   \begin{tabular}{p{0.3\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}%
-    \head{Attack}             & \head{Range}     & \head{Hit}     & \head{Damage/Effect}              \\
-    Shortsword\fmark          & 5 ft (melee)     & $+5$           & $1d6+3$ Piercing\fmark            \\
-    Shortbow\footnotemark[1]  & 80 ft (320 ft)   & $+5$           & $1d6+3$ Piercing\footnotemark[2]  \\
-    Dagger (off-hand)         & 5 ft (melee)     & $+3$           & $1d4$ Piercing                    \\
-    Dagger (thrown)           & 20 ft (60 ft)    & $+5$           & $1d4+3$ Piercing                  \\
-    \m{Starry Wisp}           & 60 ft            & $+5$           & $1d8$ Radiant
+    \head{Attack}      & \head{Range}     & \head{Hit}  & \head{Damage/Effect}     \\
+    Shortsword\fmarkA  & 5 ft (melee)     & $+5$        & $1d6+3$ Piercing\fmarkB  \\
+    Shortbow\fmarka    & 80 ft (320 ft)   & $+5$        & $1d6+3$ Piercing\fmarkb  \\
+    Dagger (off-hand)  & 5 ft (melee)     & $+3$        & $1d4$ Piercing           \\
+    Dagger (thrown)    & 20 ft (60 ft)    & $+5$        & $1d4+3$ Piercing         \\
+    \m{Starry Wisp}    & 60 ft            & $+5$        & $1d8$ Radiant
   \end{tabular}
   %
   \ftext{Using \textit{True Strike}.}
   \ftext{Choice of Piercing or Radiant.}
   %
-  {\rule{\linewidth}{0.4pt}}
+  \ThinRule \par
   \begin{tabular}{p{0.27\linewidth}p{0.36\linewidth}p{0.27\linewidth}}
-    \head{Actions}                       & \head{Bonus Actions}                  & \head{Other} \\
-    \textit{Light}                       & Two-Weapon Fighting (Dagger)          & Beguiling Magic \freq{1/day}\fmark \\
-    Healing Hands \freq{1/day}           & Celestial Revelation \freq{1/day}     & Celestial Resistance \\
-    \m{Speak with Animals} \freq{1/day}  & Bardic Inspiration $d6$ \freq{4/day}  & \\
-                                         & Mantle of Inspiration\fmark           & \\
-                                         &                                       &
+    \head{Actions}                 & \head{Bonus Actions}            & \head{Other}                 \\
+    \textit{Light}                 & Two-Weapon Fighting (Dagger)    & Beguiling Magic\fmarkC\fmark \\
+    Healing Hands\fmarkc           & Celestial Revelation\fmarkc     & Celestial Resistance         \\
+    \m{Speak with Animals}\fmarkc  & Bardic Inspiration $d6$\fmarkc  &                              \\
+                                   & Mantle of Inspiration\fmark     &                              \\
+                                   &                                 &
   \end{tabular}
   %
+  \ftext{Limited use.}
   \ftext{You can restore your use of Beguiling Magic by expending one use of
   your Bardic Inspiration (no action required).}
   \ftext{Consumes one use of your Bardic Inspiration.}
+\end{Card}
+
+\begin{Card}[Resources]{\PC, \Summary}
+  \begin{ResourceTable}
+    \header{Spell Slots}     & \header{Long Rest}                    \\
+    \resource{1st Level}{4}  & \resource{Healing Hands}{1}           \\
+    \resource{2nd Level}{2}  & \resource{Celestial Revelation}{1}    \\
+                            && \resource{\m{Speak with Animals}}{1}  \\
+                            && \resource{Bardic Inspiration}{4}      \\
+                            && \resource{Beguiling Magic}{1}
+  \end{ResourceTable}
+\end{Card}
+
+\begin{Card}{Elara's Prepared Spells}
+  \begin{tabular}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
+  \head{Cantrip}    & \head{1st Level}    & \head{2nd Level} \\
+    Guidance        &  Charm Person       & Invisibility \\
+    Light           &  Command            & Mirror Image \\
+    Minor Illusion  &  Dissonant Whispers & \\
+    Starry Wisp     &  Faerie Fire        & \\
+    True Strike     &  Healing Word       & \\
+                    &  Sleep              & \\
+                    &  Speak with Animals &
+  \end{tabular}
 \end{Card}
 
 \begin{Card*}[Class]{College of Glamour Bard}
@@ -62,19 +87,6 @@
 \end{Card}
 
 \SpeciesCardAasimar
-
-\begin{Card}{Elara's Prepared Spells}
-  \begin{tabular}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
-  \head{Cantrip}    & \head{1st Level}    & \head{2nd Level} \\
-    Guidance        &  Charm Person       & Invisibility \\
-    Light           &  Command            & Mirror Image \\
-    Minor Illusion  &  Dissonant Whispers & \\
-    Starry Wisp     &  Faerie Fire        & \\
-    True Strike     &  Healing Word       & \\
-                    &  Sleep              & \\
-                    &  Speak with Animals &
-  \end{tabular}
-\end{Card}
 
 \SpellGuidance
 \SpellLight

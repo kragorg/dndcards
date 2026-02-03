@@ -18,39 +18,37 @@
 
 \begin{Card}[Actions]{\PC, \Summary}
   \begin{tabular}{p{0.3\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}%
-    \head{Attack}            & \head{Range}     & \head{Hit}  & \head{Damage/Effect}    \\
-    Shortsword\fmark         & 5 ft (melee)     & $+6$        & $1d6+4$ Radiant         \\
-    Shortsword (off-hand)    & 5 ft (melee)     & $+2$        & $1d6$ Piercing          \\
-    Shortbow\footnotemark[1] & 80 ft (320 ft)   & $+6$        & $1d6+4$ Radiant         \\
-    \m{Sorcerous Burst}      & 120 ft           & $+6$        & $1d8$ elemental\fmark   \\
+    \head{Attack}          & \head{Range}     & \head{Hit}  & \head{Damage/Effect}    \\
+    Shortsword\fmarkA      & 5 ft (melee)     & $+6$        & $1d6+4$ Radiant         \\
+    Shortsword (off-hand)  & 5 ft (melee)     & $+2$        & $1d6$ Piercing          \\
+    Shortbow\fmarka        & 80 ft (320 ft)   & $+6$        & $1d6+4$ Radiant         \\
+    \m{Sorcerous Burst}    & 120 ft           & $+6$        & $1d8$ elemental\fmark   \\
   \end{tabular}
   %
   \ftext{Using \textit{True Strike}.}
   \ftext{Choose Acid, Cold, Fire, Lightning, Thunder, Poison, or Psychic.}
   %
-  {\rule{\linewidth}{0.4pt}}
+  \ThinRule \par
   \begin{tabular}{p{0.25\linewidth}p{0.40\linewidth}p{0.30\linewidth}}
-    \head{Actions}                       & \head{Bonus Actions}                  & \head{Other} \\
-    Wing Flap                            & Two-Weapon Fighting (Shortsword)      & Fated \freq{1/rest} \\
-    \m{Charm Person}\freq{1/day}         & Bardic Inspiration $d6$ \freq{4/day}  & Glide \\
-    \m{Detect Magic}\freq{1/day}         &                                       & Touched \\
-                                         &                                       & Songbird \\
-                                         &                                       & Center of Attention \\
+    \head{Actions}           & \head{Bonus Actions}              & \head{Other}        \\
+    Wing Flap                & Two-Weapon Fighting (Shortsword)  & Fated\fmarkB        \\
+    \m{Charm Person}\fmarkb  & Bardic Inspiration $d6$\fmarkb    & Glide               \\
+    \m{Detect Magic}\fmarkb  &                                   & Touched             \\
+                             &                                   & Songbird            \\
+                             &                                   & Center of Attention
   \end{tabular}
+  \ftext{Limited use.}
 \end{Card}
 
-
-\begin{Card}[Class]{Bard}
-  \MusicalInstruments{Birdpipes, Flue, Hand Drum}
-  \BardSpellcasting
-  \BardicInspiration{d6}
+\begin{Card}[Resources]{\PC, \Summary}
+  \begin{ResourceTable}
+    \header{Spell Slots}     & \header{Long Rest}                  \\
+    \resource{1st Level}{2}  & \resource{Bardic Inspiration}{4}    \\
+                            && \resource{\m{Charm Person}}{1}      \\
+    \header{Short Rest}      & \resource{\m{Detect Magic}}{1}      \\
+    \resource{Fated}{1}
+  \end{ResourceTable}
 \end{Card}
-
-\begin{Card}{Feats}
-\MagicInitiate{Druid}{Guidance, Gust Barrier}{Detect Magic}
-\end{Card}
-
-\SpeciesCardSeraLuma
 
 \begin{Card}{Rezina's Prepared Spells}
   \begin{tabular}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
@@ -63,6 +61,18 @@
                      &  Sleep              &
   \end{tabular}
 \end{Card}
+
+\begin{Card}[Class]{Bard}
+  \MusicalInstruments{Birdpipes, Flue, Hand Drum}
+  \BardSpellcasting
+  \BardicInspiration{d6}
+\end{Card}
+
+\begin{Card}{Feats}
+\MagicInitiate{Druid}{Guidance, Gust Barrier}{Detect Magic}
+\end{Card}
+
+\SpeciesCardSeraLuma{Sorcerous Burst}
 
 \SpellGuidance
 \SpellGustBarrier

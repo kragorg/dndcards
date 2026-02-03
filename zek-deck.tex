@@ -20,22 +20,45 @@
 
 \begin{Card}[Actions]{\PC, \Summary}
   \begin{tabular}{p{0.25\linewidth}p{0.2\linewidth}p{0.1\linewidth}p{0.4\linewidth}}%
-    \head{Attack}                 & \head{Range}     & \head{Hit}     & \head{Damage/Effect}       \\
-    Light Crossbow\fmark          & 80 ft (320 ft)   & $+5$           & $1d8+3$ Piercing\fmark     \\
-    Quarterstaff\footnotemark[1]  & 5 ft (melee)     & $+5$           & $1d8+3$ Bludgeoning\fmark
+    \head{Attack}          & \head{Range}    & \head{Hit}  & \head{Damage/Effect}       \\
+    Light Crossbow\fmarkA  & 80 ft (320 ft)  & $+5$        & $1d8+3$ Piercing\fmark     \\
+    Quarterstaff\fmarka    & 5 ft (melee)    & $+5$        & $1d8+3$ Bludgeoning\fmark
   \end{tabular}
   %
   \ftext{Using \textit{True Strike}.}
   \ftext{Choice of Piercing or Radiant.}
   \ftext{Choice of Bludgeoning or Radiant.}
   %
-  {\rule{\linewidth}{0.4pt}}
+  \ThinRule \par
   \begin{tabular}{p{0.25\linewidth}p{0.37\linewidth}p{0.30\linewidth}}
-    \head{Actions}              & \head{Bonus Actions}                      & \head{Other}       \\
-                                & Innate Sorcery \freq{2/day}               & Sorcery Points: 3  \\
-                                & Create Spell Slot                         & Quickened Spell    \\
-                                &                                           & Seeking Spell      \\
-                                &                                           & Heroic Inspiration \freq{1/day}
+    \head{Actions}  & \head{Bonus Actions}  & \head{Other}                \\
+                    & Innate Sorcery\fmarkB  & Quickened Spell\fmarkb     \\
+                    & Create Spell Slot      & Seeking Spell\fmarkb       \\
+                    &                        & Heroic Inspiration\fmarkb
+  \end{tabular}
+  \ftext{Limited use.}
+\end{Card}
+
+\begin{Card}[Resources]{\PC, \Summary}
+  \begin{ResourceTable}
+    \header{Spell Slots}     & \header{Long Rest}                  \\
+    \resource{1st Level}{4}  & \resource{Heroic Inspiration}{1}    \\
+    \resource{2nd Level}{2}  & \resource{Luck}{2}                  \\
+                            && \resource{Innate Sorcery}{2}        \\
+                            && \resource{Sorcery Points\fmark}{3}
+  \end{ResourceTable}
+  \ftext{\textbf{Quickened Spell} 2 points; \textbf{Seeking Spell} 1 point.}
+\end{Card}
+
+\begin{Card}{Zek's Prepared Spells}
+  \begin{tabular}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
+    \head{Cantrip}    & \head{1st Level}  & \head{2nd Level}  \\
+    Mage Hand         & Chromatic Orb     & Alter Self        \\
+    Mending           & Command           & Cloud of Daggers  \\
+    Mind Sliver       & Detect Magic      & Dragon's Breath   \\
+    Minor Illusion    & Find Familiar     & Invisibility      \\
+    Prestidigitation  & Magic Missile     & Suggestion        \\
+    True Strike       & Shield            &
   \end{tabular}
 \end{Card}
 
@@ -60,18 +83,6 @@
 \end{Card}
 
 \SpeciesCardHuman{Small}{Stealth}{Magic Initiate (Wizard)}
-
-\begin{Card}{Zek's Prepared Spells}
-  \begin{tabular}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
-    \head{Cantrip}    & \head{1st Level}  & \head{2nd Level}  \\
-    Mage Hand         & Chromatic Orb     & Alter Self        \\
-    Mending           & Command           & Cloud of Daggers  \\
-    Mind Sliver       & Detect Magic      & Dragon's Breath   \\
-    Minor Illusion    & Find Familiar     & Invisibility      \\
-    Prestidigitation  & Magic Missile     & Suggestion        \\
-    True Strike       & Shield            &
-  \end{tabular}
-\end{Card}
 
 \SpellMageHand
 \SpellMending
