@@ -41,7 +41,7 @@
 
 % Shared utility: Calculate D&D 5E ability modifier: (score - 10) / 2
 % This is the core mathematical formula used by both character and monster systems
-\cs_new:Npn \__dndcards_modifier:n #1 {
+\cs_new:Nn \__dndcards_modifier:n {
     \int_eval:n {
         \int_if_odd:nTF {#1} { (#1 - 11) } { (#1 - 10) }
         / 2
@@ -49,7 +49,7 @@
 }
 
 % Shared utility: Format modifier with +/- sign (3 → +3, -2 → -2, 0 → +0)
-\cs_new:Npn \__dndcards_format_stat:n #1 {
+\cs_new:Nn \__dndcards_format_stat:n {
     \int_compare:nNnTF {#1} > { -1 } { +\int_eval:n{#1} } { \int_eval:n{#1} }
 }
 \cs_generate_variant:Nn \__dndcards_format_stat:n { e }
@@ -79,15 +79,24 @@
     \group_end:
 }
 
-\NewDocumentCommand{\ThinRule}{}{\rule{\linewidth}{0.4pt}}
+\NewDocumentCommand{\ThinRule}{}{\rule{\textwidth}{0.4pt}}
 
-\NewDocumentCommand{\CardHeader}{om}{
+\cs_new_protected:Nn \__dndcards_header:nn {
   {
-    \Large\textbf{\textcolor{headercolor}{\textsc{#2}}}
-    \IfValueT{#1}{\hfill\small\textit{#1}}
-  }\par
-  \vspace{-\parskip}
-  \ThinRule
+    \noindent
+    \Large \bfseries \scshape \color{headercolor}
+    #2
+  }
+  \tl_if_novalue:nF { #1 } {
+     \hfill
+     { \normalfont \small \itshape #1 }
+  }
+  \skip_gzero:N \parskip
+  \par
+  \noindent \ThinRule
+  \__dndcards_add_continuation_arrow:
+  \par
+  \bool_gset_true:N \g__dndcards_restore_parskip_bool
 }
 
 \renewcommand{\footnoterule}{}
@@ -98,17 +107,17 @@
 % Tracking sequences for footnote validation
 \seq_new:N \g_dnd_fmark_defined_seq
 \seq_new:N \g_dnd_fmark_used_seq
-\cs_new:Npn \fmark {
+\cs_new_protected:Npn \fmark {
   \int_gincr:N \g_fmark_count_int
   \unskip
   \footnotemark[ \int_use:N \g_fmark_count_int ]
   \xspace
 }
-\cs_new:Npn \ftext #1 {
+\cs_new_protected:Npn \ftext #1 {
   \int_gincr:N \g_ftext_count_int
   \footnotetext[ \int_use:N \g_ftext_count_int ] { #1 }
 }
-\cs_new:Npn \__fmark_define:N #1
+\cs_new_protected:Nn \__fmark_define:N
   {
     \fmark
     \int_gset:Nn #1 { \int_use:N \g_fmark_count_int }
@@ -116,7 +125,7 @@
     \seq_gput_right:Nn \g_dnd_fmark_defined_seq
       { \cs_to_str:N #1 }
   }
-\cs_new:Npn \__fmark_use:N #1 {
+\cs_new_protected:Nn \__fmark_use:N {
   % Check if this mark was defined
   \int_compare:nNnTF { #1 } = { 0 }
   {
@@ -145,13 +154,22 @@
   }
 }
 
+\tl_new:N \l__dndcards_saved_everypar_tl
+
 \int_new:N \g__dndcards_cardno_int
 \tl_new:N \g__dndcards_cardtitle_tl
 \tl_new:N \g__dndcards_cardtags_tl
 \tl_new:N \g__dndcards_cardcounter_tl
 \bool_new:N \g__dndcards_in_starred_card_bool
+\bool_new:N \g__dndcards_restore_parskip_bool
+\AddToHook{para/begin}{
+  \bool_if:NT \g__dndcards_restore_parskip_bool {
+    \bool_gset_false:N \g__dndcards_restore_parskip_bool
+    \skip_gset:Nn \parskip { 0.1in }
+  }
+}
 
-\cs_new_protected:Npn \__dndcards_continuation_header:
+\cs_new_protected:Nn \__dndcards_continuation_header:
 {
   \bool_if:NT \g__dndcards_in_starred_card_bool
   {
@@ -161,21 +179,31 @@
     \int_gset:Nn \g_ftext_count_int { 0 }
     \seq_gclear:N \g_dnd_fmark_defined_seq
     \seq_gclear:N \g_dnd_fmark_used_seq
-    \CardHeader
-      [
+    % Save and reset list paragraph shaping so header renders full-width
+    \tl_set:Nx \l__dndcards_saved_everypar_tl { \tex_the:D \everypar }
+    \everypar{}
+    \parshape \c_zero_int
+    \par\vspace{-\parskip}
+    \__dndcards_header:nn
+      {
         \g__dndcards_cardtags_tl
-        \tl_set:Nx \l_tmpa_tl { cardno \int_use:N \g__dndcards_cardno_int }
-        \c_space_tl ( \exp_args:NV \arabic { \l_tmpa_tl }
+        \c_space_tl ( \exp_args:NV \arabic \l_tmpa_tl
         \c_space_tl of \c_space_tl
-        \exp_args:NV \total { \l_tmpa_tl } )
-      ]
+        \exp_args:NV \total \l_tmpa_tl )
+      }
       { \g__dndcards_cardtitle_tl }
-    \__dndcards_add_continuation_arrow:
+    % Immediately restore parskip for continuation pages.
+    % Unlike the initial header (which uses para/begin hook), we restore here
+    % because overflow content doesn't trigger para/begin, and we need parskip
+    % to be 0.1in when the paragraph after overflow starts.
+    \skip_gset:Nn \parskip { 0.1in }
+    % Restore list paragraph shaping for subsequent content
+    \everypar \exp_after:wN { \l__dndcards_saved_everypar_tl }
     \__dndcards_arm_continuation:
   }
 }
 
-\cs_new_protected:Npn \__dndcards_arm_continuation:
+\cs_new_protected:Nn \__dndcards_arm_continuation:
 {
   \bool_if:NT \g__dndcards_in_starred_card_bool
   {
@@ -184,7 +212,7 @@
 }
 
 % Add continuation arrow in bottom right corner (for all pages except the last)
-\cs_new_protected:Npn \__dndcards_add_continuation_arrow:
+\cs_new_protected:Nn \__dndcards_add_continuation_arrow:
 {
   \bool_if:NT \g__dndcards_in_starred_card_bool
   {
@@ -204,7 +232,7 @@
 }
 
 % Helper to get total count safely (returns 0 if counter doesn't exist yet)
-\cs_new:Npn \__dndcards_get_total:n #1
+\cs_new_protected:Nn \__dndcards_get_total:n
 {
   \cs_if_exist:cTF { c@#1 }
     { \totvalue{#1} }
@@ -212,25 +240,31 @@
 }
 
 % Helper to build and output card header with optional "(X of Y)" numbering
-\cs_new_protected:Npn \__dndcards_card_header:nn #1#2
+\cs_new_protected:Nn \__dndcards_header_counter:nn
 {
   \exp_args:Nx \int_compare:nNnTF { \exp_args:NV \__dndcards_get_total:n \g__dndcards_cardcounter_tl } > { 1 }
   {
-    \CardHeader
-      [
-        #1
-        \c_space_tl ( \exp_args:NV \arabic \g__dndcards_cardcounter_tl
+    \__dndcards_header:nn
+      {
+        #1 \c_space_tl (
+        \exp_args:NV \arabic \g__dndcards_cardcounter_tl
         \c_space_tl of \c_space_tl
-        \exp_args:NV \total { \g__dndcards_cardcounter_tl } )
-      ]
+        \exp_args:NV \total \g__dndcards_cardcounter_tl
+        )
+      }
       { #2 }
   }
   {
-    \CardHeader [ #1 ] { #2 }
+    \__dndcards_header:nn { #1 } { #2 }
   }
 }
 
+\cs_new_protected:Npn \Newpage {
+  \newpage \vspace{-\parskip}
+}
+
 \NewDocumentEnvironment{Card}{O{}m}{
+  \setlength{\parskip}{0em}
   \int_gincr:N \g__dndcards_cardno_int
   \tl_gset:Nn \g__dndcards_cardtitle_tl { #2 }
   \tl_gset:Nn \g__dndcards_cardtags_tl { #1 }
@@ -243,9 +277,7 @@
   \int_gset:Nn \g_ftext_count_int 0
   \seq_gclear:N \g_dnd_fmark_defined_seq
   \seq_gclear:N \g_dnd_fmark_used_seq
-  \__dndcards_card_header:nn { #1 } { #2 }
-  \__dndcards_add_continuation_arrow:
-  \setlength{\parskip}{0.1in}
+  \__dndcards_header_counter:nn { #1 } { #2 }
 } {
   % Validate footnotes before ending card
   \seq_map_inline:Nn \g_dnd_fmark_used_seq {
@@ -264,9 +296,14 @@
 }
 
 \NewDocumentCommand{\head}{m}{
-  \textbf{
-    \small \scshape \textcolor{ headercolor }{ #1 }
-  }
+  { \small \scshape \bfseries \textcolor{ headercolor }{ #1 } }
+}
+
+\NewDocumentCommand{\sect}{sm}{
+  \IfBooleanF { #1 } { \vspace{1em} }
+  { \centering \normalsize \scshape \bfseries
+    \textcolor{ headercolor }{ #2 }
+    \par }
 }
 
 \NewDocumentCommand{\freq}{m}{

@@ -13,9 +13,12 @@
 \LanguageProficiencies{Auran, Birdfolk}
 
 \TitleCard[\Summary]{\PC}
-\StatCard{\PC, \Summary}
 
-\begin{Card}[Actions]{\PC, \Summary}
+\begin{Card}{\PC, \Summary}
+  \CoreStats{}
+  \Newpage
+  %
+  %
   \begin{tabular}{p{0.3\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}
     \head{Attack}             & \head{Range}     & \head{Hit}  & \head{Damage/Effect}    \\
     Shortsword\fmarkA         & 5 ft (melee)     & $+6$        & $1d6+4$ Radiant         \\
@@ -37,19 +40,10 @@
                                   &                                   & Center of Attention
   \end{tabular}
   \ftext{Limited use.}
-\end{Card}
-
-\begin{Card}[Resources]{\PC, \Summary}
-  \begin{ResourceTable}
-    \header{Spell Slots}     & \header{Long Rest}                       \\
-    \resource{1st Level}{2}  & \resource{Bardic Inspiration}{4}         \\
-                            && \resource{\textit{Charm Person}}{1}      \\
-    \header{Short Rest}      & \resource{\textit{Detect Magic}}{1}      \\
-    \resource{Fated}{1}
-  \end{ResourceTable}
-\end{Card}
-
-\begin{Card}{Rezina's Prepared Spells}
+  \Newpage
+  %
+  %
+  \sect*{Prepared Spells}
   \begin{PreparedSpells}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
     \head{Cantrip}        & \head{1st Level}      & \\
     \spell{Guidance}      & \spell{CharmPerson}   & \\
@@ -59,19 +53,30 @@
     \spell{TrueStrike}    & \spell{SilveryBarbs}  & \\
                           & \spell{Sleep}         &
   \end{PreparedSpells}
-\end{Card}
-
-\begin{Card}[Class]{Bard}
+  \Newpage
+  %
+  %
+  \sect*{Limited Use}
+  \begin{ResourceTable}
+    \header{Spell Slots}     & \header{Long Rest}                       \\
+    \resource{1st Level}{2}  & \resource{Bardic Inspiration}{4}         \\
+                            && \resource{\textit{Charm Person}}{1}      \\
+    \header{Short Rest}      & \resource{\textit{Detect Magic}}{1}      \\
+    \resource{Fated}{1}
+  \end{ResourceTable}
+  \Newpage
+  %
+  %
+  \sect*{Class Features: Bard}
   \MusicalInstruments{Birdpipes, Flue, Hand Drum}
   \BardSpellcasting
   \BardicInspiration{d6}
+  \sect{Feats}
+  \MagicInitiate{Druid}{Guidance, Gust Barrier}{Detect Magic}
+  \Newpage
+  \sect*{Species: Sera Luma}
+  \SpeciesSeraLuma{Sorcerous Burst}
 \end{Card}
-
-\begin{Card}{Feats}
-\MagicInitiate{Druid}{Guidance, Gust Barrier}{Detect Magic}
-\end{Card}
-
-\SpeciesCardSeraLuma{Sorcerous Burst}
 
 \begin{Card}[Gear]{Bodhr\'{a}n}
   \begin{tabular}{lllll}

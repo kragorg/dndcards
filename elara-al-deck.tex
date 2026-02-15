@@ -13,11 +13,11 @@
 \LanguageProficiencies{Common, Goblin, Halfling}
 
 \TitleCard[\Summary]{\PC}
-\StatCard[
-  Spell={mod=1, note=While holding \textit{Rhythm-Maker's Drum $+1$}.}
-]{\PC, \Summary}
 
-\begin{Card}[Actions]{\PC, \Summary}
+\begin{Card}{\PC, \Summary}
+  \CoreStats{
+    Spell={mod=1, note=While holding \textit{Rhythm-Maker's Drum $+1$}.}
+  }
   \begin{tabular}{p{0.3\linewidth}p{0.15\linewidth}p{0.1\linewidth}p{0.45\linewidth}}
     \head{Attack}             & \head{Range}     & \head{Hit}              & \head{Damage/Effect}         \\
     Shortsword\fmarkA         & 5 ft (melee)     & $+7$                    & $1d6+4$ Piercing\fmarkB      \\
@@ -45,22 +45,10 @@
   \ftext{You can expend a spell slot (no action required) to regain one
   expended use of Bardic Inspiration.}
   \ftext{Consumes one use of your Bardic Inspiration.}
-\end{Card}
-
-\begin{Card}[Resources]{\PC, \Summary}
-  \begin{ResourceTable}
-    \header{Spell Slots}               & \header{Long Rest}                  \\
-    \resource{1st Level}{4}            & \resource{Healing Hands}{1}         \\
-    \resource{2nd Level}{3}            & \resource{Celestial Revelation}{1}  \\
-    \resource{3rd Level}{2}            & \resource{\textit{Shield}}{1}       \\
-                                      && \resource{Beguiling Magic}{1}       \\
-                                                                             \\
-    \header{Short Rest}                &                                     \\
-    \resource{Bardic Inspiration}{4}
-  \end{ResourceTable}
-\end{Card}
-
-\begin{Card}{Elara's Prepared Spells}
+  \Newpage
+  %
+  %
+  \sect*{Prepared Spells}
   \begin{PreparedSpells}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
     \head{Cantrip}          & \head{1st Level}          & \head{2nd Level}        \\
     \spell{FireBolt}        & \spell{CharmPerson}       & \spell{CloudOfDaggers}  \\
@@ -71,22 +59,41 @@
     \spell{ViciousMockery}  & \spell{Shield}            & \spell{DispelMagic}     \\
                             & \spell{Sleep}             & \spell{Slow}
   \end{PreparedSpells}
-\end{Card}
-
-\begin{Card}[Class]{College of Glamour Bard}
+  \Newpage
+  %
+  %
+  \sect*{Limited Use}
+  \begin{ResourceTable}
+    \header{Spell Slots}               & \header{Long Rest}                  \\
+    \resource{1st Level}{4}            & \resource{Healing Hands}{1}         \\
+    \resource{2nd Level}{3}            & \resource{Celestial Revelation}{1}  \\
+    \resource{3rd Level}{2}            & \resource{\textit{Shield}}{1}       \\
+                                      && \resource{Beguiling Magic}{1}       \\
+                                                                             \\
+    \header{Short Rest}                &                                     \\
+    \resource{Bardic Inspiration}{4}
+  \end{ResourceTable}
+  \Newpage
+  %
+  %
+  \sect*{Class Features: Bard}
   \BardSpellcasting
   \BardicInspiration{d8}
+  \Newpage
   \MusicalInstruments{Harp, Flute, Hand Drum}
   \BeguilingMagic
   \MantleOfInspiration
+  \Newpage
   \Expertise
   \JackOfAllTrades
   \FontOfInspiration
-\end{Card}
-
-\begin{Card}{Feats}
+  %
+  \sect{Feats}
   \MagicInitiate{Wizard}{Fire Bolt, Sword Burst}{Shield}
   \WarCaster{Charisma}
+  %
+  \sect{Species: Aasimar}
+  \SpeciesAasimar
 \end{Card}
 
 \begin{Card}[Item (Uncommon)]{Rhythm-Maker's Drum $+1$}
@@ -98,8 +105,6 @@
   Inspiration feature. This property of the drum can't be used again
   until the next dawn.
 \end{Card}
-
-\SpeciesCardAasimar
 
 \SpellCards
 
