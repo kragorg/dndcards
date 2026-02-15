@@ -13,9 +13,12 @@
 \LanguageProficiencies{Birdfolk, Hedge}
 
 \TitleCard[\Summary]{\PC}
-\StatCard{\PC, \Summary}
 
-\begin{Card}[Actions]{\PC, \Summary}
+\begin{Card}{\PC, \Summary}
+  \CoreStats{}
+  \Newpage
+  %
+  %
   \begin{tabular}{p{0.2\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}
     \head{Attack}                 & \head{Range}     & \head{Hit}     & \head{Damage/Effect}             \\
     Shortsword                    & 5 feet (melee)   & $+7$           & $1d6+5$ Piercing, \textit{Vex}   \\
@@ -32,30 +35,35 @@
                                       &                                   & Spiny Quills
   \end{tabular}
   \ftext{Limited use.}
-\end{Card}
-
-\begin{Card}[Resources]{\PC, \Summary}
-
+  \Newpage
+  %
+  %
+  \sect*{Limited Use}
   \begin{ResourceTable}
     \header{Short Rest}                      \\
     \resource{\textit{Animal Messenger}}{1}  \\
     \resource{Second Wind}{2}
   \end{ResourceTable}
-\end{Card}
-
-\begin{Card}[Class]{Fighter}
+  \Newpage
+  %
+  %
+  \sect*{Class Features: Fighter}
   \SecondWind
   \Vex{Shortsword}
   \Nick{Scimitar}
   \Slow{Longbow}
+  \Newpage
+  %
+  %
+  \sect*{Feats}
+  \Alert
+  \TwoWeaponFighting
+  \Newpage
+  %
+  %
+  \sect*{Species: Hedge}
+  \SpeciesHedge
 \end{Card}
-
-\begin{Card}{Feats}
-\Alert
-\TwoWeaponFighting
-\end{Card}
-
-\SpeciesCardHedge
 
 \SpellDruidcraft
 \SpellAnimalMessenger

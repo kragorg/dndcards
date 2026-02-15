@@ -24,6 +24,7 @@
             etbb
             footmisc
             latexmk
+            lua-visual-debug
             pdflscape
             scheme-small
             totcount

@@ -13,9 +13,12 @@
 \LanguageProficiencies{Common, Goblin, Halfling}
 
 \TitleCard[\Summary]{\PC}
-\StatCard{\PC, \Summary}
 
-\begin{Card}[Actions]{\PC, \Summary}
+\begin{Card}{\PC, \Summary}
+  \CoreStats{}
+  \Newpage
+  %
+  %
   \begin{tabular}{p{0.3\linewidth}p{0.3\linewidth}p{0.1\linewidth}p{0.3\linewidth}}
     \head{Attack}         & \head{Range}     & \head{Hit}  & \head{Damage/Effect}     \\
     Shortsword\fmarkA     & 5 ft (melee)     & $+5$        & $1d6+3$ Piercing\fmarkB  \\
@@ -41,20 +44,10 @@
   \ftext{You can restore your use of Beguiling Magic by expending one use of
   your Bardic Inspiration (no action required).}
   \ftext{Consumes one use of your Bardic Inspiration.}
-\end{Card}
-
-\begin{Card}[Resources]{\PC, \Summary}
-  \begin{ResourceTable}
-    \header{Spell Slots}     & \header{Long Rest}                         \\
-    \resource{1st Level}{4}  & \resource{Healing Hands}{1}                \\
-    \resource{2nd Level}{2}  & \resource{Celestial Revelation}{1}         \\
-                            && \resource{\textit{Speak with Animals}}{1}  \\
-                            && \resource{Bardic Inspiration}{4}           \\
-                            && \resource{Beguiling Magic}{1}
-  \end{ResourceTable}
-\end{Card}
-
-\begin{Card}{Elara's Prepared Spells}
+  \Newpage
+  %
+  %
+  \sect*{Prepared Spells}
   \begin{PreparedSpells}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
     \head{Cantrip}        & \head{1st Level}          & \head{2nd Level}      \\
     \spell{Guidance}      & \spell{CharmPerson}       & \spell{Invisibility}  \\
@@ -65,23 +58,38 @@
                           & \spell{Sleep}             &                       \\
                           & \spell{SpeakWithAnimals}  &
   \end{PreparedSpells}
-\end{Card}
-
-\begin{Card}[Class]{College of Glamour Bard}
+  \Newpage
+  %
+  %
+  \sect*{Limited Use}
+  \begin{ResourceTable}
+    \header{Spell Slots}     & \header{Long Rest}                         \\
+    \resource{1st Level}{4}  & \resource{Healing Hands}{1}                \\
+    \resource{2nd Level}{2}  & \resource{Celestial Revelation}{1}         \\
+                            && \resource{\textit{Speak with Animals}}{1}  \\
+                            && \resource{Bardic Inspiration}{4}           \\
+                            && \resource{Beguiling Magic}{1}
+  \end{ResourceTable}
+  \Newpage
+  %
+  %
+  \sect*{Class Features: Bard}
   \BardSpellcasting
   \BardicInspiration{d6}
+  \Newpage
   \MusicalInstruments{Harp, Flute, Hand Drum}
   \BeguilingMagic
   \MantleOfInspiration
+  \Newpage
   \Expertise
   \JackOfAllTrades
-\end{Card}
-
-\begin{Card}{Feats}
+  %
+  \sect{Feats}
   \MagicInitiate{Druid}{Guidance, Starry Wisp}{Speak With Animals}
+  %
+  \sect{Species: Aasimar}
+  \SpeciesAasimar
 \end{Card}
-
-\SpeciesCardAasimar
 
 \SpellCards
 

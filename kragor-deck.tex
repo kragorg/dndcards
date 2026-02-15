@@ -13,70 +13,78 @@
 \LanguageProficiencies{Common, Dwarvish, Orc}
 
 \TitleCard[\Summary]{\PC}
-\StatCard{\PC, \Summary}
 
-\begin{Card}[Actions]{\PC, \Summary}
-  \centering
+\begin{Card}{\PC, \Summary}
+  \CoreStats{}
+  \Newpage
+  %
+  %
   \begin{tabular}{p{0.25\linewidth}p{0.25\linewidth}p{0.1\linewidth}p{0.4\linewidth}}
-    \head{Attack}            & \head{Range}     & \head{Hit}     & \head{Damage/Effect}     \\
-    Longsword $+1$           & 5 ft (melee)     & $+6$           & $1d10+4$ Slashing\fmark  \\
-    Light Crossbow           & 80 ft (320 ft)   & $+5$           & $1d8+3$ Piercing         \\
-    \textit{Eldritch Blast}  & 120 ft           & $+5$           & $1d10$ Force\fmark
+    \head{Attack}         & \head{Range}     & \head{Hit}     & \head{Damage/Effect}         \\
+    Longsword $+1$        & 5 ft (melee)     & $+6$           & $1d10+4$ Slashing\fmark      \\
+    Light Crossbow        & 80 ft (320 ft)   & $+5$           & $1d8+3$ Piercing             \\
+    \textit{Mind Sliver}  & 60 ft            & INT \SpellDC   & $1d6$ Psychic, $-1d4$ saves
   \end{tabular}
   %
   \ftext{Choice of Slashing, Necrotic, Radiant, or Psychic.}
-  \ftext{Choice of Force or Psychic.}
+  %
   \ThinRule \par
   \begin{tabular}{p{0.35\linewidth}p{0.30\linewidth}p{0.35\linewidth}}
     \head{Actions}                              & \head{Bonus Actions}        & \head{Other}                 \\
     Fiendish Vigor: \textit{False Life}\fmark   & Pact of the Blade: Bond     & Luck\fmarkA                  \\
     Misty Visions: \textit{Silent Image}\fmark  & Pact of the Blade: Conjure  & Relentless Endurance\fmarka  \\
                                                 & Adrenaline Rush\fmarka      & Magical Cunning\fmarka       \\
-                                                & Awakened Mind               & Replling Blast               \\
-                                                &                             & Psychic Spells
+                                                & Awakened Mind               & Psychic Spells
   \end{tabular}
   %
   \ftext{At will, self only.}
   \ftext{Limited use.}
   \ftext{At will.}
-\end{Card}
-
-\begin{Card}[Resources]{\PC, \Summary}
+  \Newpage
+  %
+  %
+  \sect*{Prepared Spells}
+  \begin{PreparedSpells}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
+    \head{Cantrip}             & \head{1st Level}                      & \head{2nd Level}                \\
+    \spell{MageHand}           & \spell{ArmorOfAgathys}\fmarkA         & \spell{CloudOfDaggers}\fmarka   \\
+    \spell{MindSliver}\fmarkB  & \spell{DissonantWhispers}\fmarkb      & \spell{DetectThoughts}          \\
+                               & \spell{Hex}\fmarka\fmarkb             & \spell{PhantasmalForce}\fmarkb  \\
+                               & \spell{TashasHideousLaughter}\fmarkb  & \spell{Suggestion}\fmarkb
+  \end{PreparedSpells}
+  \ftext{\textbf{Psychic Spells:} You can change the damage type to Psychic.}
+  \ftext{\textbf{Psychic Spells:} You can cast this spell without Verbal or Somatic components.}
+  \Newpage
+  %
+  %
+  \sect*{Limited Use}
   \begin{ResourceTable}
     \header{Short Rest}            & \header{Long Rest}                  \\
     \resource{Adrenaline Rush}{2}  & \resource{Relentless Endurance}{1}  \\
     \resource{Pact Slots}{2}       & \resource{Magical Cunning}{1}       \\
                                   && \resource{Luck}{2}
   \end{ResourceTable}
-\end{Card}
-
-\begin{Card}{Kragor's Prepared Spells}
-  \begin{PreparedSpells}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
-    \head{Cantrip}          & \head{1st Level}              & \head{2nd Level}        \\
-    \spell{EldritchBlast}   & \spell{ArmorOfAgathys}        & \spell{DetectThoughts}  \\
-    \spell{MageHand}        & \spell{DetectMagic}           & \spell{PhantasmalForce} \\
-                            & \spell{DissonantWhispers}     & \spell{Suggestion}      \\
-                            & \spell{Hex}                   &                         \\
-                            & \spell{TashasHideousLaughter} &
-  \end{PreparedSpells}
-\end{Card}
-
-\begin{Card}[Class]{Great Old One Warlock}
+  \Newpage
+  %
+  %
+  \sect*{Class Features: Warlock}
   \PactMagic
   \MagicalCunning
   \PsychicSpells
   \AwakenedMind
-\end{Card}
-\begin{Card}[Class]{Warlock: Eldritch Invocations}
+  %
+  \sect{Class Features: Eldritch Invocations}
   \PactOfTheBlade
   \FiendishVigor
   \MistyVisions
-\end{Card}
-\begin{Card}{Feats}
+  %
+  \sect{Feats}
   \Lucky
+  \Newpage
+  %
+  %
+  \sect*{Species: Orc}
+  \SpeciesOrc
 \end{Card}
-
-\SpeciesCardOrc
 
 \SpellCards
 

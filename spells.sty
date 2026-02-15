@@ -141,12 +141,10 @@
 
 \cs_new_protected:Npn \__spell_begin:nn #1#2
 {
-    \setlength{\parskip}{0em}
-    \par
     \__spell_header_table:
-    \par
+    \par\vspace{-\parskip}
     \ThinRule
-    \setlength{\parskip}{0.1in}
+    \par\vspace{-\parskip}
 }
 
 \NewDocumentEnvironment{Spell}{om}
@@ -468,6 +466,8 @@
     ]{Confusion}
     Each creature in a 10-foot-radius Sphere centered on a point you choose within range must succeed on a Wisdom saving throw, or that target can't take Bonus Actions or Reactions and must roll $1d10$ at the start of each of its turns to determine its behavior for that turn, consulting the following table.
 
+    At the end of each of its turns, an affected target repeats the save, ending the spell on itself on a success.
+    \newpage
     \begin{center}
     \begin{tabular}{cl}
     \textbf{$1d10$} & \textbf{Behavior for the Turn} \\ \hline
@@ -481,8 +481,6 @@
     \hline
     \end{tabular}
     \end{center}
-
-    At the end of each of its turns, an affected target repeats the save, ending the spell on itself on a success.
 
     \textbf{Using a Higher-Level Spell Slot.} The Sphere's radius increases by 5 feet for each spell slot level above 4.
 

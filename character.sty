@@ -19,7 +19,7 @@
 \prop_new:N \g_dnd_names_prop
 \clist_new:N \l_dnd_order_clist
 
-% StatCard modifier state
+% CoreStat modifier state
 \prop_new:N \g__dnd_statcard_mods_prop
 \int_new:N \l__dnd_statcard_current_mod_int
 \tl_new:N \l__dnd_statcard_current_note_tl
@@ -27,7 +27,7 @@
 % Error message for missing note
 \msg_new:nnn {dnd} {statcard-note-required}
 {
-    StatCard~modifier~for~'#1'~requires~a~note.~
+    CoreStat~modifier~for~'#1'~requires~a~note.~
     Use:~#1={mod=X,~note=...}~or~#1={note=...}
 }
 
@@ -127,7 +127,7 @@
         { \prg_return_false: }
 }
 
-% Keys for StatCard optional arguments
+% Keys for CoreStat optional arguments
 \keys_define:nn { dnd/statcard }
 {
     % Ability score keys
@@ -185,7 +185,7 @@
     Survival .code:n = { \__dnd_statcard_set_mod:nn {Survival} {#1} },
 }
 
-% Reset StatCard modifiers
+% Reset CoreStat modifiers
 \cs_new_protected:Npn \__dnd_statcard_reset:
 {
     \prop_gclear:N \g__dnd_statcard_mods_prop
@@ -764,25 +764,25 @@
     \par
 }
 
-\NewDocumentCommand{\StatCard}{O{}m}{
+\cs_new_protected:Nn \__dnd_corestats:n {
     \group_begin:
+    \bool_gset_false:N \g__dndcards_restore_parskip_bool
     \__dnd_statcard_reset:
     \keys_set:nn { dnd/statcard } {#1}
-    \begin{Card}[Stats]{#2}
-        \setlength{\parskip}{0em}
-        \par \AbilityScoresTable
-        \par \ThinRule
-        \begin{center}
-            \par \AtAGlance
-            \vspace{0.1in}
-            \par \head{Skills}
-            \par \SkillTable
-            \vspace{0.1in}
-            \par {\small \textbf{Languages:}~\__dnd_format_languages:}
-        \end{center}
-    \end{Card}
-    \par
+    \AbilityScoresTable \par
+    \ThinRule
+    \begin{center}
+        \AtAGlance \par
+        \vspace{0.1in}\head{Skills} \par
+        \SkillTable
+        \vspace{0.1in}
+        {\small \textbf{Languages:}~\__dnd_format_languages:}
+    \end{center}
     \group_end:
+}
+
+\NewDocumentCommand{\CoreStats}{m}{
+    \__dnd_corestats:n { #1 }
 }
 
 \NewDocumentCommand{\Placard}{}{
@@ -1512,170 +1512,188 @@
 %%
 %% Aasimar species features
 %%
-\NewDocumentCommand{\SpeciesCardAasimar}{}{
-    \begin{Card}[Species]{Aasimar}
-        \textbf{Celestial Resistance.} You have Resistance to Necrotic
-        and Radiant damage.
+\NewDocumentCommand{\SpeciesAasimar}{}{
+    \textbf{Aasimar} are mortals who carry a spark of the Upper Planes
+    within their souls. As an Aasimar, you have these special traits.
 
-        \textbf{Darkvision.} You have Darkvision with a range of 60 ft.
+    \textbf{Celestial Resistance.} You have Resistance to Necrotic
+    and Radiant damage.
 
-        \textbf{Healing Hands.} As a Magic action, you touch a creature
-        and roll a number of $d4$s equal to your Proficiency Bonus. The
-        creature regains a number of Hit Points equal to the total
-        rolled. Once you use this trait, you can't use it again until
-        you finish a Long Rest.
+    \textbf{Darkvision.} You have Darkvision with a range of 60 ft.
 
-        \textbf{Light Bearer.} You know the \textit{Light} cantrip.
-        Charisma is your spellcasting ability for it.
+    \textbf{Healing Hands.} As a Magic action, you touch a creature
+    and roll a number of $d4$s equal to your Proficiency Bonus. The
+    creature regains a number of Hit Points equal to the total
+    rolled. Once you use this trait, you can't use it again until
+    you finish a Long Rest.
 
-        \textbf{Celestial Revelation.} Once every Long Rest, you can
-        transform as a Bonus Action using one of the options below
-        (choose the option each time you transform). The transformation
-        lasts for 1 minute or until you end it (no action required).
-        Once on each of your turns before the transformation ends, you
-        can deal extra damage to one target when you deal damage to it
-        with an attack or a spell. The extra damage equals your
-        Proficiency Bonus, and the extra damage's type is either
-        Necrotic for Necrotic Shroud or Radiant for Heavenly Wings and
-        Inner Radiance.
+    \textbf{Light Bearer.} You know the \textit{Light} cantrip.
+    Charisma is your spellcasting ability for it.
 
-        \begin{itemize}
-            \item \textbf{Heavenly Wings.} Two spectral wings sprout
-                from your back temporarily. Until the transformation
-                ends, you have a Fly Speed equal to your Speed.
-        \end{itemize}\newpage\begin{itemize}
-            \item \textbf{Inner Radiance.} Searing light temporarily
-                radiates from your eyes and mouth. For the duration, you
-                shed Bright Light in a 10-foot radius and Dim Light for
-                an additional 10 feet, and at the end of each of your
-                turns, each creature within 10 feet of you takes Radiant
-                damage equal to your Proficiency Bonus.
+    \textbf{Celestial Revelation.} Once every Long Rest, you can
+    transform as a Bonus Action using one of the options below
+    (choose the option each time you transform). The transformation
+    lasts for 1 minute or until you end it (no action required).
+    Once on each of your turns before the transformation ends, you
+    can deal extra damage to one target when you deal damage to it
+    with an attack or a spell. The extra damage equals your
+    Proficiency Bonus, and the extra damage's type is either
+    Necrotic for Necrotic Shroud or Radiant for Heavenly Wings and
+    Inner Radiance.
 
-            \item \textbf{Necrotic Shroud.} Your eyes briefly become
-                pools of darkness, and flightless wings sprout from your
-                back temporarily. Creatures other than your allies
-                within 10 feet of you must succeed on a Charisma saving
-                throw (DC $8 +$ Charisma modifier and Proficiency Bonus)
-                or have the Frightened condition until the end of your
-                next turn.
-        \end{itemize}
-    \end{Card}
+    \begin{itemize}
+        \item \textbf{Heavenly Wings.} Two spectral wings sprout
+            from your back temporarily. Until the transformation
+            ends, you have a Fly Speed equal to your Speed.
+        \item \textbf{Inner Radiance.} Searing light temporarily
+            radiates from your eyes and mouth. For the duration, you
+            shed Bright Light in a 10-foot radius and Dim Light for
+            an additional 10 feet, and at the end of each of your
+            turns, each creature within 10 feet of you takes Radiant
+            damage equal to your Proficiency Bonus.
+        \item \textbf{Necrotic Shroud.} Your eyes briefly become
+            pools of darkness, and flightless wings sprout from your
+            back temporarily. Creatures other than your allies
+            within 10 feet of you must succeed on a Charisma saving
+            throw (DC $8 +$ Charisma modifier and Proficiency Bonus)
+            or have the Frightened condition until the end of your
+            next turn.
+    \end{itemize}
 }
 
 
 %%
 %% Hedge species features
 %%
-\NewDocumentCommand{\SpeciesCardHedge}{}{
-    \begin{Card}[Species]{Hedge}
-      \textbf{Natural Burrowers.} You have a burrowing speed of 15 feet. You
-      are capable of burrowing through soil, but are unable to dig through
-      anything more substantial with just your clawed hands.
+\NewDocumentCommand{\SpeciesHedge}{}{
+    Resembling hedgehogs with tough, protective quills, \textbf{Hedges} are
+    diplomatic and sensitive humblefolk who prefer quiet lives in villages or
+    birdfolk perches. Although outsiders often mistake their meek demeanor for
+    cowardice, their deference is actually rooted in a profound cultural
+    emphasis on respecting the feelings of others. As a Hedge, you have these
+    special traits.
 
-      \textbf{Spiny Quills.} You have a base armor class of 19. Even though
-      you can't wear armor, you can still benefit from the armor class bonus
-      provided by shields so long as you are proficient with them.
+    \textbf{Natural Burrowers.} You have a burrowing speed of 15 feet. You
+    are capable of burrowing through soil, but are unable to dig through
+    anything more substantial with just your clawed hands.
 
-      \textbf{Curl Up.} You can use your action to curl up, exposing
-      attackers to a wall of your toughened quills. While curled up you
-      cannot move, attack, or cast spells with somatic components, and your
-      base armor class becomes 19. You cannot benefit from any Dexterity
-      bonus to armor class while curled up, but you can still use shields.
+    \textbf{Spiny Quills.} You have a base armor class of 19. Even though
+    you can't wear armor, you can still benefit from the armor class bonus
+    provided by shields so long as you are proficient with them.
 
-      Any creature that misses you with a melee attack while you are curled
-      up takes $2d4$ points of piercing damage from your sharp quills. If a
-      creature hits you while you are curled up, you are knocked prone in
-      your space at the end of the turn. You may uncurl yourself at any
-      point during your turn.
+    \textbf{Curl Up.} You can use your action to curl up, exposing
+    attackers to a wall of your toughened quills. While curled up you
+    cannot move, attack, or cast spells with somatic components, and your
+    base armor class becomes 19. You cannot benefit from any Dexterity
+    bonus to armor class while curled up, but you can still use shields.
 
-      \newpage
-      \textbf{Forest Magic.} You know the \textit{Druidcraft} cantrip.
-      Additionally, you can cast \textit{Animal Messenger} as a 2nd level
-      spell once with this trait, and regain the ability to do so after a
-      short or long rest. Charisma is your spellcasting ability for these
-      spells.
+    Any creature that misses you with a melee attack while you are curled
+    up takes $2d4$ points of piercing damage from your sharp quills. If a
+    creature hits you while you are curled up, you are knocked prone in
+    your space at the end of the turn. You may uncurl yourself at any
+    point during your turn.
 
-      \textbf{Speak With Bugs.} Through sounds and gestures, you can
-      communicate simple ideas with creatures of the beast subtype that
-      represent insects, spiders, worms, and other creepy crawlies,
-      regardless of their size.
-    \end{Card}
+    \textbf{Forest Magic.} You know the \textit{Druidcraft} cantrip.
+    Additionally, you can cast \textit{Animal Messenger} as a 2nd level
+    spell once with this trait, and regain the ability to do so after a
+    short or long rest. Charisma is your spellcasting ability for these
+    spells.
+
+    \textbf{Speak With Bugs.} Through sounds and gestures, you can
+    communicate simple ideas with creatures of the beast subtype that
+    represent insects, spiders, worms, and other creepy crawlies,
+    regardless of their size.
 }
 
 
 %%
 %% Human species features
 %%
-\NewDocumentCommand{\SpeciesCardHuman}{mmm}{
-    \begin{Card}[Species]{Human}
-        \textbf{Size.} Your Size is #1.
+\NewDocumentCommand{\SpeciesHuman}{mmm}{
+    Found throughout the multiverse, \textbf{Humans} are as varied as they are
+    numerous. As a Human, you have these traits.
 
-        \textbf{Resourceful.} You gain Heroic Inspiration whenever you
-        finish a Long Rest.
+    \textbf{Size.} Your Size is #1.
 
-        \textbf{Skillful.} You gain proficiency in one skill of your
-        choice. \textbf{Selection:} #2.
+    \textbf{Resourceful.} You gain Heroic Inspiration whenever you
+    finish a Long Rest.
 
-        \textbf{Versatile.} You gain an Origin feat of your choice.
-        \textbf{Selection:} #3.
-    \end{Card}
+    \textbf{Skillful.} You gain proficiency in one skill of your
+    choice. \textbf{Selection:} #2.
+
+    \textbf{Versatile.} You gain an Origin feat of your choice.
+    \textbf{Selection:} #3.
 }
 
 
 %%
 %% Sera Luma species features
 %%
-\NewDocumentCommand{\SpeciesCardSeraLuma}{m}{
-    \begin{Card}[Species]{Sera Luma}
-        \textbf{Size.} Small
+\NewDocumentCommand{\SpeciesSeraLuma}{m}{
 
-        \textbf{Glide.} Using your feathered arms, you can slow your
-        fall, and glide short distances.
+    \textbf{Lumas} are a race of polar opposites when it comes to their role in
+    perch society. They are as often shunned for their eccentricities as they
+    are celebrated for them. Lumas are smaller than most birdfolk, and resemble
+    either doves or pigeons. Many have ruffs of feathers that shine with unique
+    iridescent colors, something which can be seen as either alluring or
+    unusual. Most fledgling lumas approach social situations with hesitation,
+    until a time when society inevitably labels them an outcast or a notable
+    figure, and the individual naturally adapts to the role.
 
-        \textbf{Wing Flap.} As a bonus action, you can propel yourself
-        upward a distance equal to half your movement speed. You can use
-        it in conjunction with a regular jump, but not while gliding.
+    As a Sera Luma, you are revered and celebrated by those around you. You have an
+    almost unnatural beauty and grace, inspiring admiration in some and jealousy in
+    others.
 
-        \textbf{Touched.} You know one cantrip from the sorcerer spell
-        list. Charisma is your spellcasting ability for this
-        cantrip. \textbf{Selection:} \SpellList{#1}.
+    \textbf{Size.} Small
 
-        \textbf{Fated.} You can choose to reroll any attack, skill
-        check, or saving throw. You can decide to do this after your
-        roll, but only before the outcome of the roll has been
-        determined. You can't use this feature again until you have
-        completed a long rest.
+    \textbf{Glide.} Using your feathered arms, you can slow your
+    fall, and glide short distances.
 
-        \textbf{Languages.} You can speak, read, and write Birdfolk. You
-        can also understand Auran, though you cannot speak it
-        naturally.
+    \textbf{Wing Flap.} As a bonus action, you can propel yourself
+    upward a distance equal to half your movement speed. You can use
+    it in conjunction with a regular jump, but not while gliding.
 
-        \textbf{Center of Attention.} You have proficiency in the
-        Performance skill.
+    \textbf{Touched.} You know one cantrip from the sorcerer spell
+    list. Charisma is your spellcasting ability for this
+    cantrip. \textbf{Selection:} \SpellList{#1}.
 
-        \textbf{Songbird.} You may cast the \textit{Charm Person} spell
-        once per long rest. This spell does not require any somatic
-        components. Charisma is your spellcasting ability for this.
-    \end{Card}
+    \textbf{Fated.} You can choose to reroll any attack, skill
+    check, or saving throw. You can decide to do this after your
+    roll, but only before the outcome of the roll has been
+    determined. You can't use this feature again until you have
+    completed a long rest.
+
+    \textbf{Languages.} You can speak, read, and write Birdfolk. You
+    can also understand Auran, though you cannot speak it
+    naturally.
+
+    \textbf{Center of Attention.} You have proficiency in the
+    Performance skill.
+
+    \textbf{Songbird.} You may cast the \textit{Charm Person} spell
+    once per long rest. This spell does not require any somatic
+    components. Charisma is your spellcasting ability for this.
 }
 
 
 %%
 %% Orc species features
 %%
-\NewDocumentCommand{\SpeciesCardOrc}{}{
-    \begin{Card}[Species]{Orc}
-        \textbf{Adrenaline Rush.} You can take the Dash action as a
-        Bonus Action. When you do so, you gain a number of Temporary Hit
-        Points equal to your Proficiency Bonus. You can use this trait a
-        number of times equal to your Proficiency Bonus, and you regain
-        all expended uses when you finish a Short or Long Rest.
-        \par
-        \textbf{Relentless Endurance.} When you are reduced to 0 Hit
-        Points but not killed outright, you can drop to 1 Hit Point
-        instead. Once you use this trait, you can't do so again until
-        you finish a Long Rest.
-        \par
-        \textbf{Darkvision.} You have Darkvision with a range of 120 ft.
-    \end{Card}
+\NewDocumentCommand{\SpeciesOrc}{}{
+    \textbf{Orcs} are equipped with gifts to help them wander great
+    plains, vast caverns, and churning seas. As an Orc, you have these
+    special traits.
+
+    \textbf{Adrenaline Rush.} You can take the Dash action as a
+    Bonus Action. When you do so, you gain a number of Temporary Hit
+    Points equal to your Proficiency Bonus. You can use this trait a
+    number of times equal to your Proficiency Bonus, and you regain
+    all expended uses when you finish a Short or Long Rest.
+
+    \textbf{Relentless Endurance.} When you are reduced to 0 Hit
+    Points but not killed outright, you can drop to 1 Hit Point
+    instead. Once you use this trait, you can't do so again until
+    you finish a Long Rest.
+
+    \textbf{Darkvision.} You have Darkvision with a range of 120 ft.
 }

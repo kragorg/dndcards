@@ -7,4 +7,5 @@
 % Load all required D&D packages
 \RequirePackage{dndcards}
 \RequirePackage{character}
+\RequirePackage{monster}
 \RequirePackage{spells}

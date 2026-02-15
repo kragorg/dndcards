@@ -59,7 +59,7 @@
 % Monster stat block (AC, HP, Speed, abilities) - inserted after card header
 \cs_new_protected:Npn \__dnd_monster_stat_block: {
     \group_begin:
-    \\
+    \par\noindent
     \__dnd_monster_ability_table: \\
     \centering
     \ThinRule \\
@@ -170,7 +170,7 @@
 
     \textbf{Regeneration (Slaad Only).} The spirit regains 5 Hit
     Points at the start of its turn if it has at least 1 Hit Point.
-
+    \newpage
     \textbf{Whispering Aura (Mind Flayer Only).} At the start of each of
     the spirit's turns, the spirit emits psionic energy if it doesn't
     have the Incapacitated condition. \textit{Wisdom Saving Throw:}
