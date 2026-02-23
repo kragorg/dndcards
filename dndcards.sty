@@ -2,8 +2,16 @@
 \ProvidesExplPackage{dndcards}{2026/01/28}{1.0}{D&D Index Cards}
 
 \RequirePackage[paperwidth=6in, paperheight=4in, margin=0.25in]{geometry}
+\RequirePackage{fontspec}
+\setmainfont{ETbb}[
+  Extension      = .otf,
+  UprightFont    = *-Regular,
+  BoldFont       = *-Bold,
+  ItalicFont     = *-Italic,
+  BoldItalicFont = *-BoldItalic,
+  Ligatures      = {TeX, Common}
+]
 \RequirePackage{pdflscape}
-\RequirePackage{ETbb}
 \RequirePackage{array}
 \RequirePackage{booktabs}
 \RequirePackage[skip=0em]{parskip}
