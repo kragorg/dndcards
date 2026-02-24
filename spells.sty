@@ -51,16 +51,43 @@
     \__spell_prepare:n {#1}
 }
 
+\cs_new_protected:Npn \__spell_prepare_and_name:n #1 {
+    \__spell_prepare:n {#1}
+    \prop_if_in:NnTF \g_spell_names_prop {#1}
+    { \prop_item:Nn \g_spell_names_prop {#1} }
+    { #1 }
+}
+
 \NewDocumentEnvironment{PreparedSpells}{m}
 {
     \cs_set:Npn \spell ##1
     {
-        \__spell_prepare:n {##1}
-        \prop_if_in:NnTF \g_spell_names_prop {##1}
-        { \prop_item:Nn \g_spell_names_prop {##1} }
-        { ##1 }
+        \__spell_prepare_and_name:n {##1}
     }
     \begin{tabular}{#1}
+}
+{
+    \end{tabular}
+}
+
+\NewDocumentEnvironment{BookOfShadows}{}
+{
+    \cs_set:Npn \header ##1 {
+        \head{ ##1 }
+        \vspace{ 0.5em }
+    }
+    \cs_set:Npn \spell ##1
+    {
+        \__dndcards_checkbox: \kern0.5em \__spell_prepare_and_name:n {##1}
+    }
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{
+        @{}
+        p{0.3\linewidth}
+        p{0.3\linewidth}
+        p{0.3\linewidth}
+        @{}
+    }
 }
 {
     \end{tabular}
@@ -165,6 +192,34 @@
 }
 
 \ExplSyntaxOff
+\NewDocumentCommand{\SpellAbsorbElements}{}{
+    \begin{Spell}[
+        tags=Reaction,
+        level=1st,
+        time=1 Reaction\fmark,
+        range=Self,
+        components=S,
+        duration=1 Round,
+        school=Abjuration,
+        attack=None,
+        effect=Cold
+    ]{Absorb Elements}
+
+    The spell captures some of the incoming energy, lessening its effect on you
+    and storing it for your next melee attack. You have resistance to the
+    triggering damage type until the start of your next turn. Also, the
+    first time you hit with a melee attack on your next turn, the target
+    takes an extra $1d6$ damage of the triggering type, and the spell ends.
+
+    \textbf{At Higher Levels.} When you cast this spell using a spell slot of
+    2nd level or higher, the extra damage increases by $1d6$ for each slot
+    level above 1st.
+
+    \ftext{Which you take when you take acid, cold, fire, lightning, or thunder damage.}
+
+    \end{Spell}
+}
+
 \NewDocumentCommand{\SpellAlarm}{}{
     \begin{Spell}[
         tags=Ritual,
@@ -289,6 +344,49 @@
 }
 
 
+\NewDocumentCommand{\SpellBladeWard}{}{
+    \begin{Spell}[
+        tags=Concentration,
+        level=Cantrip,
+        time=1 Action,
+        range=Self,
+        components={V, S},
+        duration=1 Minute,
+        school=Abjuration,
+        attack=None,
+        effect=Combat
+    ]{Blade Ward}
+    Whenever a creature makes an attack roll against you before the spell ends, the attacker subtracts $1d4$ from the attack roll.
+
+    \begin{components}
+    V & \textit{Scutum (SKOO-toom)}
+    \end{components}
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellBoomingBlade}{}{
+    \begin{Spell}[
+        level=Cantrip,
+        time=1 Action,
+        range={Self (5 ft)},
+        components={S, M},
+        duration=1 Round,
+        school=Evocation,
+        attack=Melee,
+        effect=Thunder
+    ]{Booming Blade}
+    You brandish the weapon used in the spell's casting and make a melee attack with it against one creature within 5 feet of you. On a hit, the target suffers the weapon attack's normal effects and then becomes sheathed in booming energy until the start of your next turn. If the target willingly moves 5 feet or more before then, the target takes $1d8$ Thunder damage, and the spell ends.
+
+    \textbf{Cantrip Upgrade.} At 5th level, the melee attack deals an extra $1d8$ Thunder damage on a hit, and the moving damage increases to $2d8$. Both increase by $1d8$ at 11th level ($2d8$ and $3d8$) and again at 17th level ($3d8$ and $4d8$).
+
+    \begin{components}
+    M & a melee weapon worth at least 1sp
+    \end{components}
+    \end{Spell}
+}
+
+
 \NewDocumentCommand{\SpellCharmPerson}{}{
     \begin{Spell}[
       level=1st,
@@ -310,6 +408,31 @@
     \end{Spell}
 
 
+}
+
+
+\NewDocumentCommand{\SpellCreateBonfire}{}{
+    \begin{Spell}[
+        tags=Concentration,
+        level=Cantrip,
+        time=1 Action,
+        range={60 ft/5 ft Cube},
+        components={V, S},
+        duration=1 Minute,
+        school=Conjuration,
+        attack=DEX Save,
+        effect=Fire
+    ]{Create Bonfire}
+    You create a bonfire on ground that you can see within range. Until the spell ends, the magic bonfire fills a 5-foot Cube. Any creature in the bonfire's space when you cast the spell must succeed on a Dexterity saving throw or take $1d8$ Fire damage. A creature must also make the saving throw when it moves into the bonfire's space for the first time on a turn or ends its turn there.
+
+    The bonfire ignites flammable objects in its area that aren't being worn or carried.
+
+    \textbf{Cantrip Upgrade.} The damage increases by $1d8$ when you reach levels 5 ($2d8$), 11 ($3d8$), and 17 ($4d8$).
+
+    \begin{components}
+    V & \textit{Ignis terrae (IG-nis TEHR-rye)}
+    \end{components}
+    \end{Spell}
 }
 
 
@@ -1161,6 +1284,30 @@
 }
 
 
+\NewDocumentCommand{\SpellIdentify}{}{
+    \begin{Spell}[
+        tags=Ritual,
+        level=1st,
+        time=1 Minute,
+        range=Touch,
+        components={V, S, M},
+        duration=Instantaneous,
+        school=Divination,
+        attack=None,
+        effect=Detection
+    ]{Identify}
+    You touch an object throughout the spell's casting. If the object is a magic item or some other magical object, you learn its properties and how to use them, whether it requires Attunement, and how many charges it has, if any. You learn whether any ongoing spells are affecting the item and what they are. If the item was created by a spell, you learn that spell's name.
+
+    If you instead touch a creature throughout the casting, you learn which ongoing spells, if any, are currently affecting it.
+
+    \begin{components}
+    V & \textit{Revela naturam (reh-VAY-lah nah-TOO-rahm)} \\
+    M & a pearl worth $100+$gp
+    \end{components}
+    \end{Spell}
+}
+
+
 \NewDocumentCommand{\SpellInvisibility}{}{
     \begin{Spell}[
       tags=Concentration,
@@ -1184,6 +1331,28 @@
     \end{Spell}
 
 
+}
+
+
+\NewDocumentCommand{\SpellLightningLure}{}{
+    \begin{Spell}[
+        level=Cantrip,
+        time=1 Action,
+        range=15 ft,
+        components={V},
+        duration=Instantaneous,
+        school=Evocation,
+        attack=STR Save,
+        effect=Lightning
+    ]{Lightning Lure}
+    You create a lash of lightning energy that strikes at one creature of your choice that you can see within 15 feet of you. The target must succeed on a Strength saving throw or be pulled up to 10 feet in a straight line toward you and then take $1d8$ Lightning damage if it is within 5 feet of you.
+
+    \textbf{Cantrip Upgrade.} The damage increases by $1d8$ when you reach levels 5 ($2d8$), 11 ($3d8$), and 17 ($4d8$).
+
+    \begin{components}
+    V & \textit{Fulgur trahe (FULL-goor TRAH-heh)}
+    \end{components}
+    \end{Spell}
 }
 
 
@@ -1444,8 +1613,31 @@
     M & a bit of fleece
     \end{components}
     \end{Spell}
+}
 
 
+\NewDocumentCommand{\SpellPoisonSpray}{}{
+    \begin{Spell}[
+      level=Cantrip,
+      time=1 Action,
+      range=30 ft,
+      components={V, S},
+      duration=Instantaneous,
+      school=Necromancy,
+      attack=Ranged,
+      effect=Poison
+    ]{Poison Spray}
+
+    You spray toxic mist at a creature within range. Make a ranged spell attack
+    against the target. On a hit, the target takes $1d12$ Poison damage.
+
+    \textbf{Cantrip Upgrade.} The damage increases by $1d12$ when you reach
+    levels 5 ($2d12$), 11 ($3d12$), and 17 ($4d12$).
+
+    \begin{components}
+    V & \textit{Vals koss (VALLS KAHWS)}
+    \end{components}
+    \end{Spell}
 }
 
 
@@ -1548,6 +1740,29 @@
         \end{components}
     \end{Spell}
 }
+
+
+\NewDocumentCommand{\SpellRayOfFrost}{}{
+    \begin{Spell}[
+        level=Cantrip,
+        time=1 Action,
+        range=60 ft,
+        components={V, S},
+        duration=Instantaneous,
+        school=Evocation,
+        attack=Ranged,
+        effect=Cold
+    ]{Ray of Frost}
+    A frigid beam of blue-white light streaks toward a creature within range. Make a ranged spell attack against the target. On a hit, it takes $1d8$ Cold damage, and its Speed is reduced by 10 feet until the start of your next turn.
+
+    \textbf{Cantrip Upgrade.} The damage increases by $1d8$ when you reach levels 5 ($2d8$), 11 ($3d8$), and 17 ($4d8$).
+
+    \begin{components}
+    V & \textit{Glacies radius (GLAH-kee-ess RAH-dee-oos)}
+    \end{components}
+    \end{Spell}
+}
+
 
 \NewDocumentCommand{\SpellShapeWater}{}{
     \begin{Spell}[
@@ -2052,6 +2267,59 @@
 }
 
 
+\NewDocumentCommand{\SpellTensersFloatingDisk}{}{
+    \begin{Spell}[
+        tags=Ritual,
+        level=1st,
+        time=1 Action,
+        range=30 ft,
+        components={V, S, M},
+        duration=1 Hour,
+        school=Conjuration,
+        attack=None,
+        effect=Movement
+    ]{Tenser's Floating Disk}
+    This spell creates a circular, horizontal plane of force, 3 feet in diameter and 1 inch thick, that floats 3 feet above the ground in an unoccupied space of your choice that you can see within range. The disk remains for the duration and can hold up to 500 pounds. If more weight is placed on it, the spell ends, and everything on the disk falls to the ground.
+
+    The disk is immobile while you are within 20 feet of it. If you move more than 20 feet away from it, the disk follows you so that it remains within 20 feet of you. It can move across uneven terrain, up or down stairs, slopes and the like, but it can't cross an elevation change of 10 feet or more. For example, the disk can't move across a 10-foot-deep pit, nor could it leave such a pit if it was created at the bottom.
+
+    If you move more than 100 feet from the disk (typically because it can't move around an obstacle to follow you), the spell ends.
+
+    \begin{components}
+    V & \textit{Discus pendens (DIS-koos PEN-dens)} \\
+    M & a drop of mercury
+    \end{components}
+    \end{Spell}
+}
+
+
+\NewDocumentCommand{\SpellThornWhip}{}{
+    \begin{Spell}[
+        level=Cantrip,
+        time=1 Action,
+        range=30 ft,
+        components={V, S, M},
+        duration=Instantaneous,
+        school=Transmutation,
+        attack=Melee,
+        effect=Piercing
+    ]{Thorn Whip}
+    You create a vine-like whip covered in thorns that lashes out at your
+    command toward a creature in range. Make a melee spell attack against
+    the target. On a hit, the target takes $1d6$ Piercing damage, and if it
+    is Large or smaller, you can pull it up to 10 feet closer to you.
+
+    \textbf{Cantrip Upgrade.} The damage increases by $1d6$ when you reach
+    levels 5 ($2d6$), 11 ($3d6$), and 17 ($4d6$).
+
+    \begin{components}
+    V & \textit{Karsh svent (KAR-sh SVENT)} \\
+    M & the stem of a plant with thorns
+    \end{components}
+    \end{Spell}
+}
+
+
 \NewDocumentCommand{\SpellThunderwave}{}{
     \begin{Spell}[
         level=1st,
@@ -2078,6 +2346,28 @@
 }
 
 
+\NewDocumentCommand{\SpellTollTheDead}{}{
+    \begin{Spell}[
+        level=Cantrip,
+        time=1 Action,
+        range=60 ft,
+        components={V, S},
+        duration=Instantaneous,
+        school=Necromancy,
+        attack=WIS Save,
+        effect=Necrotic
+    ]{Toll the Dead}
+    You point at one creature you can see within range, and the single chime of a dolorous bell is audible within 10 feet of the target. The target must succeed on a Wisdom saving throw or take $1d8$ Necrotic damage. If the target is missing any of its Hit Points, it instead takes $1d12$ Necrotic damage.
+
+    \textbf{Cantrip Upgrade.} The damage increases by one die when you reach levels 5 ($2d8$ or $2d12$), 11 ($3d8$ or $3d12$), and 17 ($4d8$ or $4d12$).
+
+    \begin{components}
+    V & \textit{Campana mortis (kahm-PAH-nah MOR-tis)}
+    \end{components}
+    \end{Spell}
+}
+
+
 \NewDocumentCommand{\SpellTrueStrike}{}{
     \begin{Spell}[
       level=Cantrip,
@@ -2099,6 +2389,32 @@
     \end{Spell}
 
 
+}
+
+
+\NewDocumentCommand{\SpellUnseenServant}{}{
+    \begin{Spell}[
+        tags=Ritual,
+        level=1st,
+        time=1 Action,
+        range=60 ft,
+        components={V, S, M},
+        duration=1 Hour,
+        school=Conjuration,
+        attack=None,
+        effect=Control
+    ]{Unseen Servant}
+    This spell creates an Invisible, mindless, shapeless, Medium force that performs simple tasks at your command until the spell ends. The servant springs into existence in an unoccupied space on the ground within range. It has AC 10, 1 Hit Point, and a Strength of 2, and it can't attack. If it drops to 0 Hit Points, the spell ends.
+
+    Once on each of your turns as a Bonus Action, you can mentally command the servant to move up to 15 feet and interact with an object. The servant can perform simple tasks that a human could do, such as fetching things, cleaning, mending, folding clothes, lighting fires, serving food, and pouring drinks. Once you give the command, the servant performs the task to the best of its ability until it completes the task, then waits for your next command.
+
+    If you command the servant to perform a task that would move it more than 60 feet away from you, the spell ends.
+
+    \begin{components}
+    V & \textit{Servo invisus (SEHR-woh in-WEE-soos)} \\
+    M & a bit of string and of wood
+    \end{components}
+    \end{Spell}
 }
 
 

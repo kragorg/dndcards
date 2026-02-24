@@ -3,14 +3,7 @@
 
 \RequirePackage[paperwidth=6in, paperheight=4in, margin=0.25in]{geometry}
 \RequirePackage{fontspec}
-\setmainfont{ETbb}[
-  Extension      = .otf,
-  UprightFont    = *-Regular,
-  BoldFont       = *-Bold,
-  ItalicFont     = *-Italic,
-  BoldItalicFont = *-BoldItalic,
-  Ligatures      = {TeX, Common}
-]
+\setmainfont{ETbb}
 \RequirePackage{pdflscape}
 \RequirePackage{array}
 \RequirePackage{booktabs}
@@ -321,6 +314,12 @@
 \dim_new:N \__dndcards_rtab_name_dim
 \dim_new:N \__dndcards_rtab_boxes_dim
 
+\cs_new_protected:Npn \__dndcards_checkbox: {
+    \raisebox{-0.5ex}{
+        \tikz[baseline=0.1ex]{\draw[line~width=0.8pt, headercolor] (0,0) rectangle (0.4cm,0.4cm);}
+    }
+}
+
 \NewDocumentEnvironment{ResourceTable}{}{
   \dim_set:Nn \__dndcards_rtab_name_dim { 0.26 \linewidth }
   \dim_set:Nn \__dndcards_rtab_boxes_dim { 0.14 \linewidth }
@@ -343,9 +342,7 @@
             ##1
             &
             \int_step_inline:nn { ##2 } {
-                \raisebox{-0.5ex}{
-                    \tikz[baseline=0.1ex]{\draw[line~width=0.8pt, headercolor] (0,0) rectangle (0.4cm,0.4cm);}
-                }
+                \__dndcards_checkbox:
                 \kern0.5em
             }
         }
