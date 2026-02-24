@@ -20,37 +20,56 @@
   %
   %
   \begin{tabular}{p{0.25\linewidth}p{0.25\linewidth}p{0.1\linewidth}p{0.4\linewidth}}
-    \head{Attack}         & \head{Range}     & \head{Hit}     & \head{Damage/Effect}         \\
-    Longsword $+1$        & 5 ft (melee)     & $+6$           & $1d10+4$ Slashing\fmark      \\
-    Light Crossbow        & 80 ft (320 ft)   & $+5$           & $1d8+3$ Piercing             \\
-    \textit{Mind Sliver}  & 60 ft            & INT \SpellDC   & $1d6$ Psychic, $-1d4$ saves
+    \head{Attack}                  & \head{Range}     & \head{Hit}     & \head{Damage/Effect}  \\
+    Longsword $+1$\fmark           & 5 ft (melee)     & $+6$           & $1d10+4$ Slashing     \\
+    Light Crossbow                 & 80 ft (320 ft)   & $+5$           & $1d8+3$ Piercing      \\
+    \textit{Eldritch Blast}\fmark  & 120 ft           & $+5$           & $1d10$ Force          \\
+    \textit{Mind Sliver}\fmarkA    & 60 ft            & INT \SpellDC   & $1d6$ Psychic, $-1d4$ saves
   \end{tabular}
   %
-  \ftext{Choice of Slashing, Necrotic, Radiant, or Psychic.}
+  \ftext{\textbf{Pact Weapon:} You can cause the weapon to deal
+  Necrotic, Psychic, or Radiant damage or its normal damage type.}
+  \ftext{\textbf{Psychic Spells:} You can change the damage type to Psychic.}
+  \ftext{When contained in the \textbf{Book of Shadows}.}
   %
   \ThinRule \par
   \begin{tabular}{p{0.35\linewidth}p{0.30\linewidth}p{0.35\linewidth}}
-    \head{Actions}                              & \head{Bonus Actions}        & \head{Other}                 \\
-    Fiendish Vigor: \textit{False Life}\fmark   & Pact of the Blade: Bond     & Luck\fmarkA                  \\
-    Misty Visions: \textit{Silent Image}\fmark  & Pact of the Blade: Conjure  & Relentless Endurance\fmarka  \\
-                                                & Adrenaline Rush\fmarka      & Magical Cunning\fmarka       \\
-                                                & Awakened Mind               & Psychic Spells
+    \head{Actions}                             & \head{Bonus Actions}        & \head{Other}                 \\
+    Fiendish Vigor: \textit{False Life}\fmark  & Pact of the Blade: Bond     & Luck\fmarkA                  \\
+                                               & Pact of the Blade: Conjure  & Relentless Endurance\fmarka  \\
+                                               & Adrenaline Rush\fmarka      & Magical Cunning\fmarka       \\
+                                               & Awakened Mind               & Psychic Spells
   \end{tabular}
   %
   \ftext{At will, self only.}
   \ftext{Limited use.}
-  \ftext{At will.}
   \Newpage
   %
   %
   \sect*{Prepared Spells}
   \begin{PreparedSpells}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
-    \head{Cantrip}             & \head{1st Level}                      & \head{2nd Level}                \\
-    \spell{MageHand}           & \spell{ArmorOfAgathys}\fmarkA         & \spell{CloudOfDaggers}\fmarka   \\
-    \spell{MindSliver}\fmarkB  & \spell{DissonantWhispers}\fmarkb      & \spell{DetectThoughts}          \\
-                               & \spell{Hex}\fmarka\fmarkb             & \spell{PhantasmalForce}\fmarkb  \\
-                               & \spell{TashasHideousLaughter}\fmarkb  & \spell{Suggestion}\fmarkb
+    \head{Cantrip}                & \head{1st Level}                      & \head{2nd Level}                \\
+    \spell{EldritchBlast}\fmarkA  & \spell{ArmorOfAgathys}\fmarka         & \spell{CloudOfDaggers}\fmarka   \\
+    \spell{MageHand}              & \spell{DissonantWhispers}\fmarkB      & \spell{DetectThoughts}          \\
+                                  & \spell{Hex}\fmarka\fmarkb             & \spell{PhantasmalForce}\fmarkb  \\
+                                  & \spell{TashasHideousLaughter}\fmarkb  & \spell{Suggestion}\fmarkb
   \end{PreparedSpells}
+  \ftext{\textbf{Psychic Spells:} You can change the damage type to Psychic.}
+  \ftext{\textbf{Psychic Spells:} You can cast this spell without Verbal or Somatic components.}
+  \Newpage
+  %
+  %
+  \sect*{Prepared Spells: Book of Shadows}
+  \begin{BookOfShadows}
+    \multicolumn{2}{c}{\header{Cantrips}}                        & \header{Ritual Spells}       \\
+    \spell{BoomingBlade}\fmarkA    & \spell{Prestidigitation}    & \spell{Alarm}                \\
+    \spell{CreateBonfire}\fmarka   & \spell{RayOfFrost}\fmarka   & \spell{ComprehendLanguages}  \\
+    \spell{Guidance}               & \spell{ShapeWater}          & \spell{DetectMagic}          \\
+    \spell{LightningLure}\fmarka   & \spell{SwordBurst}\fmarka   & \spell{FindFamiliar}         \\
+    \spell{Mending}                & \spell{ThornWhip}\fmarka    & \spell{Identify}             \\
+    \spell{MindSliver}\fmarkB      & \spell{TrueStrike}\fmarka   & \spell{TensersFloatingDisk}  \\
+    \spell{MinorIllusion}\fmarkb   &                             & \spell{UnseenServant}
+  \end{BookOfShadows}
   \ftext{\textbf{Psychic Spells:} You can change the damage type to Psychic.}
   \ftext{\textbf{Psychic Spells:} You can cast this spell without Verbal or Somatic components.}
   \Newpage
@@ -75,9 +94,12 @@
   \sect{Class Features: Eldritch Invocations}
   \PactOfTheBlade
   \FiendishVigor
-  \MistyVisions
+  %\MistyVisions
+  \PactOfTheTome
+  \Newpage
   %
-  \sect{Feats}
+  %
+  \sect*{Feats}
   \Lucky
   \Newpage
   %
