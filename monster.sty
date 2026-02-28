@@ -14,6 +14,8 @@
     ac .tl_gset:N = \g__dnd_monster_ac_tl,
     hp .tl_gset:N = \g__dnd_monster_hp_tl,
     speed .tl_gset:N = \g__dnd_monster_speed_tl,
+    initiative .tl_gset:N = \g__dnd_monster_initiative_tl,
+    initiative .initial:n = {},
     str .code:n = { \prop_gput:Nnn \g_dnd_monster_prop {str} {#1} },
     dex .code:n = { \prop_gput:Nnn \g_dnd_monster_prop {dex} {#1} },
     con .code:n = { \prop_gput:Nnn \g_dnd_monster_prop {con} {#1} },
@@ -56,6 +58,12 @@
     \end{tabular}
 }
 
+% Helper to format initiative display
+\cs_new_protected:Npn \__dnd_monster_format_initiative: {
+    $\__dndcards_format_stat:e { \g__dnd_monster_initiative_tl }$~
+    (\int_eval:n { 10 + \g__dnd_monster_initiative_tl })
+}
+
 % Monster stat block (AC, HP, Speed, abilities) - inserted after card header
 \cs_new_protected:Npn \__dnd_monster_stat_block: {
     \group_begin:
@@ -64,12 +72,15 @@
     \centering
     \ThinRule \\
     \textbf{AC:}~\g__dnd_monster_ac_tl \quad
+    \tl_if_empty:NF \g__dnd_monster_initiative_tl {
+        \textbf{Initiative:}~\__dnd_monster_format_initiative: \quad
+    }
     \textbf{HP:}~\g__dnd_monster_hp_tl \quad
     \textbf{Speed:}~\g__dnd_monster_speed_tl \\
     \nointerlineskip
     \vspace{0.3em}
     \ThinRule \\
-    \vspace{0.3em}
+    \vspace{-\parskip}
     \group_end:
 }
 
@@ -170,7 +181,7 @@
 
     \textbf{Regeneration (Slaad Only).} The spirit regains 5 Hit
     Points at the start of its turn if it has at least 1 Hit Point.
-    \newpage
+    \Newpage
     \textbf{Whispering Aura (Mind Flayer Only).} At the start of each of
     the spirit's turns, the spirit emits psionic energy if it doesn't
     have the Incapacitated condition. \textit{Wisdom Saving Throw:}
@@ -203,6 +214,7 @@
         name=Bat,
         type={Tiny Beast, Unaligned},
         ac={12},
+        initiative=2,
         hp={1 ($1d4 - 1$)},
         speed={5 ft, Fly 30 ft},
         str=2, dex=15, con=8, int=2, wis=12, cha=4,
@@ -223,6 +235,7 @@
         name=Deer,
         type={Medium Beast, Unaligned},
         ac={13},
+        initiative=3,
         hp={4 ($1d8$)},
         speed={50 ft},
         str=11, dex=16, con=11, int=2, wis=14, cha=5,
@@ -283,6 +296,74 @@
     \textbf{Tricksy.} The spirit fills a 10-foot Cube within 5 feet of
     it with magical Darkness, which lasts until the end of its next
     turn.
+
+    \end{MonsterCard}
+}
+
+\NewDocumentCommand{\MonsterGiantHyena}{}{
+    \begin{MonsterCard}{
+        name=Giant Hyena,
+        type={Large Beast, Unaligned},
+        ac={12},
+        initiative=1,
+        hp={45 ($6d10 + 12$)},
+        speed={50 ft},
+        str=16, dex=14, con=14, int=2, wis=12, cha=7,
+    }
+    \skills{Perception $+3$.}
+    \senses{Darkvision 60 ft; Passive Perception 13.}
+    \languages{None.}
+    \challengerating{1 (XP 200; PB $+2$).}
+
+    \actions
+
+    \textbf{Bite.} \textit{Melee Attack Roll:} $+5$, reach 5 ft.
+    \textit{Hit:} 10 ($2d6 + 3$) Piercing damage.
+
+    \bonusactions
+
+    \textbf{Rampage (1/Day).} Immediately after dealing damage to a creature
+    that was already Bloodied, the hyena can move up to half its Speed, and
+    it makes one Bite attack.
+
+    \end{MonsterCard}
+}
+
+\NewDocumentCommand{\MonsterGiantOctopus}{}{
+    \begin{MonsterCard}{
+        name=Giant Octopus,
+        type={Large Beast, Unaligned},
+        ac={11},
+        initiative=1,
+        hp={45 ($7d10 + 7$)},
+        speed={10 ft, Swim 60 ft},
+        str=17, dex=13, con=13, int=5, wis=10, cha=4,
+    }
+    \skills{Perception $+4$, Stealth $+5$.}
+    \senses{Darkvision 60 ft; Passive Perception 14.}
+    \languages{None.}
+    \challengerating{1 (XP 200; PB $+2$).}
+
+    \traits
+
+    \textbf{Water Breathing.} The octopus can breathe only underwater. It can
+    hold its breath for 1 hour outside water.
+
+    \actions
+
+    \textbf{Tentacles.} \textit{Melee Attack Roll:} $+5$, reach 10 ft.
+    \textit{Hit:} 10 ($2d6 + 3$) Bludgeoning damage. If the target is a
+    Medium or smaller creature, it has the Grappled condition (escape DC 13)
+    from all eight tentacles. While Grappled, the target has the Restrained
+    condition.
+
+    \reactions
+
+    \textbf{Ink Cloud (1/Day).} \textit{Trigger:} The octopus takes damage
+    while underwater. \textit{Response:} The octopus releases ink that fills a
+    10-foot Cube centered on itself, and the octopus moves up to its Swim
+    Speed. The Cube is Heavily Obscured for 1 minute or until a strong current
+    or similar effect disperses the ink.
 
     \end{MonsterCard}
 }
@@ -348,7 +429,7 @@
     \textbf{Magic Resistance.} The quasit has Advantage on saving throws against
     spells and other magical effects.
 
-    \newpage
+    \Newpage
     \actions
 
     \textbf{Rend.} \textit{Melee Attack Roll:} $+5$, reach 5 ft.
@@ -464,6 +545,213 @@
 
     \textbf{Talons.} \textit{Melee Attack Roll:} $+3$, reach 5 ft.
     \textit{Hit:} 1 Slashing damage.
+
+    \end{MonsterCard}
+}
+
+\NewDocumentCommand{\MonsterGiantSpider}{}{
+    \begin{MonsterCard}{
+        name=Giant Spider,
+        type={Large Beast, Unaligned},
+        ac={14},
+        initiative=3,
+        hp={26 ($4d10 + 4$)},
+        speed={30 ft, Climb 30 ft},
+        str=14, dex=16, con=12, int=2, wis=11, cha=4,
+    }
+    \skills{Perception $+4$, Stealth $+7$.}
+    \senses{Darkvision 60 ft; Passive Perception 14.}
+    \languages{None.}
+    \challengerating{1 (XP 200; PB $+2$).}
+
+    \traits
+
+    \textbf{Spider Climb.} The spider can climb difficult surfaces, including
+    along ceilings, without needing to make an ability check.
+
+    \textbf{Web Walker.} The spider ignores movement restrictions caused by
+    webs, and it knows the location of any other creature in contact with
+    the same web.
+
+    \Newpage
+    \actions
+
+    \textbf{Bite.} \textit{Melee Attack Roll:} $+5$, reach 5 ft.
+    \textit{Hit:} 7 ($1d8 + 3$) Piercing damage plus 7 ($2d6$) Poison damage.
+
+    \textbf{Web (Recharge 5--6).} \textit{Dexterity Saving Throw:} DC 13, one
+    creature the spider can see within 60 feet. \textit{Failure:} The target
+    has the Restrained condition until the web is destroyed (AC 10; HP 5;
+    Vulnerability to Fire damage; Immunity to Poison and Psychic damage).
+
+    \end{MonsterCard}
+}
+
+\NewDocumentCommand{\MonsterGiantToad}{}{
+    \begin{MonsterCard}{
+        name=Giant Toad,
+        type={Large Beast, Unaligned},
+        ac={11},
+        initiative=1,
+        hp={39 ($6d10 + 6$)},
+        speed={30 ft, Swim 30 ft},
+        str=15, dex=13, con=13, int=2, wis=10, cha=3,
+    }
+    \senses{Darkvision 60 ft; Passive Perception 10.}
+    \languages{None.}
+    \challengerating{1 (XP 200; PB $+2$).}
+
+    \traits
+
+    \textbf{Amphibious.} The toad can breathe air and water.
+
+    \textbf{Standing Leap.} The toad's Long Jump is up to 20 feet and its
+    High Jump is up to 10 feet with or without a running start.
+
+    \Newpage
+    \actions
+
+    \textbf{Bite.} \textit{Melee Attack Roll:} $+4$, reach 5 ft.
+    \textit{Hit:} 5 ($1d6 + 2$) Piercing damage plus 5 ($2d4$) Poison
+    damage. If the target is a Medium or smaller creature, it has the
+    Grappled condition (escape DC 12).
+
+    \textbf{Swallow.} The toad swallows a Medium or smaller target it is
+    grappling. While swallowed, the target isn't Grappled but has the
+    Blinded and Restrained conditions, and it has Total Cover against
+    attacks and other effects outside the toad. In addition, the target
+    takes 10 ($3d6$) Acid damage at the end of each of the toad's turns.
+    The toad can have only one target swallowed at a time, and it can't
+    use Bite while it has a swallowed target. If the toad dies, a
+    swallowed creature is no longer Restrained and can escape from the
+    corpse using 5 feet of movement, exiting with the Prone condition.
+
+    \end{MonsterCard}
+}
+
+\NewDocumentCommand{\MonsterBrownBear}{}{
+    \begin{MonsterCard}{
+        name=Brown Bear,
+        type={Large Beast, Unaligned},
+        ac={11},
+        initiative=1,
+        hp={22 ($3d10 + 6$)},
+        speed={40 ft, Climb 30 ft},
+        str=17, dex=12, con=15, int=2, wis=13, cha=7,
+    }
+    \skills{Perception $+3$.}
+    \senses{Darkvision 60 ft; Passive Perception 13.}
+    \languages{None.}
+    \challengerating{1 (XP 200; PB $+2$).}
+
+    \actions
+
+    \textbf{Multiattack.} The bear makes one Bite attack and one Claw attack.
+
+    \textbf{Bite.} \textit{Melee Attack Roll:} $+5$, reach 5 ft.
+    \textit{Hit:} 7 ($1d8 + 3$) Piercing damage.
+
+    \textbf{Claw.} \textit{Melee Attack Roll:} $+5$, reach 5 ft.
+    \textit{Hit:} 5 ($1d4 + 3$) Slashing damage. If the target is a Large
+    or smaller creature, it has the Prone condition.
+
+    \end{MonsterCard}
+}
+
+\NewDocumentCommand{\MonsterDireWolf}{}{
+    \begin{MonsterCard}{
+        name=Dire Wolf,
+        type={Large Beast, Unaligned},
+        ac={14},
+        initiative=2,
+        hp={22 ($3d10 + 6$)},
+        speed={50 ft},
+        str=17, dex=15, con=15, int=3, wis=12, cha=7,
+    }
+    \skills{Perception $+5$, Stealth $+4$.}
+    \senses{Darkvision 60 ft; Passive Perception 15.}
+    \languages{None.}
+    \challengerating{1 (XP 200; PB $+2$).}
+
+    \traits
+
+    \textbf{Pack Tactics.} The wolf has Advantage on an attack roll against
+    a creature if at least one of the wolf's allies is within 5 feet of
+    the creature and the ally doesn't have the Incapacitated condition.
+    \Newpage
+    \actions
+
+    \textbf{Bite.} \textit{Melee Attack Roll:} $+5$, reach 5 ft.
+    \textit{Hit:} 8 ($1d10 + 3$) Piercing damage. If the target is a Large
+    or smaller creature, it has the Prone condition.
+
+    \end{MonsterCard}
+}
+
+\NewDocumentCommand{\MonsterLion}{}{
+    \begin{MonsterCard}{
+        name=Lion,
+        type={Large Beast, Unaligned},
+        ac={12},
+        initiative=2,
+        hp={22 ($4d10$)},
+        speed={50 ft},
+        str=17, dex=15, con=11, int=3, wis=12, cha=8,
+    }
+    \skills{Perception $+3$, Stealth $+4$.}
+    \senses{Darkvision 60 ft; Passive Perception 13.}
+    \languages{None.}
+    \challengerating{1 (XP 200; PB $+2$).}
+
+    \traits
+
+    \textbf{Pack Tactics.} The lion has Advantage on an attack roll against
+    a creature if at least one of the lion's allies is within 5 feet of
+    the creature and the ally doesn't have the Incapacitated condition.
+
+    \textbf{Running Leap.} With a 10-foot running start, the lion can Long
+    Jump up to 25 feet.
+
+    \Newpage
+    \actions
+
+    \textbf{Multiattack.} The lion makes two Rend attacks. It can replace
+    one attack with a use of Roar.
+
+    \textbf{Rend.} \textit{Melee Attack Roll:} $+5$, reach 5 ft.
+    \textit{Hit:} 7 ($1d8 + 3$) Slashing damage.
+
+    \textbf{Roar.} \textit{Wisdom Saving Throw:} DC 11, one creature within
+    15 feet. \textit{Failure:} The target has the Frightened condition until
+    the start of the lion's next turn.
+
+    \end{MonsterCard}
+}
+
+\NewDocumentCommand{\MonsterTiger}{}{
+    \begin{MonsterCard}{
+        name=Tiger,
+        type={Large Beast, Unaligned},
+        ac={13},
+        initiative=3,
+        hp={30 ($4d10 + 8$)},
+        speed={40 ft},
+        str=17, dex=16, con=14, int=3, wis=12, cha=8,
+    }
+    \skills{Perception $+3$, Stealth $+7$.}
+    \senses{Darkvision 60 ft; Passive Perception 13.}
+    \languages{None.}
+    \challengerating{1 (XP 200; PB $+2$).}
+
+    \actions
+
+    \textbf{Rend.} \textit{Melee Attack Roll:} $+5$, reach 5 ft.
+    \textit{Hit:} 10 ($2d6 + 3$) Slashing damage. If the target is a Large
+    or smaller creature, it has the Prone condition.
+
+    \bonusactions
+
+    \textbf{Nimble Escape.} The tiger takes the Disengage or Hide action.
 
     \end{MonsterCard}
 }
