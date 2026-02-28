@@ -47,15 +47,17 @@
     }
 }
 
-\NewDocumentCommand{\AddPreparedSpell}{m}{
-    \__spell_prepare:n {#1}
-}
-
 \cs_new_protected:Npn \__spell_prepare_and_name:n #1 {
     \__spell_prepare:n {#1}
     \prop_if_in:NnTF \g_spell_names_prop {#1}
     { \prop_item:Nn \g_spell_names_prop {#1} }
     { #1 }
+}
+
+\NewDocumentCommand{\PrepareSpell}{sm}{
+    \IfBooleanTF { #1 }
+        { \__spell_prepare:n {#2} }
+        { \__spell_prepare_and_name:n {#2} }
 }
 
 \NewDocumentEnvironment{PreparedSpells}{m}
