@@ -7,11 +7,11 @@
   summary={Orc Fighter 1/Great Old One Warlock 7},
   player=Jacques,
   levels=8,
-  str*=10, dex=14, con*=14, int=8, wis=12, cha=18,
-  hp=77, ac=20,
+  str=10, dex=14, con=14, int=8, wis*=12, cha*=18,
+  hp=76, thp=12, ac=19,
   spellcasting=cha}
-\SkillProficiencies{Acrobatics, Arcana, Insight, Persuasion}
-\LanguageProficiencies{Common, Draconic, Dwarvish, Goblin, Orc}
+\SkillProficiencies{Arcana, Deception, Insight, Perception}
+\LanguageProficiencies{Common, Draconic, Dwarvish, Orc, Undercommon}
 
 \TitleCard[\Summary]{\PC}
 
@@ -25,9 +25,9 @@
   %
   \begin{tabular}{p{0.25\linewidth}p{0.2\linewidth}p{0.1\linewidth}p{0.4\linewidth}}
     \head{Attack}                       & \head{Range}    & \head{Hit}  & \head{Damage/Effect}                 \\
-    Battleaxe $\times 2$                & 5 ft (melee)    & $+7$        & $1d8+4$ Slashing, \textit{Topple}    \\
-    Rapier $\times 2$                   & 5 ft (melee)    & $+7$        & $1d8+4$ Piercing, \textit{Vex}       \\
-    Warhammer $\times 2$                & 5 ft (melee)    & $+7$        & $1d8+4$ Bludgeoning, \textit{Push}   \\
+    Battleaxe $\times 2$                & 5 ft (melee)    & $+7$        & $1d8+6$ Slashing, \textit{Topple}    \\
+    Rapier $\times 2$                   & 5 ft (melee)    & $+7$        & $1d8+6$ Piercing, \textit{Vex}       \\
+    Warhammer $\times 2$                & 5 ft (melee)    & $+7$        & $1d8+6$ Bludgeoning, \textit{Push}   \\
     \textit{Eldritch Blast} $\times 2$  & 120 feet        & $+9$\fmark  & $1d10$ Force and push 10 ft
   \end{tabular}
   %
@@ -53,17 +53,17 @@
   \sect*{Prepared Spells}
   \begin{PreparedSpells}{p{0.33\linewidth}p{0.33\linewidth}p{0.33\linewidth}}
     \head{Cantrip}                        & \head{2nd Level}                & \head{4th Level}                  \\
-    \spell{EldritchBlast}\fmarkA          & \spell{DetectThoughts}          & \spell{Confusion}                 \\
-    \spell{MageHand}                      & \spell{PhantasmalForce}\fmarkB  & \spell{SickeningRadiance}\fmarka  \\
-    \spell{MindSliver}\fmarkb             & \spell{Suggestion}\fmarkb       & \spell{SummonAberration}          \\
+    \spell{EldritchBlast}\fmarkA          & \spell{CloudOfDaggers}\fmarka   & \spell{Confusion}                 \\
+    \spell{MageHand}                      & \spell{DetectThoughts}          & \spell{SickeningRadiance}\fmarka  \\
+    \spell{MindSliver}\fmarkB             & \spell{PhantasmalForce}\fmarkb  & \spell{ShadowOfMoil}\fmarka       \\
+                                          & \spell{Suggestion}\fmarkb       & \spell{SummonAberration}          \\
                                           &                                 &                                   \\
     \head{1st Level}                      & \head{3rd Level}                &                                   \\
-    \spell{ArmorOfAgathys}\fmarka         & \spell{Clairvoyance}            &                                   \\
-    \spell{DissonantWhispers}\fmarkb      & \spell{Fly}                     &                                   \\
-    \spell{Hex}\fmarka\fmarkb             & \spell{HungerOfHadar}\fmarka    &                                   \\
-    \spell{TashasHideousLaughter}\fmarkb  & \spell{HypnoticPattern}\fmarkb  &                                   \\
+    \spell{DissonantWhispers}\fmarkb      & \spell{Clairvoyance}            &                                   \\
+    \spell{Hex}\fmarka\fmarkb             & \spell{Fly}                     &                                   \\
+    \spell{TashasHideousLaughter}\fmarkb  & \spell{HungerOfHadar}\fmarka    &                                   \\
+                                          & \spell{HypnoticPattern}\fmarkb  &                                   \\
                                           & \spell{MajorImage}\fmarkb       &                                   \\
-                                          & \spell{SummonFey}               &                                   \\
                                           &                                 &
   \end{PreparedSpells}
   \ftext{\textbf{Psychic Spells:} You can change the damage type to Psychic.}
@@ -103,7 +103,7 @@
   \OneWithShadows
   %
   \sect{Class Features: Fighter}
-  \Defense
+  \Dueling
   \SecondWind
   \Push{Warhammer}
   \Topple{Battleaxe}
