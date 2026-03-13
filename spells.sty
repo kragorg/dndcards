@@ -346,6 +346,37 @@
 }
 
 
+\NewDocumentCommand{\SpellBacklash}{}{
+    \begin{Spell}[
+        level=5th,
+        time=1 Reaction\fmark,
+        range=60 ft,
+        components={V},
+        duration=Instantaneous,
+        school=Abjuration,
+        attack=CON Save,
+        effect=Force
+    ]{Backlash}
+    You ward yourself against destructive energy, reducing the damage taken by
+    $4d6$ plus your spellcasting ability modifier.
+
+    If the triggering damage was from a creature within range, you can force
+    the creature to make a Constitution saving throw. The creature takes
+    $4d6$ Force damage on a failed save or half as much damage on a
+    successful one.
+
+    \textbf{Using a Higher-Level Spell Slot.} The damage reduction and Force
+    damage from this spell both increase by $1d6$ for every spell slot level
+    above 4.
+
+    \ftext{Which you take in response to taking damage.}
+    \begin{components}
+    V & \textit{Xal vur (ZAL VOOR)}
+    \end{components}
+    \end{Spell}
+}
+
+
 \NewDocumentCommand{\SpellBladeWard}{}{
     \begin{Spell}[
         tags=Concentration,
