@@ -19,6 +19,16 @@
 
 \RequirePackage{tikz}
 \RequirePackage{afterpage}
+% Patch \AP@savetop to reset \@newlist before calling \par.
+% When \afterpage fires during list processing, \@newlist may be true,
+% which causes \par to be intercepted by the list death-cycles mechanism
+% instead of switching to vertical mode.  This leaves TeX in horizontal
+% mode, and \AP@savetop's \nointerlineskip then fails with
+% "! You can't use \prevdepth in horizontal mode."
+% The fix is local to the output routine group, so it doesn't affect
+% list processing in the document.
+\let\dnd@orig@AP@savetop\AP@savetop
+\def\AP@savetop{\@newlistfalse\dnd@orig@AP@savetop}
 \ExplSyntaxOff
 \usetikzlibrary{calc}
 \ExplSyntaxOn
@@ -179,6 +189,12 @@
     \int_gset:Nn \g_ftext_count_int { 0 }
     \seq_gclear:N \g_dnd_fmark_defined_seq
     \seq_gclear:N \g_dnd_fmark_used_seq
+    % Reset @newlist so \par works properly inside the header.
+    % Without this, the list mechanism intercepts \par (incrementing death
+    % cycles instead of switching to vmode), which causes \afterpage's
+    % \addboxcontents to access \prevdepth in horizontal mode.
+    % This is local to the afterpage group and reverts automatically.
+    \@newlistfalse
     % Save and reset list paragraph shaping so header renders full-width
     \tl_set:Nx \l__dndcards_saved_everypar_tl { \tex_the:D \everypar }
     \everypar{}
@@ -292,6 +308,18 @@
       { \int_use:N \g_ftext_count_int }
   }
   \bool_gset_false:N \g__dndcards_in_starred_card_bool
+  % Disarm pending \afterpage before \newpage.  The continuation header
+  % re-arms \afterpage for the *next* page, but when we reach \end{Card}
+  % there should be no next continuation.  If the armed \afterpage fires
+  % during \newpage while a list is still active, \AP@savetop's
+  % \nointerlineskip hits \prevdepth in horizontal mode.
+  \cs_if_exist:NT \AP@ {
+    \tl_if_eq:NNF \AP@ \scan_stop:
+    {
+      \cs_gset_eq:NN \AP@ \scan_stop:
+      \tex_global:D \tex_output:D \tex_expandafter:D { \tex_the:D \AP@output }
+    }
+  }
   \newpage
 }
 
