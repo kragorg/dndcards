@@ -2,6 +2,7 @@
   coreutils,
   glibcLocales,
   lib,
+  ninja,
   pkgs,
   stdenv,
   tex,
@@ -10,46 +11,31 @@
 let
   pname = "dnd-cards";
   version = "2.0";
-  scripts =
-    pkgs.runCommand "dnd-cards-scripts"
-      {
-        nativeBuildInputs = [ zsh ];
-      }
-      ''
-        mkdir -p $out/bin
-        for file in dndbuild run; do
-          install -m 0755 ${./.}/$file $out/bin/
-        done
-        patchShebangs $out/bin/$file
-      '';
+
 in
 stdenv.mkDerivation rec {
   inherit pname version;
-  inherit scripts tex;
 
   src = ./.;
-  texfiles = lib.escapeShellArgs [
-    "conditions.tex"
-    "elara-al-deck.tex"
-    "elara-deck.tex"
-    "kragor-al-deck.tex"
-    "kragor-deck.tex"
-    "rezina-deck.tex"
-    "toge-deck.tex"
-    "zek-deck.tex"
-  ];
 
   phases = [ "buildPhase" ];
   buildPhase = ''
     runHook preBuild
     export LC_ALL="en_US.UTF-8"
-    dndbuild
+    mkdir -p $out
+    ${src}/configure.zsh    \
+      --builddir "$PWD"     \
+      --dst "$out"          \
+      --src ${src}          \
+      --output build.ninja  \
+      ${src}/*.tex
+    ninja
     runHook postBuild
   '';
   nativeBuildInputs = [
     coreutils
     glibcLocales
-    scripts
+    ninja
     tex
     zsh
   ];
