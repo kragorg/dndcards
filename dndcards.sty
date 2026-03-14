@@ -34,8 +34,6 @@
   { Footnote~mismatch:~#1~marks~defined~but~#2~\token_to_str:N\ftext~calls }
 
 % Error messages for resource validation
-\msg_new:nnn {dnd} {resource-not-integer}
-  { Resource~'#1'~count~'#2'~is~not~a~valid~integer }
 \msg_new:nnn {dnd} {resource-count-invalid}
   { Resource~'#1'~count~#2~must~be~at~least~1 }
 
@@ -321,6 +319,8 @@
     }
 }
 
+\cs_generate_variant:Nn \regex_match:nnF { nV }
+
 \NewDocumentEnvironment{ResourceTable}{}{
   \dim_set:Nn \__dndcards_rtab_name_dim { 0.26 \linewidth }
   \dim_set:Nn \__dndcards_rtab_boxes_dim { 0.14 \linewidth }
@@ -334,15 +334,13 @@
     }
   }
   \cs_set:Npn \resource ##1##2 {
-    % Validate resource count
-    \regex_match:nnF { ^\d+$ } {##2}
-        { \msg_error:nnxx {dnd} {resource-not-integer} {##1} {##2} }
-    \int_compare:nNnTF {##2} < {1}
-        { \msg_error:nnxx {dnd} {resource-count-invalid} {##1} {##2} }
+    \int_set:Nn \l_tmpa_int { ##2 }
+    \int_compare:nNnTF {\l_tmpa_int} < {1}
+        { \msg_error:nnxx {dnd} {resource-count-invalid} {##1} {\int_use:N \l_tmpa_int} }
         {
             ##1
             &
-            \int_step_inline:nn { ##2 } {
+            \int_step_inline:nn { \l_tmpa_int } {
                 \__dndcards_checkbox:
                 \kern0.5em
             }
