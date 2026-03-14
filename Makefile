@@ -1,17 +1,15 @@
-define dndbuild
-	nix develop --command bash -c "dndbuild $(1)"
+define ninjabuild
+	nix develop -c ninja $(1)
 endef
 
 .PHONY: all clean distclean FORCE
 .ONESHELL:
 
 all:
-	$(call dndbuild,)
+	$(call ninjabuild,)
 
-PACKAGES := character.sty dnd-deck.cls dndcards.sty monster.sty spells.sty
-
-outputs/out/%.pdf: %.tex $(PACKAGES)
-	$(call dndbuild, $<)
+outputs/out/%.pdf: %.tex
+	$(call ninjabuild, $@)
 
 %.pdf: %.tex FORCE
 	$(MAKE) outputs/out/$@
@@ -51,7 +49,7 @@ all-monsters.tex: monster.sty
 clean:
 	rm -f all-spells.tex all-monsters.tex
 	rm -rf outputs
-	rm -f obj/*.pdf obj/*.aux
+	rm -f build.ninja obj/*.pdf obj/*.aux
 
 distclean: clean
 	rm -rf obj

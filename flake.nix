@@ -40,12 +40,15 @@
         };
         devShells = {
           default = pkgs.mkShell {
-            inherit (dnd-cards) texfiles;
             name = "dnd-cards-shell";
             shellHook = ''
-              export src="$PWD"
-              export obj="$PWD/obj"
-              export PATH=$PWD:$PATH
+              mkdir -p outputs/out obj
+              ${dnd-cards.passthru.mkBuildNinja {
+                inherit (dnd-cards.passthru) env;
+                src = ''"$PWD"'';
+                out = "outputs/out";
+                builddir = ''"$PWD/obj"'';
+              }}
             '';
             packages = dnd-cards.nativeBuildInputs ++ [
               pkgs.nixfmt
