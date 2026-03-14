@@ -728,6 +728,32 @@
     \end{MonsterCard}
 }
 
+\NewDocumentCommand{\MonsterMoorbounder}{}{
+    \begin{MonsterCard}{
+        name=Moorbounder,
+        type={Large Beast, Unaligned},
+        ac={13},
+        initiative=3,
+        hp={30 ($4d10 + 8$)},
+        speed={70 ft},
+        str=18, dex=14, con=14, int=2, wis=13, cha=5,
+    }
+    \senses{Darkvision 60 ft; Passive Perception 11.}
+    \languages{None.}
+    \challengerating{1 (XP 200; PB $+2$).}
+
+    \actions
+    \textbf{Claws.} \textit{Melee Attack Roll:} $+6$ to hit, reach 5 ft.
+    \textit{Hit:} 14 ($4d4 + 4$) Slashing damage.
+
+    \bonusactions
+    \textbf{Standing Leap.} The moorbounder’s long jump is up to 40 feet
+    and its high jump is up to 20 feet, with or without a running
+    start.
+
+    \end{MonsterCard}
+}
+
 \NewDocumentCommand{\MonsterTiger}{}{
     \begin{MonsterCard}{
         name=Tiger,
