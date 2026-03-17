@@ -43,11 +43,11 @@
             name = "dnd-cards-shell";
             shellHook = ''
               mkdir -p outputs/out obj
-              $PWD/configure.zsh           \
-                --builddir "$PWD/obj"      \
-                --dst "$PWD/outputs/out"   \
-                --src "$PWD"               \
-                --output build.ninja       \
+              ${pkgs.zsh}/bin/zsh $PWD/configure.zsh  \
+                --builddir "$PWD/obj"                 \
+                --dst "$PWD/outputs/out"              \
+                --src "$PWD"                          \
+                --output build.ninja                  \
                 $PWD/*.tex
             '';
             packages = dnd-cards.nativeBuildInputs ++ [

@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     runHook preBuild
     export LC_ALL="en_US.UTF-8"
     mkdir -p $out
-    ${src}/configure.zsh    \
-      --builddir "$PWD"     \
-      --dst "$out"          \
-      --src ${src}          \
-      --output build.ninja  \
+    ${zsh}/bin/zsh ${src}/configure.zsh  \
+      --builddir "$PWD"                  \
+      --dst "$out"                       \
+      --src ${src}                       \
+      --output build.ninja               \
       ${src}/*.tex
     ninja
     runHook postBuild
