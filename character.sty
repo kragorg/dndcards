@@ -23,6 +23,8 @@
 \prop_new:N \g__dnd_statcard_mods_prop
 \int_new:N \l__dnd_statcard_current_mod_int
 \tl_new:N \l__dnd_statcard_current_note_tl
+% Tracks the footnote mark index used for save-all (0 = not yet emitted)
+\int_new:N \g__dnd_save_all_fmark_int
 
 % Error message for missing note
 \msg_new:nnn {dnd} {statcard-note-required}
@@ -153,6 +155,7 @@
     SaveINT .code:n = { \__dnd_statcard_set_mod:nn {save-int} {#1} },
     SaveWIS .code:n = { \__dnd_statcard_set_mod:nn {save-wis} {#1} },
     SaveCHA .code:n = { \__dnd_statcard_set_mod:nn {save-cha} {#1} },
+    SaveALL .code:n = { \__dnd_statcard_set_mod:nn {save-all} {#1} },
 
     % Other stats
     HP .code:n = { \__dnd_statcard_set_mod:nn {HP} {#1} },
@@ -355,12 +358,27 @@
         } \\
 
         \textbf{Save}
+        \int_gzero:N \g__dnd_save_all_fmark_int
         \clist_map_inline:Nn \l_dnd_order_clist {
             & {\prop_if_in:NnT \g_dnd_profs_prop {##1} \boldmath $
                 \__dndcards_format_stat:e {
-                    \__dnd_statcard_apply_mod_value:en
-                        { \__dnd_save_bonus:n {##1} }
-                        {save-##1}
+                    \int_eval:n {
+                        \__dnd_save_bonus:n {##1} +
+                        \__dnd_statcard_get_mod:n {save-##1} +
+                        \__dnd_statcard_get_mod:n {save-all}
+                    }
+                }
+                \prop_if_in:NnT \g__dnd_statcard_mods_prop {save-all-note}
+                {
+                    \int_compare:nNnTF { \g__dnd_save_all_fmark_int } = { 0 }
+                    {
+                        \fmark
+                        \int_gset:Nn \g__dnd_save_all_fmark_int
+                            { \int_use:N \g_fmark_count_int }
+                    }
+                    {
+                        \footnotemark [ \int_use:N \g__dnd_save_all_fmark_int ]
+                    }
                 }
                 \prop_if_in:NnT \g__dnd_statcard_mods_prop {save-##1-note}
                 { \fmark }
@@ -368,6 +386,7 @@
         }
     \end{tabular}
     % Output footnotes for ability table
+    \__dnd_statcard_output_footnote:n {save-all}
     \clist_map_inline:nn {str, dex, con, int, wis, cha}
     {
         \__dnd_statcard_output_footnote:n {##1}
