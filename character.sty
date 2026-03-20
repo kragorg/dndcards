@@ -485,6 +485,34 @@
     \__dnd_format_languages:
 }
 
+\prop_new:N \g_dnd_tools_prop
+
+\NewDocumentCommand{\ToolProficiencies}{m}{
+    \clist_map_inline:nn {#1} {
+        \__dnd_parse_tool_proficiency:n {##1}
+    }
+}
+
+\cs_new_protected:Npn \__dnd_parse_tool_proficiency:n #1 {
+    \tl_set:Nn \l_tmpa_tl {#1}
+    \tl_trim_spaces:N \l_tmpa_tl
+    \tl_if_empty:NF \l_tmpa_tl {
+        \prop_gput:NVn \g_dnd_tools_prop \l_tmpa_tl {true}
+    }
+}
+
+\cs_new:Npn \__dnd_format_tools: {
+    \seq_clear:N \l_tmpa_seq
+    \prop_map_inline:Nn \g_dnd_tools_prop {
+        \seq_put_right:Nn \l_tmpa_seq {##1}
+    }
+    \seq_use:Nn \l_tmpa_seq { ,~ }
+}
+
+\NewDocumentCommand{\Tools}{}{
+    \__dnd_format_tools:
+}
+
 \prop_new:N \g_dnd_skill_profs_prop
 \prop_new:N \g_dnd_skill_expertise_prop
 \bool_new:N \g_dnd_jack_of_all_trades_bool
@@ -795,7 +823,10 @@
         \vspace{0.1in}\head{Skills} \par
         \SkillTable
         \vspace{0.1in}
-        {\small \textbf{Languages:}~\__dnd_format_languages:}
+        {\small \textbf{Languages:}~\__dnd_format_languages:
+        \prop_if_empty:NF \g_dnd_tools_prop {
+            \enspace\textbullet\enspace\textbf{Tools:}~\__dnd_format_tools:
+        }}
     \end{center}
     \group_end:
 }
