@@ -7,7 +7,7 @@
   player=Sheila,
   levels=3,
   str=9, dex*=16, con=12, int=10, wis=10, cha*=17,
-  hp=21, ac=15,
+  hp=21, ac=14,
   spellcasting=cha}
 \SkillProficiencies{Arcana, Perception*, Persuasion*, Stealth, Survival}
 \LanguageProficiencies{Common, Goblin, Halfling}
@@ -34,13 +34,12 @@
   %
   \ThinRule \par
   \begin{tabular}{p{0.27\linewidth}p{0.36\linewidth}p{0.27\linewidth}}
-    \head{Actions}                      & \head{Bonus Actions}            & \head{Other}                 \\
-    \textit{Light}                      & Two-Weapon Fighting (Dagger)    & Beguiling Magic\fmarkC\fmark \\
-    Healing Hands\fmarkc                & Celestial Revelation\fmarkc     & Celestial Resistance         \\
-    \textit{Speak with Animals}\fmarkc  & Bardic Inspiration $d6$\fmarkc  &                              \\
-                                        & Mantle of Inspiration\fmark     &
+    \head{Actions}                & \head{Bonus Actions}            & \head{Other}                 \\
+    \textit{Light}                & Two-Weapon Fighting (Dagger)    & Beguiling Magic\fmarkC\fmark \\
+    Healing Hands\fmarkc          & Celestial Revelation\fmarkc     & Celestial Resistance         \\
+    \textit{Healing Word}\fmarkc  & Bardic Inspiration $d6$\fmarkc  &                              \\
+                                  & Mantle of Inspiration\fmark     &
   \end{tabular}
-  \PrepareSpell*{SpeakWithAnimals}
   %
   \ftext{Limited use.}
   \ftext{You can restore your use of Beguiling Magic by expending one use of
@@ -57,6 +56,7 @@
     \spell{MinorIllusion} & \spell{DissonantWhispers} &                       \\
     \spell{StarryWisp}    & \spell{FaerieFire}        &                       \\
     \spell{TrueStrike}    & \spell{HealingWord}       &                       \\
+                          & \spell{SilveryBarbs}      &                       \\
                           & \spell{Sleep}             &
   \end{PreparedSpells}
   \Newpage
@@ -67,7 +67,7 @@
     \header{Spell Slots}     & \header{Long Rest}                         \\
     \resource{1st Level}{4}  & \resource{Healing Hands}{1}                \\
     \resource{2nd Level}{2}  & \resource{Celestial Revelation}{1}         \\
-                            && \resource{\textit{Speak with Animals}}{1}  \\
+                            && \resource{\textit{Healing Word}}{1}        \\
                             && \resource{Bardic Inspiration}{4}           \\
                             && \resource{Beguiling Magic}{1}
   \end{ResourceTable}
@@ -86,7 +86,7 @@
   \JackOfAllTrades
   %
   \sect{Feats}
-  \MagicInitiate{Druid}{Guidance, Starry Wisp}{Speak With Animals}
+  \MagicInitiate{Druid}{Guidance, Starry Wisp}{Healing Word}
   %
   \sect{Species: Aasimar}
   \SpeciesAasimar
