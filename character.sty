@@ -640,11 +640,13 @@
 
 \NewDocumentCommand{\SkillEntry}{m}{
     \small {
-        \bfseries
         \__dnd_if_skill_expertise:nTF {#1}
-            { \itshape \scshape }
-            { \__dnd_if_skill_proficient:nT {#1} { \itshape \scshape } }
-        #1
+            { \textit{\textbf{\scshape {#1}}} }
+            {
+                \__dnd_if_skill_proficient:nTF {#1}
+                    { \textit{\textbf{#1}} }
+                    { \textbf{#1} }
+            }
         }
     \hfill
     $ \__dndcards_format_stat:e {
@@ -756,13 +758,13 @@
     }
     \__dnd_statcard_output_footnote:n {SpellDC}
     \par
-    \textit{Passive~Perception}:~$\mathbf{
+    {Passive~Perception}:~$\mathbf{
         \__dnd_statcard_apply_mod:en { \PassiveScore{Perception} } {PPer}
     }$,~
-    \textit{Investigation}:~$\mathbf{
+    {Investigation}:~$\mathbf{
         \__dnd_statcard_apply_mod:en { \PassiveScore{Investigation} } {PInv}
     }$,~
-    \textit{Insight}:~$\mathbf{
+    {Insight}:~$\mathbf{
         \__dnd_statcard_apply_mod:en { \PassiveScore{Insight} } {PIns}
     }$
     % Output passive score footnotes
